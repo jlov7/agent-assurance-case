@@ -1,0 +1,198 @@
+{
+  "schema_version": "0.2",
+  "case_id": "case_01HXYV6PASS0000000000000001",
+  "created_at": "2026-05-11T13:00:00Z",
+  "profile": {
+    "profile_id": "runwright.skills.release",
+    "profile_version": "0.1.0",
+    "assurance_level": "basic"
+  },
+  "subject": {
+    "name": "deploy-helper skill bundle release",
+    "subject_type": "skill_bundle",
+    "release_ref": "pr-422",
+    "repo": "github.com/example/coding-agent",
+    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pull_request": "422",
+    "environment": "staging",
+    "owner": "platform-team"
+  },
+  "verdict": "pass",
+  "verdict_reasons": [
+    "inventory complete",
+    "required detectors passed",
+    "no unresolved high or critical findings",
+    "required evals passed"
+  ],
+  "coverage": {
+    "inventory_status": "complete",
+    "inventory_methods": [
+      "declared-skill-manifest",
+      "repo-walk",
+      "mcp-config-parse"
+    ],
+    "scanned_refs": [
+      "skills/deploy-helper/**",
+      "mcp.json",
+      "policies/**"
+    ],
+    "excluded_refs": [],
+    "detector_runs": [
+      {
+        "detector": {
+          "name": "runwright-skill-static",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "skill",
+          "skill_bundle"
+        ],
+        "categories": [
+          "skill-manifest-integrity",
+          "skill-secret-exposure",
+          "skill-executable-surface",
+          "skill-tool-scope"
+        ],
+        "status": "pass",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6PASS0000000000000001/detectors/skill-static.json"
+      },
+      {
+        "detector": {
+          "name": "runwright-mcp-policy",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "mcp_tool"
+        ],
+        "categories": [
+          "mcp-tool-definition-risk",
+          "mcp-approval-gate",
+          "mcp-scope-creep",
+          "mcp-tbom-presence"
+        ],
+        "status": "pass",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6PASS0000000000000001/detectors/mcp-policy.json"
+      }
+    ],
+    "runtime_coverage": {
+      "status": "summary",
+      "trace_refs": [
+        "otel://trace/run-20260511-001"
+      ]
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1",
+      "asset_type": "skill_bundle",
+      "name": "deploy-helper",
+      "version": "1.4.1",
+      "source_uri": "github.com/example/coding-agent/skills/deploy-helper",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "owner": "platform-team",
+      "metadata": {
+        "skill_format": "openai_codex",
+        "manifest_path": "skills/deploy-helper/SKILL.md"
+      }
+    },
+    {
+      "asset_id": "mcp_tool:internal-platform:staging-deployer.apply@2.1.1",
+      "asset_type": "mcp_tool",
+      "name": "staging-deployer.apply",
+      "version": "2.1.1",
+      "owner": "infra-team",
+      "metadata": {
+        "irreversible": false,
+        "required_approval": "not_required",
+        "scopes": [
+          "staging:write"
+        ]
+      }
+    }
+  ],
+  "findings": [],
+  "policy_decisions": [
+    {
+      "policy_id": "runwright/skills/basic-release",
+      "policy_version": "0.2.0",
+      "outcome": "allow",
+      "inputs_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1"
+    }
+  ],
+  "eval_results": [
+    {
+      "eval_id": "skillbench-pd/basic-regression",
+      "eval_version": "0.1.0",
+      "status": "pass",
+      "required": true,
+      "metric": "pass_rate",
+      "value": "0.97",
+      "threshold": "0.95",
+      "evidence_ref": "evidence://case_01HXYV6PASS0000000000000001/evals/skillbench.json"
+    }
+  ],
+  "aibom_ref": "evidence://case_01HXYV6PASS0000000000000001/aibom.cdx.json",
+  "graph_snapshot_ref": "evidence://case_01HXYV6PASS0000000000000001/graph.json",
+  "compliance_mappings": [
+    {
+      "framework": "iso_iec_42001",
+      "control": "Clause 8.1 / 8.2 - operational planning and AI risk assessment evidence",
+      "evidence_refs": [
+        "coverage",
+        "policy_decisions",
+        "eval_results"
+      ]
+    }
+  ],
+  "evidence": {
+    "content_hash": "sha256:928675e6662e36861ed50a9334336f39536318dbbef373900a77d4bde3549864",
+    "signature": "ed25519:8qoumrUFUvP4xPKVqRtGPtWvwK9diQzRCcII84589/Gwai7RvO/aRWSZ7BNfnQ/ZmmWGp3M7jYgc3bcXb64/Aw==",
+    "signed_by": "did:web:runwright.dev:demo-issuer",
+    "signed_at": "2026-05-11T13:00:00Z",
+    "key_id": "demo-v0.2",
+    "public_key_ref": "https://runwright.dev/keys/demo-issuer.pub",
+    "signature_algorithm": "Ed25519-JCS-SHA256-v1",
+    "canonicalization": "RFC8785-JCS",
+    "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"
+  },
+  "evidence_artifacts": [
+    {
+      "artifact_id": "artifact_d4af581187ed908e",
+      "uri": "evidence://case_01HXYV6PASS0000000000000001/aibom.cdx.json",
+      "digest": "sha256:d4af581187ed908ecb7944931932810701bd7ecb7ffa5311906564e138c97d44",
+      "role": "aibom",
+      "media_type": "application/vnd.cyclonedx+json"
+    },
+    {
+      "artifact_id": "artifact_f0fbd994675ce41f",
+      "uri": "evidence://case_01HXYV6PASS0000000000000001/detectors/mcp-policy.json",
+      "digest": "sha256:f0fbd994675ce41f2ab63998aa9235378fb4c8f38e162dbffc5f53cd8d996fe9",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_83725379b45c9567",
+      "uri": "evidence://case_01HXYV6PASS0000000000000001/detectors/skill-static.json",
+      "digest": "sha256:83725379b45c95670ef8812a08fe238c30bea4d4347a2e1255506fee0bd2a7ff",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_493a070e88a5762e",
+      "uri": "evidence://case_01HXYV6PASS0000000000000001/evals/skillbench.json",
+      "digest": "sha256:493a070e88a5762ef9e392826a9d854a5885b75931365378af8c487ba3d74a05",
+      "role": "eval_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_b6769edd82110734",
+      "uri": "evidence://case_01HXYV6PASS0000000000000001/graph.json",
+      "digest": "sha256:b6769edd821107344de35586e0b91f94ce4dc0260f20f1da86e7daeb4168da6a",
+      "role": "graph_snapshot",
+      "media_type": "application/json"
+    }
+  ]
+}

@@ -1,0 +1,863 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://runwright.dev/schemas/agent-assurance-case-v0.2.schema.json",
+  "title": "Agent Assurance Case",
+  "description": "A portable, signed, deterministically-verifiable JSON object that captures evidence and verdict for a release of an agentic AI workflow.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "created_at",
+    "profile",
+    "subject",
+    "verdict",
+    "coverage",
+    "assets",
+    "findings",
+    "policy_decisions",
+    "evidence"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "subject": {
+      "$ref": "#/$defs/Subject"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "hold",
+        "fail"
+      ]
+    },
+    "verdict_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "release_conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReleaseCondition"
+      }
+    },
+    "coverage": {
+      "$ref": "#/$defs/Coverage"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AgentAsset"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Finding"
+      }
+    },
+    "policy_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PolicyDecision"
+      }
+    },
+    "eval_results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EvalResult"
+      }
+    },
+    "aibom_ref": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "graph_snapshot_ref": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "runtime_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RuntimeEvent"
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Approval"
+      }
+    },
+    "compliance_mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ComplianceMapping"
+      }
+    },
+    "evidence": {
+      "$ref": "#/$defs/Evidence"
+    },
+    "evidence_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EvidenceArtifact"
+      },
+      "description": "Manifest of externally referenced evidence artifacts with immutable digests. Profiles may require this for all evidence:// refs."
+    }
+  },
+  "$defs": {
+    "Profile": {
+      "type": "object",
+      "required": [
+        "profile_id",
+        "profile_version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Examples: aac.core, runwright.skills.release, runwright.mcp.release."
+        },
+        "profile_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assurance_level": {
+          "enum": [
+            "structural",
+            "basic",
+            "standard",
+            "strict"
+          ]
+        }
+      }
+    },
+    "Subject": {
+      "type": "object",
+      "required": [
+        "name",
+        "release_ref",
+        "environment"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_type": {
+          "enum": [
+            "agent",
+            "workflow",
+            "skill_bundle",
+            "mcp_server",
+            "a2a_agent",
+            "application"
+          ]
+        },
+        "release_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repo": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "pull_request": {
+          "type": "string"
+        },
+        "environment": {
+          "enum": [
+            "dev",
+            "test",
+            "staging",
+            "production",
+            "other"
+          ]
+        },
+        "environment_ref": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        }
+      }
+    },
+    "ReleaseCondition": {
+      "type": "object",
+      "required": [
+        "condition_id",
+        "status",
+        "description"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "condition_id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "satisfied",
+            "expired"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "required_before": {
+          "enum": [
+            "merge",
+            "staging_deploy",
+            "production_deploy",
+            "runtime_enablement"
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "evidence_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "Coverage": {
+      "type": "object",
+      "required": [
+        "inventory_status",
+        "inventory_methods",
+        "detector_runs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "inventory_status": {
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "inventory_methods": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "scanned_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Exclusion"
+          }
+        },
+        "detector_runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DetectorRun"
+          }
+        },
+        "runtime_coverage": {
+          "$ref": "#/$defs/RuntimeCoverage"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "Exclusion": {
+      "type": "object",
+      "required": [
+        "ref",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "approved_by": {
+          "type": "string"
+        }
+      }
+    },
+    "DetectorRun": {
+      "type": "object",
+      "required": [
+        "detector",
+        "scope",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "detector": {
+          "$ref": "#/$defs/Detector"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "findings_present",
+            "skipped",
+            "error"
+          ]
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "evidence_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "RuntimeCoverage": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "none",
+            "summary",
+            "full"
+          ]
+        },
+        "trace_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AgentAsset": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "asset_type",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asset_type": {
+          "enum": [
+            "agent",
+            "workflow",
+            "skill",
+            "skill_bundle",
+            "mcp_server",
+            "mcp_tool",
+            "a2a_agent",
+            "prompt",
+            "memory_store",
+            "model",
+            "dataset",
+            "policy",
+            "eval",
+            "identity",
+            "credential_ref",
+            "runtime",
+            "connector",
+            "environment"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string"
+        },
+        "source_uri": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "owner": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "Finding": {
+      "type": "object",
+      "required": [
+        "finding_id",
+        "category",
+        "severity",
+        "status",
+        "subject_asset_id",
+        "title",
+        "created_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "info"
+          ]
+        },
+        "status": {
+          "enum": [
+            "open",
+            "resolved",
+            "suppressed",
+            "accepted_risk"
+          ]
+        },
+        "subject_asset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detector": {
+          "$ref": "#/$defs/Detector"
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "remediation": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "Detector": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string"
+        },
+        "rule_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Resolution": {
+      "type": "object",
+      "required": [
+        "reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "approval_id": {
+          "type": "string"
+        },
+        "resolved_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "PolicyDecision": {
+      "type": "object",
+      "required": [
+        "policy_id",
+        "policy_version",
+        "outcome",
+        "inputs_hash"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome": {
+          "enum": [
+            "allow",
+            "deny",
+            "hold",
+            "warn"
+          ]
+        },
+        "inputs_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "subject_asset_id": {
+          "type": "string",
+          "description": "Optional asset_id this policy decision primarily applies to; required by some profiles."
+        }
+      }
+    },
+    "EvalResult": {
+      "type": "object",
+      "required": [
+        "eval_id",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "eval_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eval_version": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "skipped",
+            "error"
+          ]
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "metric": {
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threshold": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "RuntimeEvent": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "event_type",
+        "occurred_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "subject_asset_id": {
+          "type": "string"
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "trace_ref": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "Approval": {
+      "type": "object",
+      "required": [
+        "approval_id",
+        "decision",
+        "decided_by",
+        "decided_at",
+        "signature"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "approval_id": {
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "approve",
+            "reject",
+            "request_changes",
+            "accept_risk"
+          ]
+        },
+        "decided_by": {
+          "type": "string"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^ed25519:[A-Za-z0-9+/=]+$"
+        }
+      }
+    },
+    "ComplianceMapping": {
+      "type": "object",
+      "required": [
+        "framework",
+        "control"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "framework": {
+          "type": "string"
+        },
+        "control": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "Evidence": {
+      "type": "object",
+      "required": [
+        "content_hash",
+        "signature",
+        "signed_by",
+        "signed_at",
+        "signature_algorithm",
+        "canonicalization"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "content_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "signature": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^ed25519:[A-Za-z0-9+/=]+$"
+        },
+        "signed_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "key_id": {
+          "type": "string"
+        },
+        "public_key_ref": {
+          "type": "string"
+        },
+        "signature_algorithm": {
+          "const": "Ed25519-JCS-SHA256-v1"
+        },
+        "canonicalization": {
+          "const": "RFC8785-JCS"
+        },
+        "offline_verifier": {
+          "type": "string"
+        }
+      }
+    },
+    "EvidenceArtifact": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "uri",
+        "digest",
+        "role"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "role": {
+          "enum": [
+            "detector_output",
+            "eval_output",
+            "aibom",
+            "graph_snapshot",
+            "runtime_trace",
+            "policy_input",
+            "file_excerpt",
+            "approval_record",
+            "other"
+          ]
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "produced_by": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+# Copy this file to .github/workflows/ci.yml in the public repository.
+#
+# It runs on every push and pull request:
+#   - installs runtime and dev Python dependencies
+#   - runs the 10-test verifier test suite
+#   - verifies all three bundled example AACs with --allow-demo-key
+#   - runs the publication-readiness gate script
+#
+# A failed CI run blocks merges.
+
+name: aac-verifier
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt
+
+      - name: Run verifier test suite
+        run: python -m pytest tests/ -v
+
+      - name: Verify pass-with-coverage example
+        run: python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
+
+      - name: Verify skill-poisoning-hold example
+        run: python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
+
+      - name: Verify critical-exfiltration-fail example
+        run: python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+
+      - name: Run publication-readiness gate
+        run: |
+          chmod +x VERIFY-PUBLICATION-READY.sh
+          ./VERIFY-PUBLICATION-READY.sh

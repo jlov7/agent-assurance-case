@@ -1,0 +1,253 @@
+{
+  "schema_version": "0.2",
+  "case_id": "case_01HXYV6HOLD0000000000000001",
+  "created_at": "2026-05-11T13:10:00Z",
+  "profile": {
+    "profile_id": "runwright.skills.release",
+    "profile_version": "0.1.0",
+    "assurance_level": "basic"
+  },
+  "subject": {
+    "name": "deploy-helper skill bundle release",
+    "subject_type": "skill_bundle",
+    "release_ref": "pr-423",
+    "repo": "github.com/example/coding-agent",
+    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pull_request": "423",
+    "environment": "staging",
+    "owner": "platform-team"
+  },
+  "verdict": "hold",
+  "verdict_reasons": [
+    "HIGH skill finding unresolved",
+    "policy hold: irreversible MCP write requires approval"
+  ],
+  "coverage": {
+    "inventory_status": "complete",
+    "inventory_methods": [
+      "declared-skill-manifest",
+      "repo-walk",
+      "mcp-config-parse"
+    ],
+    "scanned_refs": [
+      "skills/deploy-helper/**",
+      "mcp.json",
+      "policies/**"
+    ],
+    "excluded_refs": [],
+    "detector_runs": [
+      {
+        "detector": {
+          "name": "runwright-skill-static",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "skill",
+          "skill_bundle"
+        ],
+        "categories": [
+          "skill-manifest-integrity",
+          "skill-secret-exposure",
+          "skill-executable-surface",
+          "skill-tool-scope",
+          "ddipe"
+        ],
+        "status": "findings_present",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6HOLD0000000000000001/detectors/skill-static.json"
+      },
+      {
+        "detector": {
+          "name": "runwright-mcp-policy",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "mcp_tool"
+        ],
+        "categories": [
+          "mcp-tool-definition-risk",
+          "mcp-approval-gate",
+          "mcp-scope-creep",
+          "mcp-tbom-presence"
+        ],
+        "status": "pass",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6HOLD0000000000000001/detectors/mcp-policy.json"
+      }
+    ],
+    "runtime_coverage": {
+      "status": "none"
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.5.0",
+      "asset_type": "skill_bundle",
+      "name": "deploy-helper",
+      "version": "1.5.0",
+      "source_uri": "github.com/example/coding-agent/skills/deploy-helper",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "owner": "platform-team",
+      "metadata": {
+        "skill_format": "openai_codex",
+        "manifest_path": "skills/deploy-helper/SKILL.md"
+      }
+    },
+    {
+      "asset_id": "mcp_tool:internal-platform:prod-deployer.apply@2.2.0",
+      "asset_type": "mcp_tool",
+      "name": "prod-deployer.apply",
+      "version": "2.2.0",
+      "owner": "infra-team",
+      "metadata": {
+        "irreversible": true,
+        "required_approval": "missing",
+        "scopes": [
+          "prod:write",
+          "secrets:read"
+        ]
+      }
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "finding_01HXYV6_DDIPE",
+      "category": "RUNWRIGHT-SKILL-DDIPE",
+      "severity": "high",
+      "status": "open",
+      "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.5.0",
+      "title": "DDIPE-style payload in bundled test file",
+      "description": "Bundled test file can execute instruction-derived content with local permissions; evidence is held in the issuer vault, not embedded in the AAC.",
+      "evidence_refs": [
+        "evidence://case_01HXYV6HOLD0000000000000001/files/SKILL.md#L142-L168",
+        "evidence://case_01HXYV6HOLD0000000000000001/files/test_apply.py#L34-L41"
+      ],
+      "detector": {
+        "name": "runwright-skill-ddipe",
+        "version": "0.2.0",
+        "rule_id": "DDIPE-TEST-FILE-EXEC-01"
+      },
+      "remediation": "Remove executable payload path or sandbox test execution with no network/secrets.",
+      "created_at": "2026-05-11T13:09:00Z"
+    },
+    {
+      "finding_id": "finding_01HXYV6_APPROVAL",
+      "category": "MCP-IRREVERSIBLE-NO-APPROVAL",
+      "severity": "high",
+      "status": "open",
+      "subject_asset_id": "mcp_tool:internal-platform:prod-deployer.apply@2.2.0",
+      "title": "Production write MCP tool lacks approval gate",
+      "description": "The skill can call an irreversible production write tool without a recorded human approval gate.",
+      "evidence_refs": [
+        "evidence://case_01HXYV6HOLD0000000000000001/policy-trace.json"
+      ],
+      "detector": {
+        "name": "runwright-mcp-policy",
+        "version": "0.2.0",
+        "rule_id": "MCP-IRREVERSIBLE-NO-APPROVAL-01"
+      },
+      "remediation": "Require an approval policy before production write execution.",
+      "created_at": "2026-05-11T13:09:10Z"
+    }
+  ],
+  "policy_decisions": [
+    {
+      "policy_id": "runwright/skills/require-no-ddipe",
+      "policy_version": "0.2.0",
+      "outcome": "hold",
+      "inputs_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.5.0"
+    },
+    {
+      "policy_id": "runwright/mcp/require-approval-on-irreversible",
+      "policy_version": "0.2.0",
+      "outcome": "hold",
+      "inputs_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "subject_asset_id": "mcp_tool:internal-platform:prod-deployer.apply@2.2.0"
+    }
+  ],
+  "eval_results": [],
+  "aibom_ref": "evidence://case_01HXYV6HOLD0000000000000001/aibom.cdx.json",
+  "graph_snapshot_ref": "evidence://case_01HXYV6HOLD0000000000000001/graph.json",
+  "compliance_mappings": [
+    {
+      "framework": "eu_ai_act",
+      "control": "Article 12 - logging / record-keeping evidence candidate",
+      "evidence_refs": [
+        "coverage",
+        "findings",
+        "policy_decisions"
+      ]
+    },
+    {
+      "framework": "iso_iec_42001",
+      "control": "Clause 8 - operation evidence candidate",
+      "evidence_refs": [
+        "policy_decisions",
+        "findings"
+      ]
+    }
+  ],
+  "evidence": {
+    "content_hash": "sha256:5c578894b5facd98c8d5197efc6a23850762df567ecc991479ae0bbcf23f25be",
+    "signature": "ed25519:/vxcOnCfxDgjFHjPrytJarIzfcMb/0FbVZHyAmEnYVxdCnHcuJltQ1S/8NJWQLzZyGynnJij3CQUkCJcKwx1CA==",
+    "signed_by": "did:web:runwright.dev:demo-issuer",
+    "signed_at": "2026-05-11T13:10:00Z",
+    "key_id": "demo-v0.2",
+    "public_key_ref": "https://runwright.dev/keys/demo-issuer.pub",
+    "signature_algorithm": "Ed25519-JCS-SHA256-v1",
+    "canonicalization": "RFC8785-JCS",
+    "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"
+  },
+  "evidence_artifacts": [
+    {
+      "artifact_id": "artifact_e794da4e4fdb5de7",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/aibom.cdx.json",
+      "digest": "sha256:e794da4e4fdb5de7b1ad8ae7a4e3fff27b06ad02b30648f64d10adb511ef8906",
+      "role": "aibom",
+      "media_type": "application/vnd.cyclonedx+json"
+    },
+    {
+      "artifact_id": "artifact_5a73b74f7ecc37a4",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/detectors/mcp-policy.json",
+      "digest": "sha256:5a73b74f7ecc37a458615748ac8718ef7794e96c8bf651f929160177c512f78d",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_bcf9f7c24b6d34c2",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/detectors/skill-static.json",
+      "digest": "sha256:bcf9f7c24b6d34c2b4afaadec7547d437a05ca6a5cd97cf18d6d6e98c1001385",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_876d6e4dad6beba0",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/files/SKILL.md#L142-L168",
+      "digest": "sha256:876d6e4dad6beba08b3b2bf0726eaa0d3e68f44ffced589a3b30741b48935ae0",
+      "role": "file_excerpt",
+      "media_type": "text/plain"
+    },
+    {
+      "artifact_id": "artifact_7055ea13b7901497",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/files/test_apply.py#L34-L41",
+      "digest": "sha256:7055ea13b790149714fa37c29b196c2280b3dbd387cf5096a9c69831accd495f",
+      "role": "file_excerpt",
+      "media_type": "text/plain"
+    },
+    {
+      "artifact_id": "artifact_8e0201d337880bcf",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/graph.json",
+      "digest": "sha256:8e0201d337880bcf1557d645ef28e585428a41db6ff547726c750044bcc903bb",
+      "role": "graph_snapshot",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_f34d6c11c29f093d",
+      "uri": "evidence://case_01HXYV6HOLD0000000000000001/policy-trace.json",
+      "digest": "sha256:f34d6c11c29f093da84640c98c927cdd2a9bf9945bf9303f79c79e3a15269db6",
+      "role": "policy_input",
+      "media_type": "application/json"
+    }
+  ]
+}

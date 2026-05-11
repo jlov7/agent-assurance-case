@@ -1,0 +1,215 @@
+{
+  "schema_version": "0.2",
+  "case_id": "case_01HXYV6FAIL0000000000000001",
+  "created_at": "2026-05-11T13:20:00Z",
+  "profile": {
+    "profile_id": "runwright.skills.release",
+    "profile_version": "0.1.0",
+    "assurance_level": "basic"
+  },
+  "subject": {
+    "name": "deploy-helper skill bundle release",
+    "subject_type": "skill_bundle",
+    "release_ref": "pr-424",
+    "repo": "github.com/example/coding-agent",
+    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pull_request": "424",
+    "environment": "staging",
+    "owner": "platform-team"
+  },
+  "verdict": "fail",
+  "verdict_reasons": [
+    "CRITICAL credential exfiltration finding unresolved",
+    "policy denied: forbidden external network exfiltration"
+  ],
+  "coverage": {
+    "inventory_status": "complete",
+    "inventory_methods": [
+      "declared-skill-manifest",
+      "repo-walk",
+      "mcp-config-parse"
+    ],
+    "scanned_refs": [
+      "skills/deploy-helper/**",
+      "mcp.json",
+      "policies/**"
+    ],
+    "excluded_refs": [],
+    "detector_runs": [
+      {
+        "detector": {
+          "name": "runwright-skill-static",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "skill",
+          "skill_bundle"
+        ],
+        "categories": [
+          "skill-manifest-integrity",
+          "skill-secret-exposure",
+          "skill-executable-surface",
+          "skill-tool-scope",
+          "ddipe"
+        ],
+        "status": "findings_present",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6FAIL0000000000000001/detectors/skill-static.json"
+      },
+      {
+        "detector": {
+          "name": "runwright-mcp-policy",
+          "version": "0.2.0"
+        },
+        "scope": [
+          "mcp_tool"
+        ],
+        "categories": [
+          "mcp-tool-definition-risk",
+          "mcp-approval-gate",
+          "mcp-scope-creep",
+          "mcp-tbom-presence"
+        ],
+        "status": "pass",
+        "required": true,
+        "evidence_ref": "evidence://case_01HXYV6FAIL0000000000000001/detectors/mcp-policy.json"
+      }
+    ],
+    "runtime_coverage": {
+      "status": "summary",
+      "trace_refs": [
+        "otel://trace/run-20260511-001"
+      ]
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1",
+      "asset_type": "skill_bundle",
+      "name": "deploy-helper",
+      "version": "1.4.1",
+      "source_uri": "github.com/example/coding-agent/skills/deploy-helper",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "owner": "platform-team",
+      "metadata": {
+        "skill_format": "openai_codex",
+        "manifest_path": "skills/deploy-helper/SKILL.md"
+      }
+    },
+    {
+      "asset_id": "mcp_tool:internal-platform:staging-deployer.apply@2.1.1",
+      "asset_type": "mcp_tool",
+      "name": "staging-deployer.apply",
+      "version": "2.1.1",
+      "owner": "infra-team",
+      "metadata": {
+        "irreversible": false,
+        "required_approval": "not_required",
+        "scopes": [
+          "staging:write"
+        ]
+      }
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "finding_01HXYV6_CRIT_EXFIL",
+      "category": "RUNWRIGHT-SKILL-CREDENTIAL-EXFIL",
+      "severity": "critical",
+      "status": "open",
+      "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1",
+      "title": "Skill can exfiltrate credentials to external endpoint",
+      "description": "Static and behavioral analysis identified a credential-read and network-egress path. Raw code and trace evidence are stored in the issuer evidence vault.",
+      "evidence_refs": [
+        "evidence://case_01HXYV6FAIL0000000000000001/files/SKILL.md#L201-L235",
+        "evidence://case_01HXYV6FAIL0000000000000001/traces/run-17.json"
+      ],
+      "detector": {
+        "name": "runwright-skill-exfil",
+        "version": "0.2.0",
+        "rule_id": "SKILL-CREDENTIAL-EXFIL-01"
+      },
+      "remediation": "Remove credential access, deny network egress, and rotate exposed credentials if execution occurred.",
+      "created_at": "2026-05-11T13:19:00Z"
+    }
+  ],
+  "policy_decisions": [
+    {
+      "policy_id": "runwright/skills/forbid-external-secret-exfiltration",
+      "policy_version": "0.2.0",
+      "outcome": "deny",
+      "inputs_hash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "rationale": "secret-read path combined with external egress sink",
+      "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1"
+    }
+  ],
+  "eval_results": [],
+  "aibom_ref": "evidence://case_01HXYV6FAIL0000000000000001/aibom.cdx.json",
+  "graph_snapshot_ref": "evidence://case_01HXYV6FAIL0000000000000001/graph.json",
+  "compliance_mappings": [
+    {
+      "framework": "iso_iec_42001",
+      "control": "Clause 8.1 / 8.2 - operational planning and AI risk assessment evidence",
+      "evidence_refs": [
+        "coverage",
+        "policy_decisions",
+        "eval_results"
+      ]
+    }
+  ],
+  "evidence": {
+    "content_hash": "sha256:7dd746d3277fa0c84bde3df797b755ecb419e3d97d20f8af0ba8cada1d5d0be8",
+    "signature": "ed25519:mOioz4En4VU3+trjwoCwY24QNBne4LTEPesuEvOQ29MZx4OHnGpOD/YjU6fN50bo/gLrCzFWlkr++7g3GwcuAQ==",
+    "signed_by": "did:web:runwright.dev:demo-issuer",
+    "signed_at": "2026-05-11T13:20:00Z",
+    "key_id": "demo-v0.2",
+    "public_key_ref": "https://runwright.dev/keys/demo-issuer.pub",
+    "signature_algorithm": "Ed25519-JCS-SHA256-v1",
+    "canonicalization": "RFC8785-JCS",
+    "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"
+  },
+  "evidence_artifacts": [
+    {
+      "artifact_id": "artifact_a6682b2c5fc68f23",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/aibom.cdx.json",
+      "digest": "sha256:a6682b2c5fc68f23307142ba51e3ef1fff485d7aef81b6a274c5f7d51d295578",
+      "role": "aibom",
+      "media_type": "application/vnd.cyclonedx+json"
+    },
+    {
+      "artifact_id": "artifact_e0084254e9b71690",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/detectors/mcp-policy.json",
+      "digest": "sha256:e0084254e9b7169007e833ae138ffb36e693b26aa2cdf4341f1e7f86a4e5cb4f",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_d8f4956b24f43436",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/detectors/skill-static.json",
+      "digest": "sha256:d8f4956b24f43436fbde11c05a908b025ddfc17011984a09039ecdc9ea13a870",
+      "role": "detector_output",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_30b1e1db862833c3",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/files/SKILL.md#L201-L235",
+      "digest": "sha256:30b1e1db862833c3d9e7706fc5ac438e308081c3dc3197ccc749e523e8a313c6",
+      "role": "file_excerpt",
+      "media_type": "text/plain"
+    },
+    {
+      "artifact_id": "artifact_4b25fe0b0e1a6ace",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/graph.json",
+      "digest": "sha256:4b25fe0b0e1a6acefe798920545b205aaa14958b50496189d7c87e27e9eb98e8",
+      "role": "graph_snapshot",
+      "media_type": "application/json"
+    },
+    {
+      "artifact_id": "artifact_a8bbfc3ad0428fe2",
+      "uri": "evidence://case_01HXYV6FAIL0000000000000001/traces/run-17.json",
+      "digest": "sha256:a8bbfc3ad0428fe20b7904367e50ea06c354538c270dde710c1a3ec632c53816",
+      "role": "runtime_trace",
+      "media_type": "application/json"
+    }
+  ]
+}
