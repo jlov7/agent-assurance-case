@@ -1,4 +1,3 @@
-import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -32,6 +31,16 @@ def test_bad_signature_fails_without_silent_skip(tmp_path):
     case['evidence']['signature'] = 'ed25519:' + 'A' * 88
     path = write(tmp_path, 'case.json', case)
     assert verify.verify(path, None, allow_demo_key=False, resign_demo=False, verbose=False) == 1
+
+
+def test_demo_public_key_verifies_example():
+    assert verify.verify(
+        BASE / 'examples' / 'pass-with-coverage.json',
+        BASE / 'keys' / 'demo-issuer-v0.2.pub',
+        allow_demo_key=False,
+        resign_demo=False,
+        verbose=False,
+    ) == 0
 
 
 def test_evidence_metadata_tamper_changes_hash(tmp_path):
@@ -123,3 +132,80 @@ def test_accepted_critical_risk_is_hold_not_pass():
     }]
     expected, reasons = verify.recompute_verdict(case)
     assert expected == 'hold'
+
+
+def test_unsupported_profile_version_rejected(tmp_path):
+    case = load('pass-with-coverage.json')
+    case['profile']['profile_version'] = '999.0.0'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+
+
+def test_aibom_artifact_must_have_aibom_role(tmp_path):
+    case = load('pass-with-coverage.json')
+    for artifact in case['evidence_artifacts']:
+        if artifact['uri'] == case['aibom_ref']:
+            artifact['role'] = 'other'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+
+
+def test_skill_profile_finding_requires_evidence_refs(tmp_path):
+    case = load('pass-with-coverage.json')
+    case['findings'].append({
+        'finding_id': 'finding_no_refs',
+        'category': 'RUNWRIGHT-SKILL-INFO',
+        'severity': 'info',
+        'status': 'open',
+        'subject_asset_id': case['assets'][0]['asset_id'],
+        'title': 'Skill finding without evidence references',
+        'created_at': '2026-05-11T13:00:01Z',
+    })
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+
+
+def test_duplicate_asset_ids_rejected(tmp_path):
+    case = load('pass-with-coverage.json')
+    duplicate = dict(case['assets'][0])
+    duplicate['name'] = 'duplicate shadow asset'
+    case['assets'].append(duplicate)
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+
+
+def test_canonicalization_sorts_keys_by_utf16_code_units():
+    value = {'\ue000': 'bmp-private-use', '\U00010000': 'supplementary'}
+    assert verify.canonicalize(value).decode('utf-8') == '{"𐀀":"supplementary","":"bmp-private-use"}'
+
+
+def test_canonicalization_rejects_unsafe_integers():
+    try:
+        verify.canonicalize({'n': 2**53})
+        assert False, 'unsafe integer should have raised'
+    except ValueError as e:
+        assert 'safe-integer range' in str(e)
+
+
+def test_core_profile_requires_at_least_one_asset(tmp_path):
+    case = load('pass-with-coverage.json')
+    case['profile'] = {
+        'profile_id': 'aac.core',
+        'profile_version': '0.2.0',
+        'assurance_level': 'structural',
+    }
+    case['assets'] = []
+    case['findings'] = []
+    case['policy_decisions'] = []
+    case['eval_results'] = []
+    case.pop('aibom_ref', None)
+    case.pop('graph_snapshot_ref', None)
+    case.pop('evidence_artifacts', None)
+    case['verdict'] = 'pass'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1

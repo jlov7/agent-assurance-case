@@ -1,16 +1,18 @@
 # Agent Assurance Case (AAC) Specification
 
-**Version:** 0.2-candidate.2 (Draft)
-**Date:** 2026-05-11
+**Version:** 0.2-candidate.3 (Draft)
+**Date:** 2026-05-12
 **Status:** Pre-public candidate after adversarial review and profile-verifier hardening
-**Initial steward:** Runwright (intended to transfer to a neutral standards body once at least two independent implementations exist)
-**Schema URI:** `https://runwright.dev/schemas/agent-assurance-case-v0.2.schema.json`
+**Initial maintainer:** Jason Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
+**Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/schemas/agent-assurance-case-v0.2.schema.json`
 **Specification license:** CC BY 4.0
 **Reference verifier license:** Apache 2.0
 
 ## Status of This Document
 
-This is a draft pre-public specification, version 0.2-candidate. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is open for public comment. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
+This is a draft pre-public specification, version 0.2-candidate.3. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is open for public comment. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
+
+The schema URI is pinned to the candidate Git tag so reviewers can resolve the exact draft being cited. Later candidates or stable releases MUST publish their own immutable schema URI.
 
 ## Abstract
 
@@ -226,7 +228,7 @@ This manifest does not require raw evidence to be embedded in the AAC. It provid
 
 ## 7. Canonicalization and Numbers
 
-The reference verifier rejects duplicate JSON object member names, `NaN`, `Infinity`, and floating-point numbers. Numeric metrics SHOULD be represented as integers or as decimal strings.
+The reference verifier rejects duplicate JSON object member names, `NaN`, `Infinity`, floating-point numbers, and integers outside the JSON safe-integer range `[-9007199254740991, 9007199254740991]`. Numeric metrics SHOULD be represented as safe integers or as decimal strings.
 
 This restriction exists because RFC 8785 number canonicalization is non-trivial and incorrect canonicalization in the trust-critical path is worse than slightly inconvenient metric encoding. Implementations MAY support floats only if they use a vetted RFC 8785/JCS library and preserve cross-language canonicalization compatibility.
 
@@ -347,14 +349,16 @@ Implementations MUST reject AACs whose `schema_version` they do not understand. 
 
 ## 14. Stewardship and Contact
 
-Initial steward: Runwright.
+Initial maintainer: Jason Lovell.
 
-The steward commits to:
+The maintainer commits to:
 
 - transferring stewardship to a neutral standards body once at least two independent implementations exist;
 - accepting and reviewing public comment on this specification;
 - publishing breaking changes only with at least 90 days of notice and a migration guide;
 - not making conformance claims about specific organizations or vendor products without their consent.
+
+The `runwright.*` profiles in this repository are vendor profile examples. They are intentionally separate from `aac.core` and do not define the AAC format itself.
 
 Public comment channel: the public repository's issue tracker. Contributions are accepted under CC BY 4.0 for specification text and Apache 2.0 for the reference verifier.
 
@@ -386,4 +390,4 @@ Public comment channel: the public repository's issue tracker. Contributions are
 
 ---
 
-*End of specification v0.2-candidate.2.*
+*End of specification v0.2-candidate.3.*

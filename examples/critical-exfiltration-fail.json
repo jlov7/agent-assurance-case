@@ -158,12 +158,12 @@
     }
   ],
   "evidence": {
-    "content_hash": "sha256:7dd746d3277fa0c84bde3df797b755ecb419e3d97d20f8af0ba8cada1d5d0be8",
-    "signature": "ed25519:mOioz4En4VU3+trjwoCwY24QNBne4LTEPesuEvOQ29MZx4OHnGpOD/YjU6fN50bo/gLrCzFWlkr++7g3GwcuAQ==",
-    "signed_by": "did:web:runwright.dev:demo-issuer",
+    "content_hash": "sha256:ece573515ed96027faa784a0848e59d27af6548892dbc86b72f35f193b0006ff",
+    "signature": "ed25519:O5vY7/geHlo2baYdj21GAMUPdorA81aYnFUracvFHK8E+xsC/lRd9VuW4E2ibifkMmp4RzYfgCYzLYUAWHRPDg==",
+    "signed_by": "urn:agent-assurance-case:demo-issuer",
     "signed_at": "2026-05-11T13:20:00Z",
-    "key_id": "demo-v0.2",
-    "public_key_ref": "https://runwright.dev/keys/demo-issuer.pub",
+    "key_id": "aac-demo-v0.2",
+    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/keys/demo-issuer-v0.2.pub",
     "signature_algorithm": "Ed25519-JCS-SHA256-v1",
     "canonicalization": "RFC8785-JCS",
     "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"

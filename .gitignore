@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 pytest-cache-files-*/
+.ruff_cache/
 
 # macOS / ZIP artifacts
 .DS_Store
@@ -12,3 +13,6 @@ __MACOSX/
 .venv/
 venv/
 .env
+
+# Local Codex planning notes
+.codex/

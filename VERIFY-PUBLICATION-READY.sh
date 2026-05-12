@@ -1,24 +1,39 @@
 #!/usr/bin/env bash
-# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.2 artifact.
+# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.3 artifact.
 #
 # Run this before pushing to the public GitHub repo. The gate checks:
 #   1. The v0.1 leftover files are not present (they would weaken the public artifact).
-#   2. The test suite passes with 10/10 tests.
+#   2. The test suite passes.
 #   3. Each of the three bundled examples verifies cleanly.
 #   4. The bug-1 regression (silent signature skip) is still caught.
 #   5. The schema URI in SPEC.md matches the schema file shipped.
-#   6. The verifier source contains the V7 hardening hooks.
+#   6. The published demo public key verifies the examples.
+#   7. The verifier source contains the trust hardening hooks.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
 set -uo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR"
+cd "$SCRIPT_DIR" || exit 2
 
 PASS=0
 FAIL=0
 RESULTS=()
+PYTHON_BIN="${PYTHON:-python3}"
+TEMP_ROOT=""
+TMP_CASE=""
+
+# shellcheck disable=SC2329
+cleanup() {
+  if [[ -n "$TMP_CASE" && -f "$TMP_CASE" ]]; then
+    rm -f "$TMP_CASE"
+  fi
+  if [[ -n "$TEMP_ROOT" && -d "$TEMP_ROOT" ]]; then
+    rm -rf "$TEMP_ROOT"
+  fi
+}
+trap cleanup EXIT
 
 check() {
   local name="$1"
@@ -33,6 +48,22 @@ check() {
   fi
 }
 
+# Use a temporary venv outside the repository unless the caller explicitly supplies PYTHON.
+# This keeps the publication gate reproducible from a fresh clone without generating local caches.
+if [[ -z "${PYTHON:-}" ]]; then
+  TEMP_ROOT=$(mktemp -d /tmp/aac_pub_gate_env.XXXXXX)
+  if python3 -m venv "$TEMP_ROOT/venv" \
+    && "$TEMP_ROOT/venv/bin/python" -m pip install --upgrade pip >/dev/null \
+    && "$TEMP_ROOT/venv/bin/python" -m pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt >/dev/null; then
+    PYTHON_BIN="$TEMP_ROOT/venv/bin/python"
+    check "isolated Python environment" "ok" "$PYTHON_BIN"
+  else
+    check "isolated Python environment" "fail" "could not create temp venv or install verifier dependencies"
+  fi
+else
+  check "Python environment" "ok" "$PYTHON_BIN"
+fi
+
 # 1. v0.1 leftover files must not be present.
 if [[ -e "examples/minimal-pass.json" || -e "schemas/agent-assurance-case-v0.1.schema.json" ]]; then
   leftovers=()
@@ -44,7 +75,7 @@ else
 fi
 
 # 1b. No build caches, Python caches, or Mac zip artifacts (must not be pushed public).
-junk=$(find . \( -name ".pytest_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
+junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$junk" ]]; then
   count=$(printf "%s\n" "$junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$junk" | head -1)
@@ -53,16 +84,18 @@ else
   check "no build cache or junk artifacts" "ok"
 fi
 
-# 2. Test suite passes with 10/10. Disable pytest cache + bytecode writes so the gate doesn't regenerate junk.
-if PYTHONDONTWRITEBYTECODE=1 python3 -m pytest tests/ --basetemp=/tmp/aac_pub_gate -p no:cacheprovider -q 2>&1 | grep -qE "^10 passed"; then
-  check "pytest 10/10 passes" "ok"
+# 2. Test suite passes. Disable pytest cache + bytecode writes so the gate doesn't regenerate junk.
+pytest_out=$(PYTHONDONTWRITEBYTECODE=1 "$PYTHON_BIN" -m pytest tests/ --basetemp=/tmp/aac_pub_gate -p no:cacheprovider -q 2>&1)
+if printf "%s\n" "$pytest_out" | grep -qE "^[0-9]+ passed"; then
+  passed=$(printf "%s\n" "$pytest_out" | sed -nE 's/^([0-9]+ passed).*/\1/p' | head -1)
+  check "pytest suite passes" "ok" "$passed"
 else
-  check "pytest 10/10 passes" "fail" "run 'python3 -m pytest tests/ -v' to see failures"
+  check "pytest suite passes" "fail" "run 'python3 -m pytest tests/ -v' to see failures"
 fi
 
 # 3. Each bundled example verifies.
 for ex in pass-with-coverage skill-poisoning-hold critical-exfiltration-fail; do
-  out=$(PYTHONDONTWRITEBYTECODE=1 python3 verifier/verify.py "examples/${ex}.json" --allow-demo-key 2>&1 | tail -1)
+  out=$(PYTHONDONTWRITEBYTECODE=1 "$PYTHON_BIN" verifier/verify.py "examples/${ex}.json" --allow-demo-key 2>&1 | tail -1)
   if [[ "$out" == "VERIFIED" ]]; then
     check "example ${ex}.json verifies" "ok"
   else
@@ -70,39 +103,54 @@ for ex in pass-with-coverage skill-poisoning-hold critical-exfiltration-fail; do
   fi
 done
 
+# 3b. The published demo key must also verify the bundled examples.
+for ex in pass-with-coverage skill-poisoning-hold critical-exfiltration-fail; do
+  out=$(PYTHONDONTWRITEBYTECODE=1 "$PYTHON_BIN" verifier/verify.py "examples/${ex}.json" --public-key keys/demo-issuer-v0.2.pub 2>&1 | tail -1)
+  if [[ "$out" == "VERIFIED" ]]; then
+    check "example ${ex}.json verifies with published demo key" "ok"
+  else
+    check "example ${ex}.json verifies with published demo key" "fail" "got: $out"
+  fi
+done
+
 # 4. Bug-1 regression — invalid sig + no flags must produce NOT VERIFIED.
-tmp=$(mktemp)
-python3 -c "
+TMP_CASE=$(mktemp)
+"$PYTHON_BIN" -c "
 import json, sys
 with open('examples/pass-with-coverage.json') as f: case = json.load(f)
 case['evidence']['signature'] = 'ed25519:' + 'A' * 88
-with open('$tmp', 'w') as f: json.dump(case, f)
+with open('$TMP_CASE', 'w') as f: json.dump(case, f)
 "
-regression_out=$(PYTHONDONTWRITEBYTECODE=1 python3 verifier/verify.py "$tmp" 2>&1 | tail -1)
-rm -f "$tmp"
+regression_out=$(PYTHONDONTWRITEBYTECODE=1 "$PYTHON_BIN" verifier/verify.py "$TMP_CASE" 2>&1 | tail -1)
+rm -f "$TMP_CASE"
+TMP_CASE=""
 if [[ "$regression_out" == "NOT VERIFIED" ]]; then
   check "bug-1 regression (silent sig skip caught)" "ok"
 else
   check "bug-1 regression (silent sig skip caught)" "fail" "got: $regression_out"
 fi
 
+expected_schema_uri="https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/schemas/agent-assurance-case-v0.2.schema.json"
+
 # 5. Schema URI in SPEC.md matches the schema file on disk.
-if grep -q "agent-assurance-case-v0.2.schema.json" SPEC.md && [[ -f "schemas/agent-assurance-case-v0.2.schema.json" ]]; then
+if grep -q "$expected_schema_uri" SPEC.md \
+  && grep -q "\"\$id\": \"$expected_schema_uri\"" schemas/agent-assurance-case-v0.2.schema.json \
+  && [[ -f "schemas/agent-assurance-case-v0.2.schema.json" ]]; then
   check "schema URI matches shipped schema" "ok"
 else
-  check "schema URI matches shipped schema" "fail" "SPEC.md references a schema file not present in schemas/"
+  check "schema URI matches shipped schema" "fail" "SPEC.md and schema \$id must both use $expected_schema_uri"
 fi
 
-# 6. Verifier source contains V7 hardening hooks.
+# 6. Verifier source contains trust hardening hooks.
 hooks=$(grep -cE "_SUPPORTED_PROFILES|_no_duplicate_object_pairs|validate_timestamps_utc|enforce_profile|_evidence_reference_errors" verifier/verify.py 2>/dev/null || echo 0)
 if [[ "$hooks" -ge 5 ]]; then
-  check "V7 hardening hooks present in verifier" "ok" "$hooks references found"
+  check "trust hardening hooks present in verifier" "ok" "$hooks references found"
 else
-  check "V7 hardening hooks present in verifier" "fail" "only $hooks of 5 expected hooks found"
+  check "trust hardening hooks present in verifier" "fail" "only $hooks of 5 expected hooks found"
 fi
 
 # 7. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
-post_junk=$(find . \( -name ".pytest_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
+post_junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$post_junk" | head -1)
@@ -116,11 +164,11 @@ printf '%s\n' "${RESULTS[@]}"
 echo
 echo "Summary: $PASS passed, $FAIL failed."
 if [[ $FAIL -eq 0 ]]; then
-  echo "AAC v0.2-candidate.2 publication gate: PASSED"
+  echo "AAC v0.2-candidate.3 publication gate: PASSED"
   echo "Ready to push to public repo."
   exit 0
 else
-  echo "AAC v0.2-candidate.2 publication gate: FAILED"
+  echo "AAC v0.2-candidate.3 publication gate: FAILED"
   echo "Fix the failed items before pushing public."
   exit 1
 fi

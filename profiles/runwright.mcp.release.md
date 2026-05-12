@@ -5,7 +5,7 @@
 **Builds on:** `aac.core` v0.2 at assurance level `basic` or higher.  
 **Purpose:** Define the minimum evidence expected for an AAC issued against an agentic AI release whose primary surface is MCP (Model Context Protocol) servers and tools.
 
-This is a vendor profile published by Runwright. Independent vendors MAY define alternative MCP profiles. This profile is intentionally 60-day-shippable: it requires inventory, approval, scope, and provenance checks before broader runtime/cross-origin analysis.
+This is a vendor profile for Runwright-style MCP releases. Independent vendors MAY define alternative MCP profiles. This profile is intentionally 60-day-shippable: it requires inventory, approval, scope, and provenance checks before broader runtime/cross-origin analysis.
 
 ## 1. Scope
 

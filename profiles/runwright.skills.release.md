@@ -5,7 +5,7 @@
 **Builds on:** `aac.core` v0.2 at assurance level `basic` or higher.  
 **Purpose:** Define the minimum evidence expected for an AAC issued against an agentic AI release whose primary surface is skills (Anthropic SKILL.md, OpenAI Codex skills, or equivalent skill formats).
 
-This is a vendor profile published by Runwright. Independent vendors MAY define alternative skill profiles. This profile is intentionally 60-day-shippable: it requires detector classes that can be implemented with deterministic static analysis, bundle attestation, and simple scope checks. More research-heavy behavioral detectors are recommended but not required in v0.1.
+This is a vendor profile for Runwright-style skill releases. Independent vendors MAY define alternative skill profiles. This profile is intentionally 60-day-shippable: it requires detector classes that can be implemented with deterministic static analysis, bundle attestation, and simple scope checks. More research-heavy behavioral detectors are recommended but not required in v0.1.
 
 ## 1. Scope
 

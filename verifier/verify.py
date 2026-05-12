@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.2
+Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.3
 
 Trust-critical properties:
 - Signature verification is never silently skipped. Use --allow-demo-key for bundled examples only.
@@ -11,7 +11,7 @@ Trust-critical properties:
 - PASS cannot be issued for unknown/partial inventory coverage or skipped/error required detectors/evals.
 - Finding subject_asset_id values must point to declared assets, or the reserved literal "subject".
 - Supported profiles are enforced. Unsupported profiles return NOT VERIFIED.
-- Material evidence:// references must be present in evidence_artifacts for Runwright release profiles.
+- Material evidence:// references must be present in evidence_artifacts for supported release profiles.
 """
 
 from __future__ import annotations
@@ -39,10 +39,16 @@ except ImportError:
     sys.exit(2)
 
 SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schemas" / "agent-assurance-case-v0.2.schema.json"
-_DEMO_SEED = b"runwright-aac-v0.2-demo-keypair-seed-do-not-use-prod"
-_DEMO_SIGNED_BY = "did:web:runwright.dev:demo-issuer"
-_DEMO_KEY_ID = "demo-v0.2"
-_SUPPORTED_PROFILES = {"aac.core", "runwright.skills.release", "runwright.mcp.release"}
+_DEMO_SEED = b"agent-assurance-case-v0.2-demo-keypair-seed-do-not-use-prod"
+_DEMO_SIGNED_BY = "urn:agent-assurance-case:demo-issuer"
+_DEMO_KEY_ID = "aac-demo-v0.2"
+_JCS_MIN_SAFE_INTEGER = -(2**53) + 1
+_JCS_MAX_SAFE_INTEGER = (2**53) - 1
+_SUPPORTED_PROFILES = {
+    "aac.core": {"0.2.0"},
+    "runwright.skills.release": {"0.1.0"},
+    "runwright.mcp.release": {"0.1.0"},
+}
 
 
 def _reject_constant(value: str) -> None:
@@ -66,6 +72,10 @@ def load_json_no_duplicates(text: str) -> Any:
     )
 
 
+def _utf16_sort_key(value: str) -> bytes:
+    return value.encode("utf-16-be")
+
+
 # Minimal deterministic canonicalizer for the constrained AAC v0.2 value domain.
 # Floats are rejected to avoid an incomplete RFC 8785 number implementation.
 def _jcs(value: Any) -> str:
@@ -74,6 +84,8 @@ def _jcs(value: Any) -> str:
     if isinstance(value, bool):
         return "true" if value else "false"
     if isinstance(value, int) and not isinstance(value, bool):
+        if value < _JCS_MIN_SAFE_INTEGER or value > _JCS_MAX_SAFE_INTEGER:
+            raise ValueError("AAC v0.2 reference verifier rejects integers outside the JSON safe-integer range")
         return str(value)
     if isinstance(value, float):
         raise ValueError("AAC v0.2 reference verifier rejects floats; encode decimals as strings")
@@ -86,7 +98,7 @@ def _jcs(value: Any) -> str:
         # use a vetted RFC 8785/JCS library.
         return "{" + ",".join(
             json.dumps(k, ensure_ascii=False, separators=(",", ":")) + ":" + _jcs(v)
-            for k, v in sorted(value.items(), key=lambda kv: kv[0])
+            for k, v in sorted(value.items(), key=lambda kv: _utf16_sort_key(kv[0]))
         ) + "}"
     raise TypeError(f"Unsupported type for canonicalization: {type(value).__name__}")
 
@@ -330,6 +342,14 @@ def _evidence_artifact_uris(case: dict) -> set[str]:
     return {a.get("uri") for a in case.get("evidence_artifacts", []) or [] if isinstance(a, dict)}
 
 
+def _evidence_artifact_roles(case: dict, uri: str) -> set[str]:
+    return {
+        a.get("role")
+        for a in case.get("evidence_artifacts", []) or []
+        if isinstance(a, dict) and a.get("uri") == uri
+    }
+
+
 def _evidence_reference_errors(case: dict) -> list[str]:
     refs = _evidence_uri_values(case)
     artifacts = _evidence_artifact_uris(case)
@@ -337,6 +357,58 @@ def _evidence_reference_errors(case: dict) -> list[str]:
     if missing:
         return [f"evidence refs missing from evidence_artifacts: {missing[:8]}" + (" ..." if len(missing) > 8 else "")]
     return []
+
+
+def _duplicate_value_errors(case: dict) -> list[str]:
+    errors: list[str] = []
+
+    def check(collection_name: str, field: str) -> None:
+        seen: set[str] = set()
+        duplicates: set[str] = set()
+        for item in case.get(collection_name, []) or []:
+            if not isinstance(item, dict):
+                continue
+            value = item.get(field)
+            if not isinstance(value, str):
+                continue
+            if value in seen:
+                duplicates.add(value)
+            seen.add(value)
+        if duplicates:
+            errors.append(f"duplicate {collection_name}.{field} values: {sorted(duplicates)}")
+
+    check("assets", "asset_id")
+    check("findings", "finding_id")
+    check("approvals", "approval_id")
+    check("evidence_artifacts", "artifact_id")
+    check("evidence_artifacts", "uri")
+    return errors
+
+
+def _subject_reference_errors(case: dict) -> list[str]:
+    asset_ids = {a.get("asset_id") for a in case.get("assets", []) or []}
+    valid_refs = asset_ids | {"subject"}
+    errors: list[str] = []
+    for decision in case.get("policy_decisions", []) or []:
+        subject_asset_id = decision.get("subject_asset_id")
+        if subject_asset_id and subject_asset_id not in valid_refs:
+            errors.append(f"policy decision references undeclared asset: {decision.get('policy_id')} -> {subject_asset_id}")
+    for event in case.get("runtime_events", []) or []:
+        subject_asset_id = event.get("subject_asset_id")
+        if subject_asset_id and subject_asset_id not in valid_refs:
+            errors.append(f"runtime event references undeclared asset: {event.get('event_id')} -> {subject_asset_id}")
+    return errors
+
+
+def _finding_evidence_ref_errors(case: dict, predicate, label: str) -> list[str]:
+    errors: list[str] = []
+    for finding in case.get("findings", []) or []:
+        if not predicate(finding):
+            continue
+        refs = [r for r in finding.get("evidence_refs", []) or [] if isinstance(r, str) and r.startswith("evidence://")]
+        if not refs:
+            errors.append(f"{label} finding lacks evidence:// evidence_refs: {finding.get('finding_id')}")
+    return errors
 
 
 def _runtime_status(case: dict) -> str:
@@ -347,13 +419,20 @@ def enforce_profile(case: dict) -> list[str]:
     errors: list[str] = []
     profile = case.get("profile", {})
     profile_id = profile.get("profile_id")
+    profile_version = profile.get("profile_version")
     assurance = profile.get("assurance_level") or "structural"
     if profile_id not in _SUPPORTED_PROFILES:
         return [f"unsupported profile: {profile_id}"]
+    if profile_version not in _SUPPORTED_PROFILES[profile_id]:
+        return [f"unsupported profile version: {profile_id}@{profile_version}"]
 
     # Core requirements for all profiles.
+    errors += _duplicate_value_errors(case)
+    errors += _subject_reference_errors(case)
     if not case.get("subject", {}).get("subject_type"):
         errors.append("subject.subject_type is required by aac.core")
+    if not case.get("assets"):
+        errors.append("aac.core requires at least one declared asset")
     if case.get("evidence", {}).get("signature_algorithm") != "Ed25519-JCS-SHA256-v1":
         errors.append("evidence.signature_algorithm must be Ed25519-JCS-SHA256-v1")
     if case.get("evidence", {}).get("canonicalization") != "RFC8785-JCS":
@@ -400,6 +479,22 @@ def enforce_profile(case: dict) -> list[str]:
         })
         if not case.get("aibom_ref"):
             errors.append("runwright.skills.release requires aibom_ref")
+        elif "aibom" not in _evidence_artifact_roles(case, case["aibom_ref"]):
+            errors.append("runwright.skills.release requires aibom_ref artifact role aibom")
+        skill_categories = {
+            "skill-manifest-integrity",
+            "skill-secret-exposure",
+            "skill-executable-surface",
+            "skill-tool-scope",
+        }
+        errors += _finding_evidence_ref_errors(
+            case,
+            lambda finding: (
+                "SKILL" in str(finding.get("category", "")).upper()
+                or str(finding.get("category", "")).lower() in skill_categories
+            ),
+            "skill-profile",
+        )
         errors += _evidence_reference_errors(case)
 
     if profile_id == "runwright.mcp.release":
@@ -413,6 +508,8 @@ def enforce_profile(case: dict) -> list[str]:
         })
         if not case.get("aibom_ref"):
             errors.append("runwright.mcp.release requires aibom_ref")
+        elif "aibom" not in _evidence_artifact_roles(case, case["aibom_ref"]):
+            errors.append("runwright.mcp.release requires aibom_ref artifact role aibom")
         policy_subjects = {d.get("subject_asset_id") for d in case.get("policy_decisions", []) or []}
         for asset_id, asset in assets_by_id.items():
             if asset.get("asset_type") == "mcp_tool" and (asset.get("metadata") or {}).get("irreversible") is True:
@@ -422,6 +519,14 @@ def enforce_profile(case: dict) -> list[str]:
                     matching = [d for d in case.get("policy_decisions", []) or [] if d.get("subject_asset_id") == asset_id]
                     if (asset.get("metadata") or {}).get("required_approval") == "missing" and not any(d.get("outcome") in {"hold", "deny"} for d in matching):
                         errors.append(f"irreversible MCP tool missing approval must have hold/deny policy decision: {asset_id}")
+        errors += _finding_evidence_ref_errors(
+            case,
+            lambda finding: (
+                str(finding.get("category", "")).upper().startswith("MCP")
+                or (assets_by_id.get(finding.get("subject_asset_id"), {}).get("asset_type") in {"mcp_server", "mcp_tool"})
+            ),
+            "mcp-profile",
+        )
         errors += _evidence_reference_errors(case)
 
     return errors
@@ -547,7 +652,7 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Agent Assurance Case v0.2-candidate.2 reference verifier")
+    parser = argparse.ArgumentParser(description="Agent Assurance Case v0.2-candidate.3 reference verifier")
     parser.add_argument("case", type=Path)
     parser.add_argument("--public-key", type=Path, default=None)
     parser.add_argument("--allow-demo-key", action="store_true", help="Use the bundled demo key for examples only")

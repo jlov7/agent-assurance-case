@@ -24,6 +24,7 @@ A `profile.assurance_level` value when declaring `aac.core` MUST be one of:
 When declaring `aac.core` at any assurance level, an AAC MUST include:
 
 - `subject.subject_type` populated (not absent);
+- `assets` non-empty;
 - `coverage.inventory_methods` non-empty;
 - `evidence.signature_algorithm` set to `Ed25519-JCS-SHA256-v1`;
 - `evidence.canonicalization` set to `RFC8785-JCS`.

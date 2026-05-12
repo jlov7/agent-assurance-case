@@ -1,6 +1,6 @@
 # Contributing
 
-AAC v0.2-candidate.2 is a draft for review and implementation feedback.
+AAC v0.2-candidate.3 is a draft for review and implementation feedback.
 
 ## Feedback Wanted
 
@@ -22,4 +22,4 @@ Use `git commit -s` to add a `Signed-off-by` line to commits.
 
 ## Licenses
 
-Specification text, profiles, examples, and documentation are contributed under CC BY 4.0. Code, schemas, tests, and CI are contributed under Apache 2.0.
+Specification text, profiles, examples, and documentation are contributed under CC BY 4.0. Code, schemas, keys, tests, and CI are contributed under Apache 2.0.

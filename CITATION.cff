@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use the Agent Assurance Case specification or reference verifier, please cite it as below."
+type: software
+title: "Agent Assurance Case (AAC) Specification and Reference Verifier"
+version: "0.2-candidate.3"
+date-released: 2026-05-12
+authors:
+  - family-names: "Lovell"
+    given-names: "Jason"
+repository-code: "https://github.com/jlov7/agent-assurance-case"
+url: "https://github.com/jlov7/agent-assurance-case"
+abstract: "A portable, signed, deterministically verifiable evidence object for agentic AI release assurance."
+keywords:
+  - agentic-ai
+  - ai-assurance
+  - release-gates
+  - evidence
+  - json-schema
+  - ed25519
+  - verification

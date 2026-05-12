@@ -1,9 +1,11 @@
-# Copy this file to .github/workflows/ci.yml in the public repository.
+# GitHub Actions workflow for the AAC reference verifier.
 #
-# It runs on every push and pull request:
+# Runs on every push and pull request:
 #   - installs runtime and dev Python dependencies
-#   - runs the 10-test verifier test suite
+#   - runs the verifier test suite
 #   - verifies all three bundled example AACs with --allow-demo-key
+#   - verifies all three bundled example AACs with the published demo public key
+#   - validates the shipped JSON Schema as a Draft 2020-12 schema
 #   - runs the publication-readiness gate script
 #
 # A failed CI run blocks merges.
@@ -19,12 +21,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -34,7 +39,7 @@ jobs:
           pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt
 
       - name: Run verifier test suite
-        run: python -m pytest tests/ -v
+        run: python -m pytest tests/ -v -p no:cacheprovider --basetemp=/tmp/aac-pytest
 
       - name: Verify pass-with-coverage example
         run: python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
@@ -44,6 +49,23 @@ jobs:
 
       - name: Verify critical-exfiltration-fail example
         run: python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+
+      - name: Verify examples with published demo key
+        run: |
+          python verifier/verify.py examples/pass-with-coverage.json --public-key keys/demo-issuer-v0.2.pub
+          python verifier/verify.py examples/skill-poisoning-hold.json --public-key keys/demo-issuer-v0.2.pub
+          python verifier/verify.py examples/critical-exfiltration-fail.json --public-key keys/demo-issuer-v0.2.pub
+
+      - name: Validate JSON Schema metaschema
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+
+          schema = json.loads(Path("schemas/agent-assurance-case-v0.2.schema.json").read_text())
+          Draft202012Validator.check_schema(schema)
+          PY
 
       - name: Run publication-readiness gate
         run: |
