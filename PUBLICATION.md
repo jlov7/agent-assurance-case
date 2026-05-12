@@ -7,15 +7,16 @@ This checklist is for publishing an Agent Assurance Case (AAC) draft candidate a
 1. Update the candidate version everywhere it appears.
 2. Pin the schema `$id` and `SPEC.md` schema URI to the exact Git tag.
 3. Regenerate bundled examples after any verifier, demo identity, schema, or profile change.
-4. Run:
+4. Review `THREAT_MODEL.md` for any changed trust-boundary assumptions.
+5. Run:
 
    ```bash
    ./VERIFY-PUBLICATION-READY.sh
    uvx --from cffconvert cffconvert --validate --infile CITATION.cff
    ```
 
-5. Commit the final artifact.
-6. Push the commit and wait for GitHub Actions to pass on that exact SHA.
+6. Commit the final artifact.
+7. Push the commit and wait for GitHub Actions to pass on that exact SHA.
 
 ## GitHub Release
 
@@ -23,7 +24,7 @@ Do not make the repository public, push a public tag, or publish a GitHub Releas
 
 1. Create a new tag for the final checked commit. Do not move old candidate tags.
 2. Create a GitHub Release from that tag.
-3. Include concise release notes covering verifier semantics, schema changes, examples, and known draft limitations.
+3. Include concise release notes covering verifier semantics, schema changes, threat model, examples, and known draft limitations.
 4. Confirm the schema URI and demo public key URL resolve from the public tag.
 
 ## Zenodo DOI

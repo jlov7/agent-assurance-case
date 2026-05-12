@@ -2,6 +2,8 @@
 
 AAC is a draft specification and reference verifier. Please do not report suspected vulnerabilities by opening a public issue if the report contains exploit details, private keys, credentials, or non-public evidence.
 
+The reviewer-facing trust boundary is summarized in `THREAT_MODEL.md`.
+
 ## Reporting
 
 Use GitHub private vulnerability reporting for this repository when available. If that is unavailable, contact the maintainer privately through the GitHub account that owns the repository.

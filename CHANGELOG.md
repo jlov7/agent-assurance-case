@@ -8,6 +8,8 @@
 - Tightens Runwright release profiles so they require `aac.core` assurance level `basic` or higher.
 - Aligns `skill` subject-type handling across the schema, specification, profile, and verifier tests.
 - Adds explicit JCS surrogate rejection coverage and replaces non-official EU AI Act references with EUR-Lex.
+- Aligns verifier execution order with the specification's hash/signature-before-profile procedure.
+- Adds a standalone threat model and publication-gate checks for candidate version drift.
 
 ## v0.2-candidate.3
 

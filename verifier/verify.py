@@ -347,15 +347,25 @@ def _evidence_uri_values(case: dict) -> set[str]:
 
 
 def _evidence_artifact_uris(case: dict) -> set[str]:
-    return {a.get("uri") for a in case.get("evidence_artifacts", []) or [] if isinstance(a, dict)}
+    uris: set[str] = set()
+    for artifact in case.get("evidence_artifacts", []) or []:
+        if not isinstance(artifact, dict):
+            continue
+        uri = artifact.get("uri")
+        if isinstance(uri, str):
+            uris.add(uri)
+    return uris
 
 
 def _evidence_artifact_roles(case: dict, uri: str) -> set[str]:
-    return {
-        a.get("role")
-        for a in case.get("evidence_artifacts", []) or []
-        if isinstance(a, dict) and a.get("uri") == uri
-    }
+    roles: set[str] = set()
+    for artifact in case.get("evidence_artifacts", []) or []:
+        if not isinstance(artifact, dict) or artifact.get("uri") != uri:
+            continue
+        role = artifact.get("role")
+        if isinstance(role, str):
+            roles.add(role)
+    return roles
 
 
 def _evidence_reference_errors(case: dict) -> list[str]:
@@ -594,12 +604,6 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
         result.print(verbose)
         return 1
 
-    profile_errors = enforce_profile(case)
-    result.add("profile conformance", not profile_errors, "; ".join(profile_errors[:8]))
-    if profile_errors:
-        result.print(verbose)
-        return 1
-
     try:
         expected_hash = compute_content_hash(case)
     except Exception as e:
@@ -639,6 +643,12 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
             return 1
     else:
         result.add("signature", False, "no --public-key supplied; use --allow-demo-key only for bundled examples")
+        result.print(verbose)
+        return 1
+
+    profile_errors = enforce_profile(case)
+    result.add("profile conformance", not profile_errors, "; ".join(profile_errors[:8]))
+    if profile_errors:
         result.print(verbose)
         return 1
 

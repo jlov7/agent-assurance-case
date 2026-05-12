@@ -6,6 +6,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('verify', BASE / 'verifier' / 'verify.py')
+assert spec is not None and spec.loader is not None
 verify = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(verify)
 
@@ -141,6 +142,24 @@ def test_unsupported_profile_version_rejected(tmp_path):
     resign(case)
     path = write(tmp_path, 'case.json', case)
     assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def test_signature_is_checked_before_profile_conformance(tmp_path, capsys):
+    case = load('pass-with-coverage.json')
+    case['profile']['profile_version'] = '999.0.0'
+    resign(case)
+    case['evidence']['signature'] = 'ed25519:' + 'A' * 88
+    path = write(tmp_path, 'case.json', case)
+
+    assert verify.verify(
+        path,
+        BASE / 'keys' / 'demo-issuer-v0.2.pub',
+        allow_demo_key=False,
+        verbose=True,
+    ) == 1
+    output = capsys.readouterr().out
+    assert '[FAIL] signature' in output
+    assert 'profile conformance' not in output
 
 
 def test_runwright_skill_release_requires_basic_or_higher():

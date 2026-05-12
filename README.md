@@ -86,6 +86,7 @@ Run the publication gate:
 .
 ├── README.md
 ├── SPEC.md
+├── THREAT_MODEL.md
 ├── CITATION.cff
 ├── CHANGELOG.md
 ├── PUBLICATION.md
@@ -162,6 +163,8 @@ Issues and pull requests are welcome while the draft is under review. Please kee
 Specification text, profiles, examples, and documentation are licensed under CC BY 4.0. Code, schemas, keys, tests, and CI are licensed under Apache 2.0.
 
 Security-sensitive reports should follow `SECURITY.md`.
+
+Threat model assumptions are summarized in `THREAT_MODEL.md`.
 
 ## Independence Notice
 

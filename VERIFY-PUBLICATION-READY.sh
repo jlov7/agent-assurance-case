@@ -9,6 +9,7 @@
 #   5. The schema URI in SPEC.md matches the schema file shipped.
 #   6. The published demo public key verifies the examples.
 #   7. The verifier source contains the trust hardening hooks.
+#   8. Candidate version metadata stays synchronized across public artifacts.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -23,6 +24,9 @@ RESULTS=()
 PYTHON_BIN="${PYTHON:-python3}"
 TEMP_ROOT=""
 TMP_CASE=""
+EXPECTED_CANDIDATE="v0.2-candidate.4"
+EXPECTED_VERSION="${EXPECTED_CANDIDATE#v}"
+EXPECTED_SCHEMA_URI="https://raw.githubusercontent.com/jlov7/agent-assurance-case/${EXPECTED_CANDIDATE}/schemas/agent-assurance-case-v0.2.schema.json"
 
 # shellcheck disable=SC2329
 cleanup() {
@@ -130,18 +134,34 @@ else
   check "bug-1 regression (silent sig skip caught)" "fail" "got: $regression_out"
 fi
 
-expected_schema_uri="https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json"
-
 # 5. Schema URI in SPEC.md matches the schema file on disk.
-if grep -q "$expected_schema_uri" SPEC.md \
-  && grep -q "\"\$id\": \"$expected_schema_uri\"" schemas/agent-assurance-case-v0.2.schema.json \
+if grep -q "$EXPECTED_SCHEMA_URI" SPEC.md \
+  && grep -q "\"\$id\": \"$EXPECTED_SCHEMA_URI\"" schemas/agent-assurance-case-v0.2.schema.json \
   && [[ -f "schemas/agent-assurance-case-v0.2.schema.json" ]]; then
   check "schema URI matches shipped schema" "ok"
 else
-  check "schema URI matches shipped schema" "fail" "SPEC.md and schema \$id must both use $expected_schema_uri"
+  check "schema URI matches shipped schema" "fail" "SPEC.md and schema \$id must both use $EXPECTED_SCHEMA_URI"
 fi
 
-# 6. Verifier source contains trust hardening hooks.
+# 6. Candidate version metadata stays synchronized across public artifacts.
+version_mismatches=()
+grep -Fq "Current draft: \`$EXPECTED_CANDIDATE\`." README.md || version_mismatches+=("README.md")
+grep -Fq "**Version:** $EXPECTED_VERSION (Draft)" SPEC.md || version_mismatches+=("SPEC.md")
+grep -Fq "version: \"$EXPECTED_VERSION\"" CITATION.cff || version_mismatches+=("CITATION.cff")
+grep -Fq "Reference Verifier — $EXPECTED_CANDIDATE" verifier/verify.py || version_mismatches+=("verifier/verify.py")
+while IFS= read -r path; do
+  [[ -n "$path" ]] && version_mismatches+=("$path")
+done < <(grep -L "$EXPECTED_CANDIDATE/keys/demo-issuer-v0.2.pub" examples/*.json || true)
+if [[ ! -f "THREAT_MODEL.md" ]]; then
+  version_mismatches+=("THREAT_MODEL.md")
+fi
+if [[ ${#version_mismatches[@]} -eq 0 ]]; then
+  check "candidate version metadata synchronized" "ok" "$EXPECTED_CANDIDATE"
+else
+  check "candidate version metadata synchronized" "fail" "mismatch: ${version_mismatches[*]}"
+fi
+
+# 7. Verifier source contains trust hardening hooks.
 hooks=$(grep -cE "_SUPPORTED_PROFILES|_no_duplicate_object_pairs|validate_timestamps_utc|enforce_profile|_evidence_reference_errors" verifier/verify.py 2>/dev/null || echo 0)
 if [[ "$hooks" -ge 5 ]]; then
   check "trust hardening hooks present in verifier" "ok" "$hooks references found"
@@ -149,7 +169,7 @@ else
   check "trust hardening hooks present in verifier" "fail" "only $hooks of 5 expected hooks found"
 fi
 
-# 7. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 8. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
@@ -164,11 +184,11 @@ printf '%s\n' "${RESULTS[@]}"
 echo
 echo "Summary: $PASS passed, $FAIL failed."
 if [[ $FAIL -eq 0 ]]; then
-  echo "AAC v0.2-candidate.4 publication gate: PASSED"
+  echo "AAC $EXPECTED_CANDIDATE publication gate: PASSED"
   echo "Ready for final publication approval."
   exit 0
 else
-  echo "AAC v0.2-candidate.4 publication gate: FAILED"
+  echo "AAC $EXPECTED_CANDIDATE publication gate: FAILED"
   echo "Fix the failed items before pushing public."
   exit 1
 fi
