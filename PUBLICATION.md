@@ -19,6 +19,8 @@ This checklist is for publishing an Agent Assurance Case (AAC) draft candidate a
 
 ## GitHub Release
 
+Do not make the repository public, push a public tag, or publish a GitHub Release until the maintainer explicitly approves that exact publication action.
+
 1. Create a new tag for the final checked commit. Do not move old candidate tags.
 2. Create a GitHub Release from that tag.
 3. Include concise release notes covering verifier semantics, schema changes, examples, and known draft limitations.

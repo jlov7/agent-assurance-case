@@ -1,0 +1,44 @@
+---
+name: Verifier bug
+description: Report a deterministic verifier or profile-enforcement defect.
+title: "[verifier] "
+labels:
+  - verifier
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What did the verifier accept or reject incorrectly?
+    validations:
+      required: true
+  - type: textarea
+    id: case
+    attributes:
+      label: Minimal case
+      description: >
+        Provide a minimal AAC JSON fragment or repository example mutation. Do
+        not paste secrets or private evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command and output
+      description: Include the exact verifier command and the relevant output.
+      render: shell
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - False pass
+        - False hold or fail
+        - Signature/hash confusion
+        - Parser/canonicalization ambiguity
+        - Profile enforcement drift
+        - Documentation mismatch
+    validations:
+      required: true

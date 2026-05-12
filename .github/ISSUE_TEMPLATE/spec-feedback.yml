@@ -1,0 +1,46 @@
+---
+name: Spec feedback
+description: Propose a focused AAC spec, schema, or profile change.
+title: "[spec] "
+labels:
+  - spec
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is ambiguous, inconsistent, missing, or over-specified?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Concrete example
+      description: >
+        Include the smallest AAC fragment, profile rule, or verifier behavior
+        that demonstrates the issue.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Verdict semantics
+        - Schema shape
+        - Profile rules
+        - Evidence binding
+        - Privacy and evidence references
+        - External standards alignment
+        - Versioning and conformance
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed resolution
+      description: >
+        What exact change should be made, and what compatibility impact would
+        it have?
+    validations:
+      required: true

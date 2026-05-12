@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.3 artifact.
+# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.4 artifact.
 #
 # Run this before pushing to the public GitHub repo. The gate checks:
 #   1. The v0.1 leftover files are not present (they would weaken the public artifact).
@@ -53,8 +53,8 @@ check() {
 if [[ -z "${PYTHON:-}" ]]; then
   TEMP_ROOT=$(mktemp -d /tmp/aac_pub_gate_env.XXXXXX)
   if python3 -m venv "$TEMP_ROOT/venv" \
-    && "$TEMP_ROOT/venv/bin/python" -m pip install --upgrade pip >/dev/null \
-    && "$TEMP_ROOT/venv/bin/python" -m pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt >/dev/null; then
+    && PIP_NO_CACHE_DIR=1 "$TEMP_ROOT/venv/bin/python" -m pip install --upgrade pip >/dev/null \
+    && PIP_NO_CACHE_DIR=1 "$TEMP_ROOT/venv/bin/python" -m pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt >/dev/null; then
     PYTHON_BIN="$TEMP_ROOT/venv/bin/python"
     check "isolated Python environment" "ok" "$PYTHON_BIN"
   else
@@ -130,7 +130,7 @@ else
   check "bug-1 regression (silent sig skip caught)" "fail" "got: $regression_out"
 fi
 
-expected_schema_uri="https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/schemas/agent-assurance-case-v0.2.schema.json"
+expected_schema_uri="https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json"
 
 # 5. Schema URI in SPEC.md matches the schema file on disk.
 if grep -q "$expected_schema_uri" SPEC.md \
@@ -164,11 +164,11 @@ printf '%s\n' "${RESULTS[@]}"
 echo
 echo "Summary: $PASS passed, $FAIL failed."
 if [[ $FAIL -eq 0 ]]; then
-  echo "AAC v0.2-candidate.3 publication gate: PASSED"
-  echo "Ready to push to public repo."
+  echo "AAC v0.2-candidate.4 publication gate: PASSED"
+  echo "Ready for final publication approval."
   exit 0
 else
-  echo "AAC v0.2-candidate.3 publication gate: FAILED"
+  echo "AAC v0.2-candidate.4 publication gate: FAILED"
   echo "Fix the failed items before pushing public."
   exit 1
 fi

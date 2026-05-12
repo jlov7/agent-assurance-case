@@ -5,7 +5,7 @@
 **Builds on:** `aac.core` v0.2 at assurance level `basic` or higher.  
 **Purpose:** Define the minimum evidence expected for an AAC issued against an agentic AI release whose primary surface is skills (Anthropic SKILL.md, OpenAI Codex skills, or equivalent skill formats).
 
-This is a vendor profile for Runwright-style skill releases. Independent vendors MAY define alternative skill profiles. This profile is intentionally 60-day-shippable: it requires detector classes that can be implemented with deterministic static analysis, bundle attestation, and simple scope checks. More research-heavy behavioral detectors are recommended but not required in v0.1.
+This is a vendor profile for Runwright-style skill releases. Independent vendors MAY define alternative skill profiles. This profile is intentionally implementable with deterministic static analysis, bundle attestation, and simple scope checks. More research-heavy behavioral detectors are recommended but not required in v0.1.
 
 ## 1. Scope
 
@@ -40,7 +40,7 @@ The following detector classes are RECOMMENDED but are not required for v0.1 con
 - `skill-drift` — runtime behavior divergence from declared or baseline skill behavior;
 - `prompt-instruction-smuggling` — malicious natural-language instruction patterns that are not tied to an executable surface.
 
-A required detector that has `status` in `{skipped, error}` MUST cause HOLD per SPEC §5.2. A required detector with `status: findings_present` does not automatically fail the case; the finding severities and policy decisions determine the verdict.
+Under core verdict semantics, a required detector with `status` in `{skipped, error}` causes HOLD. Under this stricter release profile, that same case is not profile-conformant because the required detector category was not successfully executed. A required detector with `status: findings_present` does not automatically fail the case; the finding severities and policy decisions determine the verdict.
 
 ## 4. Required Evidence Linkage
 
@@ -61,6 +61,7 @@ This profile REQUIRES `aibom_ref`. The referenced AIBOM MUST enumerate every ski
 A verifier processing an AAC declaring this profile MUST:
 
 - apply all `aac.core` rules;
+- reject the AAC if `profile.assurance_level` is below `basic`;
 - reject the AAC if no `skill` or `skill_bundle` asset is present;
 - reject the AAC if any skill asset lacks a `digest`;
 - reject the AAC if any required detector category from §3 is absent or has `status` in `{skipped, error}`;

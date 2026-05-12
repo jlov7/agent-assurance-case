@@ -1,5 +1,7 @@
 import importlib.util
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1]
@@ -30,7 +32,7 @@ def test_bad_signature_fails_without_silent_skip(tmp_path):
     case = load('pass-with-coverage.json')
     case['evidence']['signature'] = 'ed25519:' + 'A' * 88
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=False, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=False, verbose=False) == 1
 
 
 def test_demo_public_key_verifies_example():
@@ -38,7 +40,6 @@ def test_demo_public_key_verifies_example():
         BASE / 'examples' / 'pass-with-coverage.json',
         BASE / 'keys' / 'demo-issuer-v0.2.pub',
         allow_demo_key=False,
-        resign_demo=False,
         verbose=False,
     ) == 0
 
@@ -47,7 +48,7 @@ def test_evidence_metadata_tamper_changes_hash(tmp_path):
     case = load('pass-with-coverage.json')
     case['evidence']['signed_by'] = 'did:web:evil.example'
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_partial_inventory_prevents_pass(tmp_path):
@@ -55,7 +56,7 @@ def test_partial_inventory_prevents_pass(tmp_path):
     case['coverage']['inventory_status'] = 'partial'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_finding_references_undeclared_asset_fails(tmp_path):
@@ -63,7 +64,7 @@ def test_finding_references_undeclared_asset_fails(tmp_path):
     case['findings'][0]['subject_asset_id'] = 'skill:missing@1.0.0'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_fail_example_verifies_as_fail():
@@ -79,7 +80,7 @@ def test_profile_missing_required_skill_detector_fails(tmp_path):
             run['categories'] = [c for c in run['categories'] if c != 'skill-secret-exposure']
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_evidence_ref_missing_from_artifact_manifest_fails(tmp_path):
@@ -96,7 +97,7 @@ def test_evidence_ref_missing_from_artifact_manifest_fails(tmp_path):
     })
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_duplicate_json_member_rejected():
@@ -113,7 +114,7 @@ def test_non_utc_timestamp_rejected(tmp_path):
     case['evidence']['signed_at'] = '2026-05-11T13:00:00+00:00'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_accepted_critical_risk_is_hold_not_pass():
@@ -139,7 +140,25 @@ def test_unsupported_profile_version_rejected(tmp_path):
     case['profile']['profile_version'] = '999.0.0'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def test_runwright_skill_release_requires_basic_or_higher():
+    case = load('pass-with-coverage.json')
+    case['profile']['assurance_level'] = 'structural'
+    errors = verify.enforce_profile(case)
+    assert 'runwright.skills.release requires aac.core assurance_level basic or higher' in errors
+
+
+def test_runwright_mcp_release_requires_basic_or_higher():
+    case = load('pass-with-coverage.json')
+    case['profile'] = {
+        'profile_id': 'runwright.mcp.release',
+        'profile_version': '0.1.0',
+        'assurance_level': 'structural',
+    }
+    errors = verify.enforce_profile(case)
+    assert 'runwright.mcp.release requires aac.core assurance_level basic or higher' in errors
 
 
 def test_aibom_artifact_must_have_aibom_role(tmp_path):
@@ -149,7 +168,7 @@ def test_aibom_artifact_must_have_aibom_role(tmp_path):
             artifact['role'] = 'other'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_skill_profile_finding_requires_evidence_refs(tmp_path):
@@ -165,7 +184,7 @@ def test_skill_profile_finding_requires_evidence_refs(tmp_path):
     })
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_duplicate_asset_ids_rejected(tmp_path):
@@ -175,7 +194,7 @@ def test_duplicate_asset_ids_rejected(tmp_path):
     case['assets'].append(duplicate)
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 
 
 def test_canonicalization_sorts_keys_by_utf16_code_units():
@@ -189,6 +208,33 @@ def test_canonicalization_rejects_unsafe_integers():
         assert False, 'unsafe integer should have raised'
     except ValueError as e:
         assert 'safe-integer range' in str(e)
+
+
+def test_canonicalization_rejects_lone_surrogates():
+    for value in [{'bad': '\ud800'}, {'\udfff': 'bad'}]:
+        try:
+            verify.canonicalize(value)
+            assert False, 'lone surrogate should have raised'
+        except ValueError as e:
+            assert 'surrogate' in str(e)
+
+
+def test_subject_type_skill_is_valid_for_skill_profile(tmp_path):
+    case = load('pass-with-coverage.json')
+    case['subject']['subject_type'] = 'skill'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 0
+
+
+def test_public_cli_does_not_expose_demo_resigning():
+    completed = subprocess.run(
+        [sys.executable, str(BASE / 'verifier' / 'verify.py'), '--help'],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert '--resign-demo' not in completed.stdout
 
 
 def test_core_profile_requires_at_least_one_asset(tmp_path):
@@ -208,4 +254,4 @@ def test_core_profile_requires_at_least_one_asset(tmp_path):
     case['verdict'] = 'pass'
     resign(case)
     path = write(tmp_path, 'case.json', case)
-    assert verify.verify(path, None, allow_demo_key=True, resign_demo=False, verbose=False) == 1
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1

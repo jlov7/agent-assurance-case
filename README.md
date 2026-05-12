@@ -16,7 +16,7 @@
 **A portable, signed, audit-grade evidence object for agentic AI release assurance.**
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
-![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.3-2f6f9f)
+![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.4-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
@@ -121,12 +121,12 @@ This separation is deliberate: AAC can be cited, implemented, archived, and disc
 
 ## Status
 
-Current draft: `v0.2-candidate.3`.
+Current draft: `v0.2-candidate.4`.
 
 The draft schema identifier is pinned to the candidate tag:
 
 ```text
-https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/schemas/agent-assurance-case-v0.2.schema.json
+https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json
 ```
 
 This draft supersedes an unpublished v0.1 design that had trust-critical defects around signature verification and evidence metadata binding. Those bug classes now have regression tests.

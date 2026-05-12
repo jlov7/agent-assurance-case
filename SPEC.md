@@ -1,16 +1,16 @@
 # Agent Assurance Case (AAC) Specification
 
-**Version:** 0.2-candidate.3 (Draft)
+**Version:** 0.2-candidate.4 (Draft)
 **Date:** 2026-05-12
 **Status:** Pre-public candidate after adversarial review and profile-verifier hardening
 **Initial maintainer:** Jason Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
-**Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.3/schemas/agent-assurance-case-v0.2.schema.json`
+**Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json`
 **Specification license:** CC BY 4.0
 **Reference verifier license:** Apache 2.0
 
 ## Status of This Document
 
-This is a draft pre-public specification, version 0.2-candidate.3. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is open for public comment. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
+This is a draft pre-public specification, version 0.2-candidate.4. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is prepared for public comment but SHOULD remain private until the maintainer explicitly approves publication. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
 
 The schema URI is pinned to the candidate Git tag so reviewers can resolve the exact draft being cited. Later candidates or stable releases MUST publish their own immutable schema URI.
 
@@ -51,9 +51,9 @@ This specification does not define:
 
 ### 1.4 Relationship to Other Standards
 
-- **CycloneDX ML-BOM / SPDX 3.0 AI profiles** — Referenced by URI in `aibom_ref`. The AIBOM enumerates components; the AAC certifies release readiness.
+- **CycloneDX ML-BOM / SPDX 3.0 AI profiles** — Referenced by URI in `aibom_ref`. The AIBOM enumerates components; the AAC records and signs the issuer's release-readiness decision.
 - **OpenTelemetry GenAI semantic conventions** — Runtime events SHOULD use OTel GenAI span shapes where applicable.
-- **Sigstore / in-toto / SLSA** — AAC signatures use ed25519 by default and are compatible with Sigstore key formats. The AAC complements rather than replaces SLSA provenance: SLSA attests how an artifact was built; the AAC attests whether it is safe to release.
+- **Sigstore / in-toto / SLSA** — AAC signatures use Ed25519 by default and are compatible with Sigstore key formats. The AAC complements rather than replaces SLSA provenance: SLSA attests how an artifact was built; the AAC records the issuer's deterministic release verdict and supporting evidence.
 - **OWASP MCP Top 10** — Finding `category` values for MCP-related risks SHOULD use identifiers `MCP01` through `MCP10`.
 - **NIST AI RMF** — Compliance mappings SHOULD reference GOVERN, MAP, MEASURE, and MANAGE function categories.
 - **ISO/IEC 42001** — Compliance mappings SHOULD reference clause numbers and Annex A controls.
@@ -112,7 +112,7 @@ Each field is defined in the JSON Schema at the canonical URI listed at the top 
 
 The `subject` MUST identify the release being assured by at least `name`, `release_ref`, and `environment`. Implementations SHOULD include `repo`, `commit`, `pull_request`, and `owner` when available.
 
-The `subject.subject_type` SHOULD be one of `agent`, `workflow`, `skill_bundle`, `mcp_server`, `a2a_agent`, or `application`.
+The `subject.subject_type` SHOULD be one of `agent`, `workflow`, `skill`, `skill_bundle`, `mcp_server`, `a2a_agent`, or `application`.
 
 ## 4. Profiles
 
@@ -360,34 +360,35 @@ The maintainer commits to:
 
 The `runwright.*` profiles in this repository are vendor profile examples. They are intentionally separate from `aac.core` and do not define the AAC format itself.
 
-Public comment channel: the public repository's issue tracker. Contributions are accepted under CC BY 4.0 for specification text and Apache 2.0 for the reference verifier.
+After publication, the public comment channel is the repository issue tracker. Contributions are accepted under CC BY 4.0 for specification text and Apache 2.0 for the reference verifier.
 
 ## 15. References
 
 ### 15.1 Normative References
 
-- RFC 2119 — Key words for use in RFCs to Indicate Requirement Levels
-- RFC 3339 — Date and Time on the Internet: Timestamps
-- RFC 8174 — Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words
-- RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format
-- RFC 8785 — JSON Canonicalization Scheme (JCS)
+- RFC 2119 — Key words for use in RFCs to Indicate Requirement Levels — https://www.rfc-editor.org/rfc/rfc2119
+- RFC 3339 — Date and Time on the Internet: Timestamps — https://www.rfc-editor.org/rfc/rfc3339
+- RFC 8174 — Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words — https://www.rfc-editor.org/rfc/rfc8174
+- RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format — https://www.rfc-editor.org/rfc/rfc8259
+- RFC 8785 — JSON Canonicalization Scheme (JCS) — https://www.rfc-editor.org/rfc/rfc8785
 
 ### 15.2 Informative References
 
-- CycloneDX Machine Learning Bill of Materials — https://cyclonedx.org/capabilities/mlbom/
-- SPDX 3.0 Specification — https://spdx.dev/specifications/
-- OpenTelemetry GenAI Semantic Conventions — https://opentelemetry.io/docs/specs/semconv/gen-ai/
+- CycloneDX Machine Learning Bill of Materials — https://www.cyclonedx.org/capabilities/mlbom
+- SPDX Specification 3.0.1 — https://spdx.github.io/spdx-spec/v3.0.1/
+- OpenTelemetry GenAI semantic conventions — https://opentelemetry.io/docs/specs/semconv/gen-ai/
+- Model Context Protocol specification — https://modelcontextprotocol.io/specification
 - Sigstore — https://www.sigstore.dev/
 - in-toto Attestation Framework — https://in-toto.io/
 - SLSA Supply-chain Levels for Software Artifacts — https://slsa.dev/
 - OWASP MCP Top 10 — https://owasp.org/www-project-mcp-top-10/
 - NIST AI Risk Management Framework — https://www.nist.gov/itl/ai-risk-management-framework
 - NIST CAISI AI Agent Standards Initiative — https://www.nist.gov/caisi/ai-agent-standards-initiative
-- ISO/IEC 42001:2023 — Artificial Intelligence Management System — https://www.iso.org/standard/42001
-- EU AI Act — https://artificialintelligenceact.eu/
+- ISO/IEC 42001:2023 — Artificial Intelligence Management System — https://www.iso.org/standard/81230.html
+- EU AI Act, Regulation (EU) 2024/1689 — https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng
 - A2A Protocol — https://github.com/a2aproject/A2A
 - W3C Verifiable Credentials — https://www.w3.org/TR/vc-data-model/
 
 ---
 
-*End of specification v0.2-candidate.3.*
+*End of specification v0.2-candidate.4.*

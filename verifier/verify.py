@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.3
+Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.4
 
 Trust-critical properties:
 - Signature verification is never silently skipped. Use --allow-demo-key for bundled examples only.
@@ -49,6 +49,7 @@ _SUPPORTED_PROFILES = {
     "runwright.skills.release": {"0.1.0"},
     "runwright.mcp.release": {"0.1.0"},
 }
+_RUNWRIGHT_RELEASE_PROFILES = {"runwright.skills.release", "runwright.mcp.release"}
 
 
 def _reject_constant(value: str) -> None:
@@ -73,7 +74,13 @@ def load_json_no_duplicates(text: str) -> Any:
 
 
 def _utf16_sort_key(value: str) -> bytes:
+    _reject_surrogate_code_points(value)
     return value.encode("utf-16-be")
+
+
+def _reject_surrogate_code_points(value: str) -> None:
+    if any(0xD800 <= ord(ch) <= 0xDFFF for ch in value):
+        raise ValueError("AAC v0.2 reference verifier rejects lone UTF-16 surrogate code points")
 
 
 # Minimal deterministic canonicalizer for the constrained AAC v0.2 value domain.
@@ -90,6 +97,7 @@ def _jcs(value: Any) -> str:
     if isinstance(value, float):
         raise ValueError("AAC v0.2 reference verifier rejects floats; encode decimals as strings")
     if isinstance(value, str):
+        _reject_surrogate_code_points(value)
         return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
     if isinstance(value, list):
         return "[" + ",".join(_jcs(v) for v in value) + "]"
@@ -425,6 +433,8 @@ def enforce_profile(case: dict) -> list[str]:
         return [f"unsupported profile: {profile_id}"]
     if profile_version not in _SUPPORTED_PROFILES[profile_id]:
         return [f"unsupported profile version: {profile_id}@{profile_version}"]
+    if profile_id in _RUNWRIGHT_RELEASE_PROFILES and assurance not in {"basic", "standard", "strict"}:
+        errors.append(f"{profile_id} requires aac.core assurance_level basic or higher")
 
     # Core requirements for all profiles.
     errors += _duplicate_value_errors(case)
@@ -554,7 +564,7 @@ class VerifyResult:
         print("VERIFIED" if self.ok else "NOT VERIFIED")
 
 
-def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, resign_demo: bool, verbose: bool) -> int:
+def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, verbose: bool) -> int:
     result = VerifyResult()
     try:
         raw = case_path.read_text(encoding="utf-8")
@@ -583,14 +593,6 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
     if ts_errors:
         result.print(verbose)
         return 1
-
-    if resign_demo:
-        priv, _ = _demo_keypair()
-        case["evidence"]["signed_by"] = _DEMO_SIGNED_BY
-        case["evidence"]["key_id"] = _DEMO_KEY_ID
-        sign_case(case, priv)
-        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        result.add("demo resign", True, f"rewrote {case_path}")
 
     profile_errors = enforce_profile(case)
     result.add("profile conformance", not profile_errors, "; ".join(profile_errors[:8]))
@@ -652,14 +654,13 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Agent Assurance Case v0.2-candidate.3 reference verifier")
+    parser = argparse.ArgumentParser(description="Agent Assurance Case v0.2-candidate.4 reference verifier")
     parser.add_argument("case", type=Path)
     parser.add_argument("--public-key", type=Path, default=None)
     parser.add_argument("--allow-demo-key", action="store_true", help="Use the bundled demo key for examples only")
-    parser.add_argument("--resign-demo", action="store_true", help="Rewrite the case with the bundled demo key")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
-    return verify(args.case, args.public_key, args.allow_demo_key, args.resign_demo, args.verbose)
+    return verify(args.case, args.public_key, args.allow_demo_key, args.verbose)
 
 
 if __name__ == "__main__":

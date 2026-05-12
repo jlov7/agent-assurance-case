@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2-candidate.4
+
+- Supersedes the private `v0.2-candidate.3` release candidate before public publication.
+- Adds the personal-work independence notice.
+- Removes demo-case resigning from the public verifier CLI while keeping internal test signing helpers.
+- Tightens Runwright release profiles so they require `aac.core` assurance level `basic` or higher.
+- Aligns `skill` subject-type handling across the schema, specification, profile, and verifier tests.
+- Adds explicit JCS surrogate rejection coverage and replaces non-official EU AI Act references with EUR-Lex.
+
 ## v0.2-candidate.3
 
 - Pins the draft schema URI to the `v0.2-candidate.3` Git tag.

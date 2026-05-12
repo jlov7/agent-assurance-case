@@ -1,3 +1,4 @@
+---
 # GitHub Actions workflow for the AAC reference verifier.
 #
 # Runs on every push and pull request:
@@ -12,7 +13,7 @@
 
 name: aac-verifier
 
-on:
+"on":
   push:
     branches: [main]
   pull_request:
@@ -24,6 +25,7 @@ jobs:
     env:
       PYTHONDONTWRITEBYTECODE: "1"
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PIP_NO_CACHE_DIR: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -36,25 +38,47 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt
+          pip install \
+            -r verifier/requirements.txt \
+            -r verifier/requirements-dev.txt
 
       - name: Run verifier test suite
-        run: python -m pytest tests/ -v -p no:cacheprovider --basetemp=/tmp/aac-pytest
+        run: |
+          python -m pytest \
+            tests/ \
+            -v \
+            -p no:cacheprovider \
+            --basetemp=/tmp/aac-pytest
 
       - name: Verify pass-with-coverage example
-        run: python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
+        run: |
+          python verifier/verify.py \
+            examples/pass-with-coverage.json \
+            --allow-demo-key
 
       - name: Verify skill-poisoning-hold example
-        run: python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
+        run: |
+          python verifier/verify.py \
+            examples/skill-poisoning-hold.json \
+            --allow-demo-key
 
       - name: Verify critical-exfiltration-fail example
-        run: python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+        run: |
+          python verifier/verify.py \
+            examples/critical-exfiltration-fail.json \
+            --allow-demo-key
 
       - name: Verify examples with published demo key
         run: |
-          python verifier/verify.py examples/pass-with-coverage.json --public-key keys/demo-issuer-v0.2.pub
-          python verifier/verify.py examples/skill-poisoning-hold.json --public-key keys/demo-issuer-v0.2.pub
-          python verifier/verify.py examples/critical-exfiltration-fail.json --public-key keys/demo-issuer-v0.2.pub
+          python verifier/verify.py \
+            examples/pass-with-coverage.json \
+            --public-key keys/demo-issuer-v0.2.pub
+          python verifier/verify.py \
+            examples/skill-poisoning-hold.json \
+            --public-key keys/demo-issuer-v0.2.pub
+          python verifier/verify.py \
+            examples/critical-exfiltration-fail.json \
+            --public-key keys/demo-issuer-v0.2.pub
 
       - name: Validate JSON Schema metaschema
         run: |
@@ -63,7 +87,10 @@ jobs:
           from pathlib import Path
           from jsonschema import Draft202012Validator
 
-          schema = json.loads(Path("schemas/agent-assurance-case-v0.2.schema.json").read_text())
+          schema_path = (
+              Path("schemas") / "agent-assurance-case-v0.2.schema.json"
+          )
+          schema = json.loads(schema_path.read_text())
           Draft202012Validator.check_schema(schema)
           PY
 

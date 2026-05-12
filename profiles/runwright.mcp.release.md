@@ -5,7 +5,7 @@
 **Builds on:** `aac.core` v0.2 at assurance level `basic` or higher.  
 **Purpose:** Define the minimum evidence expected for an AAC issued against an agentic AI release whose primary surface is MCP (Model Context Protocol) servers and tools.
 
-This is a vendor profile for Runwright-style MCP releases. Independent vendors MAY define alternative MCP profiles. This profile is intentionally 60-day-shippable: it requires inventory, approval, scope, and provenance checks before broader runtime/cross-origin analysis.
+This is a vendor profile for Runwright-style MCP releases. Independent vendors MAY define alternative MCP profiles. This profile is intentionally implementable with deterministic inventory, approval, scope, and provenance checks before broader runtime/cross-origin analysis.
 
 ## 1. Scope
 
@@ -44,7 +44,7 @@ The following detector classes are RECOMMENDED but are not required for v0.1 con
 - `supply-chain-compromise-deep`;
 - `intent-flow-subversion`.
 
-A required detector that has `status` in `{skipped, error}` MUST cause HOLD per SPEC §5.2.
+Under core verdict semantics, a required detector with `status` in `{skipped, error}` causes HOLD. Under this stricter release profile, that same case is not profile-conformant because the required detector category was not successfully executed.
 
 ## 4. Required Policy Decisions
 
@@ -67,6 +67,7 @@ This profile REQUIRES `aibom_ref`. The referenced AIBOM MUST enumerate every MCP
 A verifier processing an AAC declaring this profile MUST:
 
 - apply all `aac.core` rules;
+- reject the AAC if `profile.assurance_level` is below `basic`;
 - reject the AAC if no `mcp_server` or `mcp_tool` asset is present;
 - reject the AAC if any required detector category from §3 is absent or has `status` in `{skipped, error}`;
 - reject the AAC if any irreversible MCP tool lacks an explicit asset-linked policy decision per §4;
