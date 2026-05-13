@@ -14,6 +14,7 @@
 - Adds maintainer ORCID metadata to `CITATION.cff`.
 - Publishes byte-level canonicalization fixtures for the AAC-supported JCS subset.
 - Publishes a sign/verify conformance vector and verifier conformance checklist.
+- Adds a one-page overview, explicit limitations, and clearer vendor-profile positioning.
 
 ## v0.2-candidate.3
 

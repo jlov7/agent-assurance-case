@@ -122,6 +122,8 @@ A schema without profiles is insufficient for enterprise assurance because a wea
 
 The reference profile in this specification is `aac.core`. Implementations MAY define additional profiles. Profile definitions are published as separate documents alongside this specification; see `profiles/` in the reference repository for the core profile and any vendor profiles.
 
+Conformance to AAC v0.2 means conformance to `aac.core`. Vendor profiles, including `runwright.*`, are opt-in overlays and do not define the AAC format.
+
 A verifier MUST recompute the verdict using the deterministic rules in §5 of this specification. A verifier MUST apply any profile-specific rules it claims to support. A verifier that does not support the declared profile MUST return `NOT VERIFIED` rather than silently falling back to core-only verification. A profile MUST NOT relax §5 conditions; it MAY only add conditions.
 
 ## 5. Verdict Semantics
