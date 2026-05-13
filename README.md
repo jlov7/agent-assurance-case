@@ -13,6 +13,8 @@
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
+[DOI: 10.5281/zenodo.20159774](https://doi.org/10.5281/zenodo.20159774) · [Release: v0.2-candidate.4](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.4)
+
 </div>
 
 Agent Assurance Case (AAC) is a draft specification and reference verifier for one release-critical question:
