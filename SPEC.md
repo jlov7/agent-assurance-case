@@ -226,7 +226,7 @@ A verifier MUST NOT silently skip signature verification. It MUST verify against
 
 The optional `evidence_artifacts` array lists externally stored evidence referenced by the AAC. Each entry SHOULD include `artifact_id`, `uri`, `digest`, `role`, and `media_type` where available.
 
-Profiles MAY require that every `evidence://` URI appearing in `findings[*].evidence_refs`, `coverage.detector_runs[*].evidence_ref`, `eval_results[*].evidence_ref`, `runtime_events[*].trace_ref`, `coverage.runtime_coverage.trace_refs`, `aibom_ref`, or `graph_snapshot_ref` appears in `evidence_artifacts` with a `sha256:` digest.
+Profiles MAY require that every `evidence://` URI appearing in `findings[*].evidence_refs`, `coverage.detector_runs[*].evidence_ref`, `eval_results[*].evidence_ref`, `runtime_events[*].trace_ref`, `coverage.runtime_coverage.trace_refs`, `release_conditions[*].evidence_ref`, `compliance_mappings[*].evidence_refs`, `aibom_ref`, or `graph_snapshot_ref` appears in `evidence_artifacts` with a `sha256:` digest.
 
 This manifest does not require raw evidence to be embedded in the AAC. It provides immutable binding for external evidence vault objects.
 

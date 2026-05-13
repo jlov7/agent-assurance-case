@@ -38,7 +38,11 @@ except ImportError:
     sys.stderr.write("Missing dependency. Run: pip install -r requirements.txt\n")
     sys.exit(2)
 
-SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schemas" / "agent-assurance-case-v0.2.schema.json"
+SCHEMA_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "schemas"
+    / "agent-assurance-case-v0.2.schema.json"
+)
 _DEMO_SEED = b"agent-assurance-case-v0.2-demo-keypair-seed-do-not-use-prod"
 _DEMO_SIGNED_BY = "urn:agent-assurance-case:demo-issuer"
 _DEMO_KEY_ID = "aac-demo-v0.2"
@@ -80,7 +84,9 @@ def _utf16_sort_key(value: str) -> bytes:
 
 def _reject_surrogate_code_points(value: str) -> None:
     if any(0xD800 <= ord(ch) <= 0xDFFF for ch in value):
-        raise ValueError("AAC v0.2 reference verifier rejects lone UTF-16 surrogate code points")
+        raise ValueError(
+            "AAC v0.2 reference verifier rejects lone UTF-16 surrogate code points"
+        )
 
 
 # Minimal deterministic canonicalizer for the constrained AAC v0.2 value domain.
@@ -92,10 +98,14 @@ def _jcs(value: Any) -> str:
         return "true" if value else "false"
     if isinstance(value, int) and not isinstance(value, bool):
         if value < _JCS_MIN_SAFE_INTEGER or value > _JCS_MAX_SAFE_INTEGER:
-            raise ValueError("AAC v0.2 reference verifier rejects integers outside the JSON safe-integer range")
+            raise ValueError(
+                "AAC v0.2 reference verifier rejects integers outside the JSON safe-integer range"
+            )
         return str(value)
     if isinstance(value, float):
-        raise ValueError("AAC v0.2 reference verifier rejects floats; encode decimals as strings")
+        raise ValueError(
+            "AAC v0.2 reference verifier rejects floats; encode decimals as strings"
+        )
     if isinstance(value, str):
         _reject_surrogate_code_points(value)
         return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
@@ -104,10 +114,14 @@ def _jcs(value: Any) -> str:
     if isinstance(value, dict):
         # This is intentionally small and readable. Production implementations SHOULD
         # use a vetted RFC 8785/JCS library.
-        return "{" + ",".join(
-            json.dumps(k, ensure_ascii=False, separators=(",", ":")) + ":" + _jcs(v)
-            for k, v in sorted(value.items(), key=lambda kv: _utf16_sort_key(kv[0]))
-        ) + "}"
+        return (
+            "{"
+            + ",".join(
+                json.dumps(k, ensure_ascii=False, separators=(",", ":")) + ":" + _jcs(v)
+                for k, v in sorted(value.items(), key=lambda kv: _utf16_sort_key(kv[0]))
+            )
+            + "}"
+        )
     raise TypeError(f"Unsupported type for canonicalization: {type(value).__name__}")
 
 
@@ -141,7 +155,11 @@ def _walk_timestamps(value: Any, path: str = "") -> Iterable[tuple[str, str]]:
     if isinstance(value, dict):
         for key, child in value.items():
             child_path = f"{path}.{key}" if path else key
-            if key.endswith("_at") or key in {"created_at", "expires_at", "occurred_at"}:
+            if key.endswith("_at") or key in {
+                "created_at",
+                "expires_at",
+                "occurred_at",
+            }:
                 if isinstance(child, str):
                     yield child_path, child
             yield from _walk_timestamps(child, child_path)
@@ -160,7 +178,9 @@ def validate_timestamps_utc(case: dict) -> list[str]:
     return errors
 
 
-def _is_resolution_structurally_effective(finding: dict, approvals_by_id: dict, signed_at: str) -> bool:
+def _is_resolution_structurally_effective(
+    finding: dict, approvals_by_id: dict, signed_at: str
+) -> bool:
     status = finding.get("status", "open")
     if status == "resolved":
         return True
@@ -175,7 +195,10 @@ def _is_resolution_structurally_effective(finding: dict, approvals_by_id: dict, 
         return False
     if status == "accepted_risk" and approval.get("decision") != "accept_risk":
         return False
-    if status == "suppressed" and approval.get("decision") not in {"approve", "accept_risk"}:
+    if status == "suppressed" and approval.get("decision") not in {
+        "approve",
+        "accept_risk",
+    }:
         return False
     expires_at = resolution.get("expires_at") or approval.get("expires_at")
     if expires_at:
@@ -197,20 +220,26 @@ def recompute_verdict(case: dict) -> Tuple[str, list[str]]:
     for finding in case.get("findings", []):
         subject_asset_id = finding.get("subject_asset_id")
         if subject_asset_id != "subject" and subject_asset_id not in asset_ids:
-            reasons.append(f"Finding references undeclared asset: {finding.get('finding_id')} -> {subject_asset_id}")
+            reasons.append(
+                f"Finding references undeclared asset: {finding.get('finding_id')} -> {subject_asset_id}"
+            )
             return "fail", reasons
 
     coverage = case.get("coverage", {})
     coverage_hold = False
     if coverage.get("inventory_status") != "complete":
-        reasons.append(f"Inventory coverage is {coverage.get('inventory_status')}, not complete")
+        reasons.append(
+            f"Inventory coverage is {coverage.get('inventory_status')}, not complete"
+        )
         coverage_hold = True
 
     for run in coverage.get("detector_runs", []):
         if run.get("required") and run.get("status") in {"skipped", "error"}:
             coverage_hold = True
             detector = run.get("detector", {}).get("name", "unknown")
-            reasons.append(f"Required detector {detector} status is {run.get('status')}")
+            reasons.append(
+                f"Required detector {detector} status is {run.get('status')}"
+            )
 
     for condition in case.get("release_conditions", []):
         if condition.get("status") != "satisfied":
@@ -222,7 +251,9 @@ def recompute_verdict(case: dict) -> Tuple[str, list[str]]:
     for finding in case.get("findings", []):
         severity = finding.get("severity")
         status = finding.get("status", "open")
-        effective = _is_resolution_structurally_effective(finding, approvals_by_id, signed_at)
+        effective = _is_resolution_structurally_effective(
+            finding, approvals_by_id, signed_at
+        )
         if status == "resolved" and effective:
             continue
         if status in {"suppressed", "accepted_risk"} and effective:
@@ -235,10 +266,14 @@ def recompute_verdict(case: dict) -> Tuple[str, list[str]]:
             continue
         if severity == "critical":
             has_critical = True
-            reasons.append(f"CRITICAL finding unresolved: {finding.get('title')} ({finding.get('finding_id')})")
+            reasons.append(
+                f"CRITICAL finding unresolved: {finding.get('title')} ({finding.get('finding_id')})"
+            )
         elif severity == "high":
             has_high_or_exception = True
-            reasons.append(f"HIGH finding unresolved: {finding.get('title')} ({finding.get('finding_id')})")
+            reasons.append(
+                f"HIGH finding unresolved: {finding.get('title')} ({finding.get('finding_id')})"
+            )
 
     policy_hold = False
     for decision in case.get("policy_decisions", []):
@@ -254,7 +289,9 @@ def recompute_verdict(case: dict) -> Tuple[str, list[str]]:
     for ev in case.get("eval_results", []):
         if ev.get("required") and ev.get("status") in {"fail", "error", "skipped"}:
             eval_hold = True
-            reasons.append(f"Required eval {ev.get('eval_id')} status is {ev.get('status')}")
+            reasons.append(
+                f"Required eval {ev.get('eval_id')} status is {ev.get('status')}"
+            )
 
     if has_critical:
         return "fail", reasons
@@ -301,7 +338,9 @@ def verify_signature(public_key: Ed25519PublicKey, case: dict) -> bool:
         return False
 
 
-def _required_detector_categories_present(case: dict, required_categories: set[str]) -> list[str]:
+def _required_detector_categories_present(
+    case: dict, required_categories: set[str]
+) -> list[str]:
     present: set[str] = set()
     skipped_or_error: set[str] = set()
     for run in case.get("coverage", {}).get("detector_runs", []):
@@ -324,14 +363,20 @@ def _required_detector_categories_present(case: dict, required_categories: set[s
 
 def _evidence_uri_values(case: dict) -> set[str]:
     refs: set[str] = set()
+
     def add(v: Any) -> None:
         if isinstance(v, str) and v.startswith("evidence://"):
             refs.add(v)
+
     add(case.get("aibom_ref"))
     add(case.get("graph_snapshot_ref"))
     for run in case.get("coverage", {}).get("detector_runs", []):
         add(run.get("evidence_ref"))
-    for tr in case.get("coverage", {}).get("runtime_coverage", {}).get("trace_refs", []) or []:
+    for condition in case.get("release_conditions", []) or []:
+        add(condition.get("evidence_ref"))
+    for tr in (
+        case.get("coverage", {}).get("runtime_coverage", {}).get("trace_refs", []) or []
+    ):
         add(tr)
     for finding in case.get("findings", []):
         for ref in finding.get("evidence_refs", []) or []:
@@ -373,7 +418,10 @@ def _evidence_reference_errors(case: dict) -> list[str]:
     artifacts = _evidence_artifact_uris(case)
     missing = sorted(refs - artifacts)
     if missing:
-        return [f"evidence refs missing from evidence_artifacts: {missing[:8]}" + (" ..." if len(missing) > 8 else "")]
+        return [
+            f"evidence refs missing from evidence_artifacts: {missing[:8]}"
+            + (" ..." if len(missing) > 8 else "")
+        ]
     return []
 
 
@@ -393,7 +441,9 @@ def _duplicate_value_errors(case: dict) -> list[str]:
                 duplicates.add(value)
             seen.add(value)
         if duplicates:
-            errors.append(f"duplicate {collection_name}.{field} values: {sorted(duplicates)}")
+            errors.append(
+                f"duplicate {collection_name}.{field} values: {sorted(duplicates)}"
+            )
 
     check("assets", "asset_id")
     check("findings", "finding_id")
@@ -410,11 +460,15 @@ def _subject_reference_errors(case: dict) -> list[str]:
     for decision in case.get("policy_decisions", []) or []:
         subject_asset_id = decision.get("subject_asset_id")
         if subject_asset_id and subject_asset_id not in valid_refs:
-            errors.append(f"policy decision references undeclared asset: {decision.get('policy_id')} -> {subject_asset_id}")
+            errors.append(
+                f"policy decision references undeclared asset: {decision.get('policy_id')} -> {subject_asset_id}"
+            )
     for event in case.get("runtime_events", []) or []:
         subject_asset_id = event.get("subject_asset_id")
         if subject_asset_id and subject_asset_id not in valid_refs:
-            errors.append(f"runtime event references undeclared asset: {event.get('event_id')} -> {subject_asset_id}")
+            errors.append(
+                f"runtime event references undeclared asset: {event.get('event_id')} -> {subject_asset_id}"
+            )
     return errors
 
 
@@ -423,9 +477,15 @@ def _finding_evidence_ref_errors(case: dict, predicate, label: str) -> list[str]
     for finding in case.get("findings", []) or []:
         if not predicate(finding):
             continue
-        refs = [r for r in finding.get("evidence_refs", []) or [] if isinstance(r, str) and r.startswith("evidence://")]
+        refs = [
+            r
+            for r in finding.get("evidence_refs", []) or []
+            if isinstance(r, str) and r.startswith("evidence://")
+        ]
         if not refs:
-            errors.append(f"{label} finding lacks evidence:// evidence_refs: {finding.get('finding_id')}")
+            errors.append(
+                f"{label} finding lacks evidence:// evidence_refs: {finding.get('finding_id')}"
+            )
     return errors
 
 
@@ -443,7 +503,11 @@ def enforce_profile(case: dict) -> list[str]:
         return [f"unsupported profile: {profile_id}"]
     if profile_version not in _SUPPORTED_PROFILES[profile_id]:
         return [f"unsupported profile version: {profile_id}@{profile_version}"]
-    if profile_id in _RUNWRIGHT_RELEASE_PROFILES and assurance not in {"basic", "standard", "strict"}:
+    if profile_id in _RUNWRIGHT_RELEASE_PROFILES and assurance not in {
+        "basic",
+        "standard",
+        "strict",
+    }:
         errors.append(f"{profile_id} requires aac.core assurance_level basic or higher")
 
     # Core requirements for all profiles.
@@ -461,16 +525,26 @@ def enforce_profile(case: dict) -> list[str]:
     if assurance in {"basic", "standard", "strict"}:
         if case.get("coverage", {}).get("inventory_status") != "complete":
             errors.append("basic+ assurance requires complete inventory")
-        required_runs = [r for r in case.get("coverage", {}).get("detector_runs", []) if r.get("required")]
+        required_runs = [
+            r
+            for r in case.get("coverage", {}).get("detector_runs", [])
+            if r.get("required")
+        ]
         if not required_runs:
-            errors.append("basic+ assurance requires at least one required detector run")
+            errors.append(
+                "basic+ assurance requires at least one required detector run"
+            )
     if assurance in {"standard", "strict"}:
         if not case.get("aibom_ref"):
             errors.append("standard+ assurance requires aibom_ref")
         if _runtime_status(case) not in {"summary", "full"}:
-            errors.append("standard+ assurance requires runtime coverage summary or full")
+            errors.append(
+                "standard+ assurance requires runtime coverage summary or full"
+            )
         if not case.get("compliance_mappings"):
-            errors.append("standard+ assurance requires at least one compliance mapping")
+            errors.append(
+                "standard+ assurance requires at least one compliance mapping"
+            )
     if assurance == "strict":
         if _runtime_status(case) != "full":
             errors.append("strict assurance requires full runtime coverage")
@@ -480,27 +554,38 @@ def enforce_profile(case: dict) -> list[str]:
                 approval_id = (finding.get("resolution") or {}).get("approval_id")
                 approval = approvals.get(approval_id)
                 if not approval or not approval.get("signature"):
-                    errors.append(f"strict assurance requires signed approval for {finding.get('finding_id')}")
+                    errors.append(
+                        f"strict assurance requires signed approval for {finding.get('finding_id')}"
+                    )
 
     asset_types = [a.get("asset_type") for a in case.get("assets", []) or []]
     assets_by_id = {a.get("asset_id"): a for a in case.get("assets", []) or []}
 
     if profile_id == "runwright.skills.release":
         if not any(t in {"skill", "skill_bundle"} for t in asset_types):
-            errors.append("runwright.skills.release requires at least one skill or skill_bundle asset")
+            errors.append(
+                "runwright.skills.release requires at least one skill or skill_bundle asset"
+            )
         for asset in case.get("assets", []) or []:
-            if asset.get("asset_type") in {"skill", "skill_bundle"} and not asset.get("digest"):
+            if asset.get("asset_type") in {"skill", "skill_bundle"} and not asset.get(
+                "digest"
+            ):
                 errors.append(f"skill asset lacks digest: {asset.get('asset_id')}")
-        errors += _required_detector_categories_present(case, {
-            "skill-manifest-integrity",
-            "skill-secret-exposure",
-            "skill-executable-surface",
-            "skill-tool-scope",
-        })
+        errors += _required_detector_categories_present(
+            case,
+            {
+                "skill-manifest-integrity",
+                "skill-secret-exposure",
+                "skill-executable-surface",
+                "skill-tool-scope",
+            },
+        )
         if not case.get("aibom_ref"):
             errors.append("runwright.skills.release requires aibom_ref")
         elif "aibom" not in _evidence_artifact_roles(case, case["aibom_ref"]):
-            errors.append("runwright.skills.release requires aibom_ref artifact role aibom")
+            errors.append(
+                "runwright.skills.release requires aibom_ref artifact role aibom"
+            )
         skill_categories = {
             "skill-manifest-integrity",
             "skill-secret-exposure",
@@ -519,31 +604,60 @@ def enforce_profile(case: dict) -> list[str]:
 
     if profile_id == "runwright.mcp.release":
         if not any(t in {"mcp_server", "mcp_tool"} for t in asset_types):
-            errors.append("runwright.mcp.release requires at least one mcp_server or mcp_tool asset")
-        errors += _required_detector_categories_present(case, {
-            "mcp-tool-definition-risk",
-            "mcp-approval-gate",
-            "mcp-scope-creep",
-            "mcp-tbom-presence",
-        })
+            errors.append(
+                "runwright.mcp.release requires at least one mcp_server or mcp_tool asset"
+            )
+        errors += _required_detector_categories_present(
+            case,
+            {
+                "mcp-tool-definition-risk",
+                "mcp-approval-gate",
+                "mcp-scope-creep",
+                "mcp-tbom-presence",
+            },
+        )
         if not case.get("aibom_ref"):
             errors.append("runwright.mcp.release requires aibom_ref")
         elif "aibom" not in _evidence_artifact_roles(case, case["aibom_ref"]):
-            errors.append("runwright.mcp.release requires aibom_ref artifact role aibom")
-        policy_subjects = {d.get("subject_asset_id") for d in case.get("policy_decisions", []) or []}
+            errors.append(
+                "runwright.mcp.release requires aibom_ref artifact role aibom"
+            )
+        policy_subjects = {
+            d.get("subject_asset_id") for d in case.get("policy_decisions", []) or []
+        }
         for asset_id, asset in assets_by_id.items():
-            if asset.get("asset_type") == "mcp_tool" and (asset.get("metadata") or {}).get("irreversible") is True:
+            if (
+                asset.get("asset_type") == "mcp_tool"
+                and (asset.get("metadata") or {}).get("irreversible") is True
+            ):
                 if asset_id not in policy_subjects:
-                    errors.append(f"irreversible MCP tool lacks asset-linked policy decision: {asset_id}")
+                    errors.append(
+                        f"irreversible MCP tool lacks asset-linked policy decision: {asset_id}"
+                    )
                 else:
-                    matching = [d for d in case.get("policy_decisions", []) or [] if d.get("subject_asset_id") == asset_id]
-                    if (asset.get("metadata") or {}).get("required_approval") == "missing" and not any(d.get("outcome") in {"hold", "deny"} for d in matching):
-                        errors.append(f"irreversible MCP tool missing approval must have hold/deny policy decision: {asset_id}")
+                    matching = [
+                        d
+                        for d in case.get("policy_decisions", []) or []
+                        if d.get("subject_asset_id") == asset_id
+                    ]
+                    if (asset.get("metadata") or {}).get(
+                        "required_approval"
+                    ) == "missing" and not any(
+                        d.get("outcome") in {"hold", "deny"} for d in matching
+                    ):
+                        errors.append(
+                            f"irreversible MCP tool missing approval must have hold/deny policy decision: {asset_id}"
+                        )
         errors += _finding_evidence_ref_errors(
             case,
             lambda finding: (
                 str(finding.get("category", "")).upper().startswith("MCP")
-                or (assets_by_id.get(finding.get("subject_asset_id"), {}).get("asset_type") in {"mcp_server", "mcp_tool"})
+                or (
+                    assets_by_id.get(finding.get("subject_asset_id"), {}).get(
+                        "asset_type"
+                    )
+                    in {"mcp_server", "mcp_tool"}
+                )
             ),
             "mcp-profile",
         )
@@ -574,7 +688,9 @@ class VerifyResult:
         print("VERIFIED" if self.ok else "NOT VERIFIED")
 
 
-def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, verbose: bool) -> int:
+def verify(
+    case_path: Path, public_key_path: Path | None, allow_demo_key: bool, verbose: bool
+) -> int:
     result = VerifyResult()
     try:
         raw = case_path.read_text(encoding="utf-8")
@@ -586,9 +702,13 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
     try:
         schema = load_json_no_duplicates(SCHEMA_PATH.read_text(encoding="utf-8"))
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
-        errors = sorted(validator.iter_errors(case), key=lambda e: list(e.absolute_path))
+        errors = sorted(
+            validator.iter_errors(case), key=lambda e: list(e.absolute_path)
+        )
         if errors:
-            joined = "; ".join(f"{list(e.absolute_path) or '<root>'}: {e.message}" for e in errors[:8])
+            joined = "; ".join(
+                f"{list(e.absolute_path) or '<root>'}: {e.message}" for e in errors[:8]
+            )
             result.add("schema validation", False, joined)
             result.print(verbose)
             return 1
@@ -613,7 +733,9 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
 
     declared_hash = case["evidence"]["content_hash"]
     if expected_hash != declared_hash:
-        result.add("content hash", False, f"declared={declared_hash}, computed={expected_hash}")
+        result.add(
+            "content hash", False, f"declared={declared_hash}, computed={expected_hash}"
+        )
         result.print(verbose)
         return 1
     result.add("content hash", True, expected_hash if verbose else "")
@@ -631,18 +753,31 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
             result.print(verbose)
             return 1
     elif allow_demo_key:
-        if case["evidence"].get("signed_by") != _DEMO_SIGNED_BY or case["evidence"].get("key_id") != _DEMO_KEY_ID:
-            result.add("signature (demo key)", False, "demo key allowed only for bundled demo issuer/key_id")
+        if (
+            case["evidence"].get("signed_by") != _DEMO_SIGNED_BY
+            or case["evidence"].get("key_id") != _DEMO_KEY_ID
+        ):
+            result.add(
+                "signature (demo key)",
+                False,
+                "demo key allowed only for bundled demo issuer/key_id",
+            )
             result.print(verbose)
             return 1
         _, pub = _demo_keypair()
         ok = verify_signature(pub, case)
-        result.add("signature (demo key)", ok, "DO NOT USE --allow-demo-key FOR PRODUCTION")
+        result.add(
+            "signature (demo key)", ok, "DO NOT USE --allow-demo-key FOR PRODUCTION"
+        )
         if not ok:
             result.print(verbose)
             return 1
     else:
-        result.add("signature", False, "no --public-key supplied; use --allow-demo-key only for bundled examples")
+        result.add(
+            "signature",
+            False,
+            "no --public-key supplied; use --allow-demo-key only for bundled examples",
+        )
         result.print(verbose)
         return 1
 
@@ -654,20 +789,32 @@ def verify(case_path: Path, public_key_path: Path | None, allow_demo_key: bool, 
 
     expected_verdict, reasons = recompute_verdict(case)
     if expected_verdict != case["verdict"]:
-        result.add("verdict recomputation", False, f"declared={case['verdict']}, recomputed={expected_verdict}; reasons={reasons}")
+        result.add(
+            "verdict recomputation",
+            False,
+            f"declared={case['verdict']}, recomputed={expected_verdict}; reasons={reasons}",
+        )
         result.print(verbose)
         return 1
-    result.add("verdict recomputation", True, f"verdict={expected_verdict}" if verbose else "")
+    result.add(
+        "verdict recomputation", True, f"verdict={expected_verdict}" if verbose else ""
+    )
 
     result.print(verbose)
     return 0
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Agent Assurance Case v0.2-candidate.4 reference verifier")
+    parser = argparse.ArgumentParser(
+        description="Agent Assurance Case v0.2-candidate.4 reference verifier"
+    )
     parser.add_argument("case", type=Path)
     parser.add_argument("--public-key", type=Path, default=None)
-    parser.add_argument("--allow-demo-key", action="store_true", help="Use the bundled demo key for examples only")
+    parser.add_argument(
+        "--allow-demo-key",
+        action="store_true",
+        help="Use the bundled demo key for examples only",
+    )
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
     return verify(args.case, args.public_key, args.allow_demo_key, args.verbose)

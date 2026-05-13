@@ -72,5 +72,5 @@ A verifier processing an AAC declaring this profile MUST:
 - reject the AAC if any required detector category from §3 is absent or has `status` in `{skipped, error}`;
 - reject the AAC if any irreversible MCP tool lacks an explicit asset-linked policy decision per §4;
 - reject the AAC if `aibom_ref` is absent or absent from `evidence_artifacts`;
-- reject the AAC if any `evidence://` reference in findings, detector runs, eval results, runtime trace refs, `aibom_ref`, or `graph_snapshot_ref` is absent from `evidence_artifacts`;
+- reject the AAC if any `evidence://` reference in findings, detector runs, eval results, runtime trace refs, `release_conditions`, `compliance_mappings`, `aibom_ref`, or `graph_snapshot_ref` is absent from `evidence_artifacts`;
 - recompute the verdict and reject if it does not match `verdict`.
