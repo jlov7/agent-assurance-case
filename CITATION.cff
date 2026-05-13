@@ -7,6 +7,7 @@ date-released: 2026-05-12
 authors:
   - family-names: "Lovell"
     given-names: "Jason"
+    orcid: "https://orcid.org/0009-0001-6300-9155"
 repository-code: "https://github.com/jlov7/agent-assurance-case"
 url: "https://github.com/jlov7/agent-assurance-case"
 abstract: "A portable, signed, deterministically verifiable evidence object for agentic AI release assurance."

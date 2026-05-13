@@ -10,6 +10,7 @@
 - Adds explicit JCS surrogate rejection coverage and replaces non-official EU AI Act references with EUR-Lex.
 - Aligns verifier execution order with the specification's hash/signature-before-profile procedure.
 - Adds a standalone threat model and publication-gate checks for candidate version drift.
+- Adds maintainer ORCID metadata to `CITATION.cff`.
 
 ## v0.2-candidate.3
 
