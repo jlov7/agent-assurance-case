@@ -3,7 +3,7 @@ message: "If you use the Agent Assurance Case specification or reference verifie
 type: software
 title: "Agent Assurance Case (AAC) Specification and Reference Verifier"
 version: "0.2-candidate.4"
-date-released: 2026-05-12
+date-released: 2026-05-13
 authors:
   - family-names: "Lovell"
     given-names: "Jason"

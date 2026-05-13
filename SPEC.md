@@ -1,7 +1,7 @@
 # Agent Assurance Case (AAC) Specification
 
 **Version:** 0.2-candidate.4 (Draft)
-**Date:** 2026-05-12
+**Date:** 2026-05-13
 **Status:** Pre-public candidate after adversarial review and profile-verifier hardening
 **Initial maintainer:** Jason Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
 **Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json`
