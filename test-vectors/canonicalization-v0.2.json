@@ -1,0 +1,105 @@
+{
+  "name": "AAC v0.2 canonicalization vectors",
+  "scope": "AAC-supported RFC 8785/JCS subset: no floats, no unsafe integers, no lone surrogate code points.",
+  "accept": [
+    {
+      "name": "string escaping",
+      "value": {
+        "string": "€$\u000f\nA'B\"\\\\\"/"
+      },
+      "canonical": "{\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+      "canonical_utf8_hex": "7b22737472696e67223a22e282ac245c75303030665c6e4127425c225c5c5c5c5c222f227d"
+    },
+    {
+      "name": "literals",
+      "value": {
+        "literals": [
+          null,
+          true,
+          false
+        ]
+      },
+      "canonical": "{\"literals\":[null,true,false]}",
+      "canonical_utf8_hex": "7b226c69746572616c73223a5b6e756c6c2c747275652c66616c73655d7d"
+    },
+    {
+      "name": "safe integers",
+      "value": {
+        "numbers": [
+          0,
+          -1,
+          9007199254740991,
+          -9007199254740991
+        ]
+      },
+      "canonical": "{\"numbers\":[0,-1,9007199254740991,-9007199254740991]}",
+      "canonical_utf8_hex": "7b226e756d62657273223a5b302c2d312c393030373139393235343734303939312c2d393030373139393235343734303939315d7d"
+    },
+    {
+      "name": "nested sort and UTF-16 object-key order",
+      "value": {
+        "b": {
+          "\ue000": 1,
+          "𐀀": 2
+        },
+        "a": [
+          {
+            "z": 0,
+            "a": 1
+          }
+        ]
+      },
+      "canonical": "{\"a\":[{\"a\":1,\"z\":0}],\"b\":{\"𐀀\":2,\"\":1}}",
+      "canonical_utf8_hex": "7b2261223a5b7b2261223a312c227a223a307d5d2c2262223a7b22f0908080223a322c22ee8080223a317d7d"
+    },
+    {
+      "name": "empty object",
+      "value": {},
+      "canonical": "{}",
+      "canonical_utf8_hex": "7b7d"
+    },
+    {
+      "name": "empty array",
+      "value": [],
+      "canonical": "[]",
+      "canonical_utf8_hex": "5b5d"
+    }
+  ],
+  "reject": [
+    {
+      "name": "float",
+      "value": {
+        "n": 1.5
+      },
+      "error_contains": "rejects floats"
+    },
+    {
+      "name": "unsafe integer high",
+      "value": {
+        "n": 9007199254740992
+      },
+      "error_contains": "safe-integer range"
+    },
+    {
+      "name": "unsafe integer low",
+      "value": {
+        "n": -9007199254740992
+      },
+      "error_contains": "safe-integer range"
+    },
+    {
+      "name": "lone surrogate in value",
+      "value": {
+        "bad": "\ud800"
+      },
+      "error_contains": "surrogate"
+    },
+    {
+      "name": "lone surrogate in key",
+      "value": {
+        "\udfff": "bad"
+      },
+      "error_contains": "surrogate"
+    }
+  ]
+}

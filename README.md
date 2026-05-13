@@ -76,6 +76,7 @@ Run the publication gate:
 - All timestamps must be UTC RFC 3339 strings ending in `Z`.
 - `evidence.content_hash` is recomputed over the signed payload.
 - `evidence.signature` is verified with Ed25519.
+- Canonicalization behavior is pinned by published byte-level test vectors.
 - Unsupported profiles return `NOT VERIFIED`.
 - PASS/HOLD/FAIL is recomputed deterministically from the case contents.
 - A verifier never silently skips signature verification.
@@ -102,6 +103,8 @@ Run the publication gate:
 │   ├── pass-with-coverage.json
 │   ├── skill-poisoning-hold.json
 │   └── critical-exfiltration-fail.json
+├── test-vectors/
+│   └── canonicalization-v0.2.json
 ├── verifier/
 │   ├── verify.py
 │   ├── requirements.txt

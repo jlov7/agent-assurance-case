@@ -236,6 +236,8 @@ The reference verifier rejects duplicate JSON object member names, `NaN`, `Infin
 
 This restriction exists because RFC 8785 number canonicalization is non-trivial and incorrect canonicalization in the trust-critical path is worse than slightly inconvenient metric encoding. Implementations MAY support floats only if they use a vetted RFC 8785/JCS library and preserve cross-language canonicalization compatibility.
 
+The repository publishes byte-level canonicalization fixtures in `test-vectors/canonicalization-v0.2.json` for the AAC-supported JCS subset: literals, strings, safe integers, nested object sorting, array preservation, UTF-16 property ordering, unsafe integer rejection, float rejection, and lone-surrogate rejection.
+
 ## 8. Coverage
 
 The `coverage` object is REQUIRED. A PASS without coverage is not meaningful.

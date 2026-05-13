@@ -221,6 +221,21 @@ def test_canonicalization_sorts_keys_by_utf16_code_units():
     assert verify.canonicalize(value).decode('utf-8') == '{"𐀀":"supplementary","":"bmp-private-use"}'
 
 
+def test_canonicalization_matches_aac_supported_jcs_vectors():
+    vectors = json.loads((BASE / 'test-vectors' / 'canonicalization-v0.2.json').read_text())
+    for vector in vectors['accept']:
+        actual = verify.canonicalize(vector['value'])
+        assert actual == vector['canonical'].encode('utf-8'), vector['name']
+        assert actual.hex() == vector['canonical_utf8_hex'], vector['name']
+
+    for vector in vectors['reject']:
+        try:
+            verify.canonicalize(vector['value'])
+            assert False, f"{vector['name']} should have raised"
+        except ValueError as e:
+            assert vector['error_contains'] in str(e), vector['name']
+
+
 def test_canonicalization_rejects_unsafe_integers():
     try:
         verify.canonicalize({'n': 2**53})

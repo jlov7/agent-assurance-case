@@ -62,6 +62,13 @@ deployments should use vetted cryptographic and canonicalization libraries and
 should add organization-specific key, revocation, approval, and evidence-vault
 policy checks.
 
+The reference verifier's canonicalizer is restricted to the AAC v0.2 supported
+JSON value domain. The repository publishes byte-level fixtures in
+`test-vectors/canonicalization-v0.2.json` for strings, literals, safe integers,
+nested sorting, UTF-16 property ordering, and rejection of floats, unsafe
+integers, and lone surrogates. Full RFC 8785 number support for arbitrary
+floating-point JSON values is a non-goal for this reference verifier.
+
 ## Non-Goals
 
 - AAC is not an SBOM, AIBOM, trace format, policy engine, detector engine, or
@@ -70,6 +77,8 @@ policy checks.
 - AAC does not make unsupported profiles safe by falling back to core-only
   verification.
 - AAC does not make demo keys production-safe.
+- The v0.2 reference verifier does not accept arbitrary RFC 8785 numeric input;
+  floats must be encoded as strings or safe integers.
 
 ## Residual Risks
 
