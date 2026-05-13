@@ -165,7 +165,7 @@ AAC is designed to sit beside, not replace:
 
 This repository includes `CITATION.cff` so GitHub and archival systems can generate software citations.
 
-After the first public GitHub release is archived by Zenodo, add the Zenodo DOI to `CITATION.cff`, this README, and the release notes. If you want the work to appear on an ORCID record, add the DOI as a work item through ORCID or authorize the relevant DOI provider integration when available. See `PUBLICATION.md` for the release checklist.
+The v0.2-candidate.4 release is archived at [10.5281/zenodo.20159774](https://doi.org/10.5281/zenodo.20159774). To list the work on an ORCID record, add the DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
 
 ## Contributing
 
