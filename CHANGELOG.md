@@ -2,6 +2,7 @@
 
 ## v0.2-candidate.4
 
+- Requires `subject.subject_type` in the JSON Schema so the normative shape matches `aac.core` and the reference verifier (no optional drift).
 - Supersedes the private `v0.2-candidate.3` release candidate before public publication.
 - Adds the personal-work independence notice.
 - Removes demo-case resigning from the public verifier CLI while keeping internal test signing helpers.

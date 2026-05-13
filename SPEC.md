@@ -110,9 +110,9 @@ Each field is defined in the JSON Schema at the canonical URI listed at the top 
 
 ### 3.1 Subject
 
-The `subject` MUST identify the release being assured by at least `name`, `release_ref`, and `environment`. Implementations SHOULD include `repo`, `commit`, `pull_request`, and `owner` when available.
+The `subject` MUST identify the release being assured with `name`, `release_ref`, `environment`, and `subject_type`. Implementations SHOULD include `repo`, `commit`, `pull_request`, and `owner` when available.
 
-The `subject.subject_type` SHOULD be one of `agent`, `workflow`, `skill`, `skill_bundle`, `mcp_server`, `a2a_agent`, or `application`.
+The `subject.subject_type` MUST be one of `agent`, `workflow`, `skill`, `skill_bundle`, `mcp_server`, `a2a_agent`, or `application`, matching the JSON Schema enumeration for v0.2.
 
 ## 4. Profiles
 

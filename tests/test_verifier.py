@@ -396,3 +396,10 @@ def test_policy_outcome_warn_does_not_change_verdict():
     })
     expected, _ = verify.recompute_verdict(case)
     assert expected == 'pass'
+
+def test_subject_type_required_by_schema(tmp_path):
+    case = load('pass-with-coverage.json')
+    del case['subject']['subject_type']
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1

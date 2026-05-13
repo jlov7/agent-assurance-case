@@ -155,7 +155,8 @@
       "required": [
         "name",
         "release_ref",
-        "environment"
+        "environment",
+        "subject_type"
       ],
       "additionalProperties": false,
       "properties": {
