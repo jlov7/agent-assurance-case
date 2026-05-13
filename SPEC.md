@@ -162,6 +162,8 @@ The verdict MUST be deterministically computable from the contents of the AAC by
 
 Policy decisions are distinct from finding severity. The `outcome` value `deny` represents a non-remediable policy violation. The value `hold` represents a remediable policy violation (for example, a required approval is pending). Issuers SHOULD prefer `hold` over `deny` when a documented path exists to satisfy the policy.
 
+The `outcome` value `warn` is informational. It MUST NOT, by itself, change the verdict. Consumers MAY surface warnings to reviewers but a verifier that recomputes the verdict treats `warn` as it treats `allow`.
+
 ## 6. Evidence Model
 
 The `evidence` object binds the AAC to its issuer through a content hash and a signature.
@@ -173,15 +175,17 @@ content_hash
 signature
 signed_by
 signed_at
+signature_algorithm
+canonicalization
 ```
+
+`signature_algorithm` and `canonicalization` are REQUIRED because §6.4 fixes their permitted values and a verifier MUST be able to reject an AAC that names a scheme it does not implement. They are signed alongside the rest of the payload.
 
 ### 6.2 Recommended Evidence Fields
 
 ```
 key_id
 public_key_ref
-signature_algorithm
-canonicalization
 offline_verifier
 ```
 

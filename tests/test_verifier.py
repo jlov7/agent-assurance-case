@@ -274,3 +274,125 @@ def test_core_profile_requires_at_least_one_asset(tmp_path):
     resign(case)
     path = write(tmp_path, 'case.json', case)
     assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def _build_mcp_release_case(case):
+    case['profile'] = {
+        'profile_id': 'runwright.mcp.release',
+        'profile_version': '0.1.0',
+        'assurance_level': 'basic',
+    }
+    case['subject']['subject_type'] = 'mcp_server'
+    case['assets'] = [
+        {
+            'asset_id': 'mcp_server:internal:platform@1.0.0',
+            'asset_type': 'mcp_server',
+            'name': 'platform-mcp',
+            'version': '1.0.0',
+            'metadata': {'transport': 'http', 'auth_scheme': 'oidc'},
+        },
+        {
+            'asset_id': 'mcp_tool:internal:platform.delete@1.0.0',
+            'asset_type': 'mcp_tool',
+            'name': 'platform.delete',
+            'version': '1.0.0',
+            'metadata': {
+                'irreversible': True,
+                'required_approval': 'missing',
+                'scopes': ['prod:delete'],
+            },
+        },
+    ]
+    case['coverage']['detector_runs'] = [
+        {
+            'detector': {'name': 'runwright-mcp-policy', 'version': '0.2.0'},
+            'scope': ['mcp_server', 'mcp_tool'],
+            'categories': [
+                'mcp-tool-definition-risk',
+                'mcp-approval-gate',
+                'mcp-scope-creep',
+                'mcp-tbom-presence',
+            ],
+            'status': 'pass',
+            'required': True,
+            'evidence_ref': 'evidence://mcp/detectors/policy.json',
+        }
+    ]
+    case['findings'] = []
+    case['eval_results'] = []
+    case['policy_decisions'] = []
+    case['aibom_ref'] = 'evidence://mcp/aibom.cdx.json'
+    case.pop('graph_snapshot_ref', None)
+    case['evidence_artifacts'] = [
+        {
+            'artifact_id': 'artifact_aibom',
+            'uri': 'evidence://mcp/aibom.cdx.json',
+            'digest': 'sha256:' + 'a' * 64,
+            'role': 'aibom',
+            'media_type': 'application/vnd.cyclonedx+json',
+        },
+        {
+            'artifact_id': 'artifact_detector',
+            'uri': 'evidence://mcp/detectors/policy.json',
+            'digest': 'sha256:' + 'b' * 64,
+            'role': 'detector_output',
+            'media_type': 'application/json',
+        },
+    ]
+    case['verdict'] = 'hold'
+    return case
+
+
+def test_mcp_profile_irreversible_tool_requires_policy_decision(tmp_path):
+    case = _build_mcp_release_case(load('pass-with-coverage.json'))
+    case['policy_decisions'] = []
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def test_mcp_profile_irreversible_tool_missing_approval_must_hold_or_deny(tmp_path):
+    case = _build_mcp_release_case(load('pass-with-coverage.json'))
+    case['policy_decisions'] = [
+        {
+            'policy_id': 'runwright/mcp/require-approval-on-irreversible',
+            'policy_version': '0.2.0',
+            'outcome': 'allow',
+            'inputs_hash': 'sha256:' + '0' * 64,
+            'subject_asset_id': 'mcp_tool:internal:platform.delete@1.0.0',
+        }
+    ]
+    case['verdict'] = 'pass'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def test_mcp_profile_full_case_with_hold_policy_verifies(tmp_path):
+    case = _build_mcp_release_case(load('pass-with-coverage.json'))
+    case['policy_decisions'] = [
+        {
+            'policy_id': 'runwright/mcp/require-approval-on-irreversible',
+            'policy_version': '0.2.0',
+            'outcome': 'hold',
+            'inputs_hash': 'sha256:' + '0' * 64,
+            'subject_asset_id': 'mcp_tool:internal:platform.delete@1.0.0',
+        }
+    ]
+    case['verdict'] = 'hold'
+    resign(case)
+    path = write(tmp_path, 'case.json', case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 0
+
+
+def test_policy_outcome_warn_does_not_change_verdict():
+    case = load('pass-with-coverage.json')
+    case['policy_decisions'].append({
+        'policy_id': 'runwright/skills/warn-only',
+        'policy_version': '0.2.0',
+        'outcome': 'warn',
+        'inputs_hash': 'sha256:' + '7' * 64,
+        'subject_asset_id': case['assets'][0]['asset_id'],
+    })
+    expected, _ = verify.recompute_verdict(case)
+    assert expected == 'pass'
