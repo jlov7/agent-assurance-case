@@ -7,6 +7,7 @@
 **A portable, signed, audit-grade evidence object for agentic AI release assurance.**
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20159774.svg)](https://doi.org/10.5281/zenodo.20159774)
 ![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.4-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
