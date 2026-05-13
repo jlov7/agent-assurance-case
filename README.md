@@ -1,15 +1,6 @@
 <div align="center">
 
-```text
-   /$$$$$$   /$$$$$$   /$$$$$$
-  /$$__  $$ /$$__  $$ /$$__  $$
- | $$  \ $$| $$  \ $$| $$  \__/
- | $$$$$$$$| $$$$$$$$| $$
- | $$__  $$| $$__  $$| $$
- | $$  | $$| $$  | $$| $$    $$
- | $$  | $$| $$  | $$|  $$$$$$/
- |__/  |__/|__/  |__/ \______/
-```
+<img src="assets/aac-logo.svg" width="560" alt="Agent Assurance Case">
 
 # Agent Assurance Case
 
@@ -102,6 +93,8 @@ Run the publication gate:
 ├── CITATION.cff
 ├── CHANGELOG.md
 ├── PUBLICATION.md
+├── assets/
+│   └── aac-logo.svg
 ├── keys/
 │   └── demo-issuer-v0.2.pub
 ├── schemas/

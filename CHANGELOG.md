@@ -15,6 +15,7 @@
 - Publishes byte-level canonicalization fixtures for the AAC-supported JCS subset.
 - Publishes a sign/verify conformance vector and verifier conformance checklist.
 - Adds a one-page overview, explicit limitations, and clearer vendor-profile positioning.
+- Replaces the README ASCII logo with a tracked SVG wordmark and updates the license map for public-release assets.
 
 ## v0.2-candidate.3
 
