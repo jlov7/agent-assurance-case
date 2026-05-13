@@ -208,6 +208,8 @@ An implementation MUST NOT remove the entire `evidence` object before hashing. D
 
 The signature MUST be an ed25519 signature over the same canonical payload bytes used to compute `content_hash`. The `signature_algorithm` field MUST be set to `Ed25519-JCS-SHA256-v1` to identify this scheme.
 
+The repository publishes a golden sign/verify fixture in `test-vectors/sign-verify-v0.2.json`, binding one example AAC to its expected canonical payload bytes, content hash, public key, and signature.
+
 ### 6.5 Verification Procedure
 
 A compliant verifier MUST:
@@ -229,6 +231,22 @@ The optional `evidence_artifacts` array lists externally stored evidence referen
 Profiles MAY require that every `evidence://` URI appearing in `findings[*].evidence_refs`, `coverage.detector_runs[*].evidence_ref`, `eval_results[*].evidence_ref`, `runtime_events[*].trace_ref`, `coverage.runtime_coverage.trace_refs`, `release_conditions[*].evidence_ref`, `compliance_mappings[*].evidence_refs`, `aibom_ref`, or `graph_snapshot_ref` appears in `evidence_artifacts` with a `sha256:` digest.
 
 This manifest does not require raw evidence to be embedded in the AAC. It provides immutable binding for external evidence vault objects.
+
+### 6.7 Verifier Conformance Checklist
+
+A verifier claiming AAC v0.2 conformance MUST:
+
+- reject duplicate JSON object member names, `NaN`, `Infinity`, and `-Infinity`;
+- validate with the v0.2 JSON Schema and JSON Schema `format` checks enabled;
+- compute `content_hash` by nulling only `evidence.content_hash` and `evidence.signature`;
+- produce the canonical bytes in `test-vectors/canonicalization-v0.2.json` for the AAC-supported JCS subset;
+- verify the golden signature fixture in `test-vectors/sign-verify-v0.2.json`;
+- reject unsupported profiles and unsupported profile versions;
+- enforce every supported profile it claims to support before returning `VERIFIED`;
+- recompute PASS/HOLD/FAIL deterministically from the AAC contents;
+- return `NOT VERIFIED` rather than silently skipping signature verification.
+
+The reference test suite maps this checklist to executable regression tests.
 
 ## 7. Canonicalization and Numbers
 

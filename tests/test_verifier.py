@@ -279,6 +279,23 @@ def test_canonicalization_matches_aac_supported_jcs_vectors():
             assert vector["error_contains"] in str(e), vector["name"]
 
 
+def test_sign_verify_conformance_vector_matches_example():
+    vector = json.loads((BASE / "test-vectors" / "sign-verify-v0.2.json").read_text())
+    case = verify.load_json_no_duplicates((BASE / vector["case_file"]).read_text())
+    vector_id = vector["vector_id"]
+
+    canonical_hex = "".join(vector["canonical_payload_utf8_hex_chunks"])
+    assert verify.payload_bytes(case).hex() == canonical_hex, vector_id
+    assert verify.compute_content_hash(case) == vector["content_hash"], vector_id
+    assert case["evidence"]["content_hash"] == vector["content_hash"], vector_id
+    assert case["evidence"]["signature"] == vector["signature"], vector_id
+    assert case["evidence"]["signature_algorithm"] == vector["signature_algorithm"], vector_id
+    assert case["evidence"]["canonicalization"] == vector["canonicalization"], vector_id
+
+    public_key = verify.load_public_key(BASE / vector["public_key_file"])
+    assert verify.verify_signature(public_key, case) is True, vector_id
+
+
 def test_canonicalization_rejects_unsafe_integers():
     try:
         verify.canonicalize({"n": 2**53})

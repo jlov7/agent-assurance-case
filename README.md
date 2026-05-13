@@ -48,6 +48,12 @@ python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
 python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
 ```
 
+Expected final line for each command:
+
+```text
+VERIFIED
+```
+
 `--allow-demo-key` is only for the bundled examples. It is not a production trust mode. The demo public key is published at `keys/demo-issuer-v0.2.pub` so reviewers can inspect the exact key used by the examples.
 
 Verify a production case with an issuer key:
@@ -77,6 +83,7 @@ Run the publication gate:
 - `evidence.content_hash` is recomputed over the signed payload.
 - `evidence.signature` is verified with Ed25519.
 - Canonicalization behavior is pinned by published byte-level test vectors.
+- Sign/verify behavior is pinned by a published golden vector.
 - Unsupported profiles return `NOT VERIFIED`.
 - PASS/HOLD/FAIL is recomputed deterministically from the case contents.
 - A verifier never silently skips signature verification.
@@ -104,7 +111,8 @@ Run the publication gate:
 │   ├── skill-poisoning-hold.json
 │   └── critical-exfiltration-fail.json
 ├── test-vectors/
-│   └── canonicalization-v0.2.json
+│   ├── canonicalization-v0.2.json
+│   └── sign-verify-v0.2.json
 ├── verifier/
 │   ├── verify.py
 │   ├── requirements.txt

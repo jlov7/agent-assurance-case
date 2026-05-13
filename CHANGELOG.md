@@ -13,6 +13,7 @@
 - Adds a standalone threat model and publication-gate checks for candidate version drift.
 - Adds maintainer ORCID metadata to `CITATION.cff`.
 - Publishes byte-level canonicalization fixtures for the AAC-supported JCS subset.
+- Publishes a sign/verify conformance vector and verifier conformance checklist.
 
 ## v0.2-candidate.3
 
