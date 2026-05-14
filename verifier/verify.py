@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.4
+Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.5
 
 Trust-critical properties:
 - Signature verification is never silently skipped. Use --allow-demo-key for bundled examples only.
@@ -12,6 +12,7 @@ Trust-critical properties:
 - Finding subject_asset_id values must point to declared assets, or the reserved literal "subject".
 - Supported profiles are enforced. Unsupported profiles return NOT VERIFIED.
 - Material evidence:// references must be present in evidence_artifacts for supported release profiles.
+- policy_decisions[].inputs_hash values are recomputed over their canonical decision payloads.
 """
 
 from __future__ import annotations
@@ -298,6 +299,25 @@ def recompute_verdict(case: dict) -> Tuple[str, list[str]]:
     if has_high_or_exception or policy_hold or coverage_hold or eval_hold:
         return "hold", reasons
     return "pass", reasons
+
+
+def policy_inputs_hash_errors(case: dict) -> list[str]:
+    errors: list[str] = []
+    for idx, decision in enumerate(case.get("policy_decisions", []) or []):
+        declared = decision.get("inputs_hash")
+        payload = {k: v for k, v in decision.items() if k != "inputs_hash"}
+        try:
+            computed = "sha256:" + hashlib.sha256(canonicalize(payload)).hexdigest()
+        except Exception as e:
+            errors.append(f"policy_decisions[{idx}]: cannot canonicalize inputs: {e}")
+            continue
+        if declared != computed:
+            ref = f"{decision.get('policy_id')}@{decision.get('policy_version')}"
+            errors.append(
+                f"policy_decisions[{idx}] {ref}: inputs_hash mismatch "
+                f"declared={declared}, computed={computed}"
+            )
+    return errors
 
 
 def _demo_keypair() -> Tuple[Ed25519PrivateKey, Ed25519PublicKey]:
@@ -787,6 +807,16 @@ def verify(
         result.print(verbose)
         return 1
 
+    policy_hash_errors = policy_inputs_hash_errors(case)
+    result.add(
+        "policy inputs hash",
+        not policy_hash_errors,
+        "; ".join(policy_hash_errors[:5]),
+    )
+    if policy_hash_errors:
+        result.print(verbose)
+        return 1
+
     expected_verdict, reasons = recompute_verdict(case)
     if expected_verdict != case["verdict"]:
         result.add(
@@ -806,7 +836,7 @@ def verify(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Agent Assurance Case v0.2-candidate.4 reference verifier"
+        description="Agent Assurance Case v0.2-candidate.5 reference verifier"
     )
     parser.add_argument("case", type=Path)
     parser.add_argument("--public-key", type=Path, default=None)

@@ -138,7 +138,7 @@
       "policy_id": "runwright/skills/forbid-external-secret-exfiltration",
       "policy_version": "0.2.0",
       "outcome": "deny",
-      "inputs_hash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "inputs_hash": "sha256:dca6ef9f488aa6ac5ac5f2843a87d9bd1fe01c49b01357349a34f507ed61b7f1",
       "rationale": "secret-read path combined with external egress sink",
       "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1"
     }
@@ -158,12 +158,12 @@
     }
   ],
   "evidence": {
-    "content_hash": "sha256:71a989e75c86ea5633c3bae7dece103fff5ad05c16b2b42899a398bec1281366",
-    "signature": "ed25519:UEvb4usAEvr/bhMgMrl4urfgXWCg19yC+M0xmeeVsn3ooWfUXk27Oo6+zHBkVaNQVwcCYUBORl0Zv116asTPCA==",
+    "content_hash": "sha256:b498b35c4fe379d05816d7cd4ba05a8e2864fbde284f4dd4ca68f44edfb5cba8",
+    "signature": "ed25519:Kvd+m4cl2qqo7ENFxFDSm/HfA1EPnJn4uKssawceF1z5MUTSjgMaHFSoxlgH2I/o+YHstqQ9vHpKMFyiLoxxDA==",
     "signed_by": "urn:agent-assurance-case:demo-issuer",
     "signed_at": "2026-05-11T13:20:00Z",
     "key_id": "aac-demo-v0.2",
-    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/keys/demo-issuer-v0.2.pub",
+    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.5/keys/demo-issuer-v0.2.pub",
     "signature_algorithm": "Ed25519-JCS-SHA256-v1",
     "canonicalization": "RFC8785-JCS",
     "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"

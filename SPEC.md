@@ -1,16 +1,16 @@
 # Agent Assurance Case (AAC) Specification
 
-**Version:** 0.2-candidate.4 (Draft)
-**Date:** 2026-05-13
+**Version:** 0.2-candidate.5 (Draft)
+**Date:** 2026-05-14
 **Status:** Pre-public candidate after adversarial review and profile-verifier hardening
 **Initial maintainer:** Jason Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
-**Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/schemas/agent-assurance-case-v0.2.schema.json`
+**Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.5/schemas/agent-assurance-case-v0.2.schema.json`
 **Specification license:** CC BY 4.0
 **Reference verifier license:** Apache 2.0
 
 ## Status of This Document
 
-This is a draft pre-public specification, version 0.2-candidate.4. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is prepared for public comment but SHOULD remain private until the maintainer explicitly approves publication. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
+This is a draft pre-public specification, version 0.2-candidate.5. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is prepared for public comment but SHOULD remain private until the maintainer explicitly approves publication. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
 
 The schema URI is pinned to the candidate Git tag so reviewers can resolve the exact draft being cited. Later candidates or stable releases MUST publish their own immutable schema URI.
 
@@ -165,6 +165,8 @@ The verdict MUST be deterministically computable from the contents of the AAC by
 Policy decisions are distinct from finding severity. The `outcome` value `deny` represents a non-remediable policy violation. The value `hold` represents a remediable policy violation (for example, a required approval is pending). Issuers SHOULD prefer `hold` over `deny` when a documented path exists to satisfy the policy.
 
 The `outcome` value `warn` is informational. It MUST NOT, by itself, change the verdict. Consumers MAY surface warnings to reviewers but a verifier that recomputes the verdict treats `warn` as it treats `allow`.
+
+Each policy decision's `inputs_hash` MUST equal the lowercase SHA-256 digest, prefixed with `sha256:`, of the RFC 8785/JCS canonical JSON bytes for that policy decision object with the `inputs_hash` member removed. A verifier MUST reject an AAC whose `inputs_hash` cannot be recomputed exactly.
 
 ## 6. Evidence Model
 
@@ -417,4 +419,4 @@ After publication, the public comment channel is the repository issue tracker. C
 
 ---
 
-*End of specification v0.2-candidate.4.*
+*End of specification v0.2-candidate.5.*

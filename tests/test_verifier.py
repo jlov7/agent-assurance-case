@@ -15,10 +15,20 @@ def load(name):
     return json.loads((BASE / "examples" / name).read_text())
 
 
+def set_policy_hashes(case):
+    for decision in case.get("policy_decisions", []):
+        payload = {k: v for k, v in decision.items() if k != "inputs_hash"}
+        decision["inputs_hash"] = (
+            "sha256:" + verify.hashlib.sha256(verify.canonicalize(payload)).hexdigest()
+        )
+    return case
+
+
 def resign(case):
     priv, _ = verify._demo_keypair()
     case["evidence"]["signed_by"] = verify._DEMO_SIGNED_BY
     case["evidence"]["key_id"] = verify._DEMO_KEY_ID
+    set_policy_hashes(case)
     verify.sign_case(case, priv)
     return case
 
@@ -51,6 +61,14 @@ def test_demo_public_key_verifies_example():
 def test_evidence_metadata_tamper_changes_hash(tmp_path):
     case = load("pass-with-coverage.json")
     case["evidence"]["signed_by"] = "did:web:evil.example"
+    path = write(tmp_path, "case.json", case)
+    assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
+
+
+def test_policy_inputs_hash_mismatch_fails(tmp_path):
+    case = load("pass-with-coverage.json")
+    case["policy_decisions"][0]["inputs_hash"] = "sha256:" + "0" * 64
+    verify.sign_case(case, verify._demo_keypair()[0])
     path = write(tmp_path, "case.json", case)
     assert verify.verify(path, None, allow_demo_key=True, verbose=False) == 1
 

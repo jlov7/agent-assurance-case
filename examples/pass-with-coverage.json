@@ -118,7 +118,7 @@
       "policy_id": "runwright/skills/basic-release",
       "policy_version": "0.2.0",
       "outcome": "allow",
-      "inputs_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "inputs_hash": "sha256:e0dca4b6399926d548b88ba44e921ee4991380941b5eb02c346b126387da8a1f",
       "subject_asset_id": "skill_bundle:github.com/example/coding-agent:deploy-helper@1.4.1"
     }
   ],
@@ -148,12 +148,12 @@
     }
   ],
   "evidence": {
-    "content_hash": "sha256:26559e0de4128161f5da31af17b384d3a0ea13a1ea9e599edaf8ef4bfa560da9",
-    "signature": "ed25519:iRjdzEIRDQQQOuwuW82ypLL8gZa7ubRgTGQCyJkfnt7Cte/4eD+Qb9V8Ih0a+iTLoEK91CDo8lQR6iXRhuGyDQ==",
+    "content_hash": "sha256:8a53afdbc56d23576a01eda3552cb3008a19cb53445764a14378682e1b51144e",
+    "signature": "ed25519:N8ciqP6AHBZ5ySUo4a3ToHkTBkENY02+2f0hbLpd4FCKpHmxgrngdznf+C/1CHmYTFymRqHU+MP/7c+NQuoyBA==",
     "signed_by": "urn:agent-assurance-case:demo-issuer",
     "signed_at": "2026-05-11T13:00:00Z",
     "key_id": "aac-demo-v0.2",
-    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.4/keys/demo-issuer-v0.2.pub",
+    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.5/keys/demo-issuer-v0.2.pub",
     "signature_algorithm": "Ed25519-JCS-SHA256-v1",
     "canonicalization": "RFC8785-JCS",
     "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2-candidate.5
+
+- Recomputes and verifies `policy_decisions[*].inputs_hash` over the canonical policy decision payload with `inputs_hash` removed.
+- Refreshes bundled examples and the sign/verify test vector so policy input hashes are real digest bindings, not placeholders.
+- Adds regression coverage for mismatched policy input hashes.
+- Documents policy input hash verification in `SPEC.md`.
+
 ## v0.2-candidate.4
 
 - Requires `subject.subject_type` in the JSON Schema so the normative shape matches `aac.core` and the reference verifier (no optional drift).
