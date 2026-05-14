@@ -7,12 +7,13 @@
 **A portable, signed, audit-grade evidence object for agentic AI release assurance.**
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20185170.svg)](https://doi.org/10.5281/zenodo.20185170)
 ![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.5-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
-[Release target: v0.2-candidate.5](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.5) · Previous archive: [v0.2-candidate.4 DOI 10.5281/zenodo.20159774](https://doi.org/10.5281/zenodo.20159774)
+[DOI: 10.5281/zenodo.20185170](https://doi.org/10.5281/zenodo.20185170) · [Release: v0.2-candidate.5](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.5)
 
 </div>
 
@@ -164,7 +165,7 @@ AAC is designed to sit beside, not replace:
 
 This repository includes `CITATION.cff` so GitHub and archival systems can generate software citations.
 
-The v0.2-candidate.5 DOI should be added here after the GitHub Release is archived on Zenodo. The previous v0.2-candidate.4 archive is [10.5281/zenodo.20159774](https://doi.org/10.5281/zenodo.20159774). See `PUBLICATION.md` for the release checklist.
+The v0.2-candidate.5 release is archived at [10.5281/zenodo.20185170](https://doi.org/10.5281/zenodo.20185170). To list the work on an ORCID record, add the DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
 
 ## Contributing
 
