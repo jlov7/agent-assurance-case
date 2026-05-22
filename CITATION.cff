@@ -7,7 +7,7 @@ date-released: 2026-05-14
 doi: "10.5281/zenodo.20185170"
 authors:
   - family-names: "Lovell"
-    given-names: "Jason"
+    given-names: "Jason Mark"
     orcid: "https://orcid.org/0009-0001-6300-9155"
 repository-code: "https://github.com/jlov7/agent-assurance-case"
 url: "https://github.com/jlov7/agent-assurance-case"

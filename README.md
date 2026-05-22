@@ -179,4 +179,4 @@ Threat model assumptions are summarized in `THREAT_MODEL.md`.
 
 ## Independence Notice
 
-This is personal, independent work by Jason Lovell. It is not authored, sponsored, endorsed, or reviewed by, and does not represent the views of, any employer, client, or affiliated organization.
+This is personal, independent work by Jason Mark Lovell. It is not authored, sponsored, endorsed, or reviewed by, and does not represent the views of, any employer, client, or affiliated organization.

@@ -3,7 +3,7 @@
 **Version:** 0.2-candidate.5 (Draft)
 **Date:** 2026-05-14
 **Status:** Pre-public candidate after adversarial review and profile-verifier hardening
-**Initial maintainer:** Jason Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
+**Initial maintainer:** Jason Mark Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
 **Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.5/schemas/agent-assurance-case-v0.2.schema.json`
 **Specification license:** CC BY 4.0
 **Reference verifier license:** Apache 2.0
@@ -377,7 +377,7 @@ Implementations MUST reject AACs whose `schema_version` they do not understand. 
 
 ## 14. Stewardship and Contact
 
-Initial maintainer: Jason Lovell.
+Initial maintainer: Jason Mark Lovell.
 
 The maintainer commits to:
 
