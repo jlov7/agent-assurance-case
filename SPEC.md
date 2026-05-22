@@ -2,7 +2,7 @@
 
 **Version:** 0.2-candidate.5 (Draft)
 **Date:** 2026-05-14
-**Status:** Pre-public candidate after adversarial review and profile-verifier hardening
+**Status:** Public draft candidate after adversarial review and profile-verifier hardening
 **Initial maintainer:** Jason Mark Lovell (intended to transfer to a neutral standards body once at least two independent implementations exist)
 **Schema URI:** `https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.5/schemas/agent-assurance-case-v0.2.schema.json`
 **Specification license:** CC BY 4.0
