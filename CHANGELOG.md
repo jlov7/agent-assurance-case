@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2-candidate.6
+
+- Publishes a signed replacement candidate from current `main` so release provenance no longer depends on the older unsigned `v0.2-candidate.5` tag.
+- Aligns public-status wording now that the repository is public.
+- Aligns citation and independence metadata with the maintainer's ORCID identity.
+- Keeps verifier and schema semantics unchanged from `v0.2-candidate.5`; this is a provenance and metadata release.
+- Zenodo DOI pending until the signed GitHub Release is archived.
+
 ## v0.2-candidate.5
 
 - Recomputes and verifies `policy_decisions[*].inputs_hash` over the canonical policy decision payload with `inputs_hash` removed.
