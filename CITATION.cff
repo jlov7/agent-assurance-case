@@ -4,6 +4,7 @@ type: software
 title: "Agent Assurance Case (AAC) Specification and Reference Verifier"
 version: "0.2-candidate.6"
 date-released: 2026-05-22
+doi: "10.5281/zenodo.20345018"
 authors:
   - family-names: "Lovell"
     given-names: "Jason Mark"

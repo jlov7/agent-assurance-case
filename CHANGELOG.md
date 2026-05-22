@@ -6,7 +6,7 @@
 - Aligns public-status wording now that the repository is public.
 - Aligns citation and independence metadata with the maintainer's ORCID identity.
 - Keeps verifier and schema semantics unchanged from `v0.2-candidate.5`; this is a provenance and metadata release.
-- Zenodo DOI pending until the signed GitHub Release is archived.
+- Zenodo DOI: <https://doi.org/10.5281/zenodo.20345018>.
 
 ## v0.2-candidate.5
 
