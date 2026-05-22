@@ -10,7 +10,7 @@
 
 ## Status of This Document
 
-This is a draft pre-public specification, version 0.2-candidate.5. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is prepared for public comment but SHOULD remain private until the maintainer explicitly approves publication. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
+This is a public draft specification, version 0.2-candidate.5. It supersedes the internal v0.1 draft, which contained trust-critical defects in evidence binding and signature verification. This document is published for public comment. Implementations conforming to this draft MUST NOT claim conformance to a stable AAC standard until v1.0.
 
 The schema URI is pinned to the candidate Git tag so reviewers can resolve the exact draft being cited. Later candidates or stable releases MUST publish their own immutable schema URI.
 
