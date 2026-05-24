@@ -1,0 +1,66 @@
+---
+name: External review
+description: Share an independent AAC review, implementation result, or conformance critique.
+title: "[review] "
+labels:
+  - review
+body:
+  - type: dropdown
+    id: review_type
+    attributes:
+      label: Review type
+      options:
+        - Independent verifier or parser
+        - Canonicalization or signature vectors
+        - Spec conformance
+        - Schema/profile/verifier consistency
+        - Evidence binding
+        - Privacy or evidence references
+        - Threat model or limitations
+        - Deployment feedback
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target release or commit
+      description: Use v0.2-candidate.6 or a full commit SHA.
+      placeholder: v0.2-candidate.6
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What did you review, implement, reproduce, or challenge?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include commands, output, vector IDs, file paths, or a minimal AAC case.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding or result
+      description: State the observed behavior and why it matters.
+    validations:
+      required: true
+  - type: dropdown
+    id: disposition
+    attributes:
+      label: Suggested disposition
+      options:
+        - No change; independent confirmation
+        - Documentation clarification
+        - Spec change
+        - Schema change
+        - Verifier change
+        - Test/vector addition
+        - Security-sensitive; moving to private report
+    validations:
+      required: true
