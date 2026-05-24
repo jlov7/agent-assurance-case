@@ -86,4 +86,4 @@ The most useful contributions are concrete and runnable:
 - a verifier patch with a regression test;
 - a spec issue that maps a normative `MUST` to a missing schema, verifier, or test counterpart.
 
-Open public feedback with the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.
+The current public review thread is [RFC: external review for AAC v0.2-candidate.6](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.

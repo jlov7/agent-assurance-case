@@ -152,6 +152,8 @@ Do not claim AAC v1.0 conformance yet. This repository is open for implementatio
 - privacy posture for external evidence artifacts;
 - compatibility with audit and release-review workflows.
 
+Current public review thread: [RFC: external review for AAC v0.2-candidate.6](https://github.com/jlov7/agent-assurance-case/issues/2).
+
 ## Standards Alignment
 
 AAC is designed to sit beside, not replace:
@@ -170,7 +172,7 @@ The v0.2-candidate.6 release is archived at [10.5281/zenodo.20345018](https://do
 
 ## Contributing
 
-Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification.
+Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification. For broad external review, use the current [AAC v0.2-candidate.6 RFC thread](https://github.com/jlov7/agent-assurance-case/issues/2).
 
 Specification text, profiles, examples, and documentation are licensed under CC BY 4.0. Code, schemas, keys, tests, and CI are licensed under Apache 2.0.
 
