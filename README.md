@@ -7,13 +7,14 @@
 **A portable, signed, audit-grade evidence object for agentic AI release assurance.**
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
+[![Release fingerprints](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20379393.svg)](https://doi.org/10.5281/zenodo.20379393)
 ![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.7-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
-[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7)
+[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7) · [Release fingerprints](RELEASE_FINGERPRINTS.md)
 
 </div>
 

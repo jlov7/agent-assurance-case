@@ -74,12 +74,13 @@ GitHub also runs the same check through the `release-fingerprints` workflow on r
 
 ## Baseline Post-Release Evidence
 
-The release tag is immutable review evidence. `main` may contain later documentation clarifications. This baseline evidence records a green post-release `main` state after the DOI and review-entry updates, without implying it will remain the latest `main` commit:
+The release tag is immutable review evidence. `main` may contain later documentation clarifications. This baseline evidence records a green post-release `main` state after the DOI, review-entry, and release-fingerprint workflow updates, without implying it will remain the latest `main` commit:
 
 - Evidence checked: `2026-05-25`
-- Workflow commit: `b64901780f3dedbb517161153ccc5ca3cde29a6d`
-- AAC verifier workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26408137384>
-- CodeQL workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26408137385>
+- Workflow commit: `7314cf4bc845f814981d9734e505a4d70b13e2ec`
+- Release-fingerprints workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409297175>
+- AAC verifier workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409297183>
+- CodeQL workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409297220>
 - Open code-scanning alerts at last check: `0`
 
 ## Claim Boundary
