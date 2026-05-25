@@ -45,7 +45,8 @@
     "strict_required_checks": [
       "test",
       "Analyze Python",
-      "Verify AAC release fingerprint"
+      "Verify AAC release fingerprint",
+      "Quality checks"
     ],
     "initial_required_fingerprint_gate": {
       "main_commit": "c9373000406a6c753989da94fae92aa64faac71f",
