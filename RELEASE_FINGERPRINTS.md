@@ -64,9 +64,9 @@ Each bundled example verifier command should end with:
 VERIFIED
 ```
 
-## Post-Release Main Evidence
+## Baseline Post-Release Evidence
 
-The release tag is immutable review evidence. `main` may contain later documentation clarifications. Latest green post-release workflow evidence when this page was added:
+The release tag is immutable review evidence. `main` may contain later documentation clarifications. This baseline evidence records a green post-release `main` state after the DOI and review-entry updates, without implying it will remain the latest `main` commit:
 
 - Evidence checked: `2026-05-25`
 - Workflow commit: `b64901780f3dedbb517161153ccc5ca3cde29a6d`
