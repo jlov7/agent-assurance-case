@@ -1,6 +1,8 @@
 ---
 name: External review
-description: Share an independent AAC review, implementation result, or conformance critique.
+description: >-
+  Share an independent AAC review, implementation result, or conformance
+  critique.
 title: "[review] "
 labels:
   - review
@@ -39,10 +41,27 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: Include commands, output, vector IDs, file paths, or a minimal AAC case. For parser/verifier reviews, include `python verifier/check_vectors.py` output from the v0.2-candidate.7 release tag/current main or equivalent byte-level conformance output against the test vectors.
+      description: >-
+        Include commands, output, vector IDs, file paths, or a minimal AAC case.
+        For parser/verifier reviews, include `python verifier/check_vectors.py`
+        output from the v0.2-candidate.7 release tag/current main or equivalent
+        byte-level conformance output against the test vectors.
       render: shell
     validations:
       required: true
+  - type: textarea
+    id: structured_report
+    attributes:
+      label: Structured review report
+      description: >-
+        For ledger consideration, attach or paste a filled
+        `review-report-template.json` and include the output of
+        `python verifier/validate_review_report.py path/to/review-report.json`.
+        Use N/A only if this is an informal discussion issue rather than a
+        ledger candidate.
+      render: json
+    validations:
+      required: false
   - type: textarea
     id: finding
     attributes:
