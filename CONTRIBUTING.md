@@ -14,6 +14,12 @@ AAC v0.2-candidate.6 is a draft for review and implementation feedback.
 
 Open an issue or pull request with a clear description of the change and why it matters. Keep proposals scoped and include a concrete example when possible.
 
+## Review And Merge Policy
+
+The `main` branch is protected. Changes should land through pull requests after the required GitHub Actions checks pass: `test` and CodeQL `Analyze Python`.
+
+Release tags are signed, treated as immutable, and superseded by new tags rather than rewritten.
+
 ## Developer Certificate of Origin
 
 This project uses the Developer Certificate of Origin. By contributing, you certify that you have the right to submit the contribution under this repository's licenses.
