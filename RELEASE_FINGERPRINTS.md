@@ -80,7 +80,7 @@ As of `2026-05-25`, the protected `main` branch requires strict status checks fo
 - `Analyze Python`
 - `Verify AAC release fingerprint`
 
-The current protected-gate evidence after enabling the release-fingerprint requirement is:
+The initial protected-gate evidence after enabling the release-fingerprint requirement is listed below. For the latest `main` status, use the workflow badges or GitHub Actions run history.
 
 - Main commit: `c9373000406a6c753989da94fae92aa64faac71f`
 - Release-fingerprints workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409761127>
