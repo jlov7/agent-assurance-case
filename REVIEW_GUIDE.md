@@ -156,6 +156,7 @@ The most useful contributions are concrete and runnable:
 - an independent verifier or parser that agrees or disagrees with the vectors;
 - output from `python verifier/check_vectors.py`, or equivalent byte-level output from an independent implementation;
 - a minimal failing AAC case;
+- an implementation report using [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md);
 - a profile proposal with machine-checkable requirements;
 - a privacy or evidence-binding critique tied to a field path;
 - a verifier patch with a regression test;
