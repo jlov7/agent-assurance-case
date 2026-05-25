@@ -1,0 +1,54 @@
+---
+name: quality
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PIP_NO_CACHE_DIR: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Run ruff
+        run: uvx ruff check --no-cache verifier tests scripts
+
+      - name: Run pyright
+        run: >-
+          uv run
+          --with-requirements verifier/requirements-dev.txt
+          --with pyright
+          pyright verifier tests scripts
+
+      - name: Run codespell
+        run: uvx codespell . --skip './.git,./.venv'
+
+      - name: Validate citation metadata
+        run: >-
+          uvx --from cffconvert
+          cffconvert --validate --infile CITATION.cff
+
+      - name: Run shellcheck
+        run: >-
+          uvx --from shellcheck-py
+          shellcheck VERIFY-PUBLICATION-READY.sh
