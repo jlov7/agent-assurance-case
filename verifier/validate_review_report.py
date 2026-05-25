@@ -25,6 +25,7 @@ EXPECTED_VECTOR_OUTPUT = [
     "AAC vectors: sign_verify=aac-v0.2-demo-sign-verify-pass-with-coverage",
     "AAC vectors: valid",
 ]
+IMPLEMENTATION_REVIEW_TYPE = "independent-verifier-or-parser"
 
 
 def _no_duplicate_object_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -76,6 +77,39 @@ def _duplicate_finding_errors(findings: list[dict[str, Any]]) -> list[str]:
     return errors
 
 
+def _implementation_metadata_errors(report: dict[str, Any], review_type: object) -> list[str]:
+    errors: list[str] = []
+    implementation = report.get("implementation", {})
+    if not isinstance(implementation, dict):
+        return errors
+
+    if review_type == IMPLEMENTATION_REVIEW_TYPE:
+        if implementation.get("applicable") is not True:
+            errors.append(
+                "implementation.applicable must be true for independent verifier or parser reviews"
+            )
+        for field in (
+            "implementation.name",
+            "implementation.source_url",
+            "implementation.version_or_commit",
+            "implementation.language_runtime",
+        ):
+            _require_populated(errors, report, field)
+        if implementation.get("support_scope") == "not-applicable":
+            errors.append("implementation.support_scope must describe the implementation scope")
+
+    if implementation.get("support_scope") == "aac.core verifier plus profiles":
+        profiles = implementation.get("profiles_supported", [])
+        if not isinstance(profiles, list) or not profiles:
+            errors.append(
+                "implementation.profiles_supported must name supported profiles when support_scope includes profiles"
+            )
+        elif any(_is_placeholder(profile) for profile in profiles):
+            errors.append("implementation.profiles_supported must not contain placeholders")
+
+    return errors
+
+
 def validate_review_report(path: Path) -> list[str]:
     errors: list[str] = []
     try:
@@ -113,6 +147,7 @@ def validate_review_report(path: Path) -> list[str]:
 
     review = report.get("review", {})
     review_type = review.get("review_type") if isinstance(review, dict) else None
+    errors.extend(_implementation_metadata_errors(report, review_type))
     vector_conformance = report.get("vector_conformance", {})
     if isinstance(vector_conformance, dict):
         applicable = vector_conformance.get("applicable")

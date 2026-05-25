@@ -18,6 +18,18 @@
     "public_artifact_url": "",
     "security_sensitive": false
   },
+  "implementation": {
+    "applicable": true,
+    "name": "",
+    "source_url": "",
+    "version_or_commit": "",
+    "language_runtime": "",
+    "support_scope": "aac.core verifier",
+    "profiles_supported": [
+      "aac.core"
+    ],
+    "notes": ""
+  },
   "reproduction": {
     "environment": "",
     "commands": [
