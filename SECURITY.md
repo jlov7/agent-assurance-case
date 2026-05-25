@@ -6,7 +6,10 @@ The reviewer-facing trust boundary is summarized in `THREAT_MODEL.md`.
 
 ## Reporting
 
-Use GitHub private vulnerability reporting for this repository when available. If that is unavailable, contact the maintainer privately through the GitHub account that owns the repository.
+Use GitHub private vulnerability reporting for this repository when available:
+<https://github.com/jlov7/agent-assurance-case/security/advisories/new>.
+
+If that is unavailable, contact the maintainer privately through the GitHub account that owns the repository.
 
 ## Disclosure
 
