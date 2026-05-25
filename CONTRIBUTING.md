@@ -16,7 +16,7 @@ Open an issue or pull request with a clear description of the change and why it 
 
 ## Review And Merge Policy
 
-The `main` branch is protected. Changes should land through pull requests after the required GitHub Actions checks pass: `test` and CodeQL `Analyze Python`.
+The `main` branch is protected. Changes should land through pull requests after the required GitHub Actions checks pass: `test`, CodeQL `Analyze Python`, and `Verify AAC release fingerprint`.
 
 Release tags are signed, treated as immutable, and superseded by new tags rather than rewritten.
 

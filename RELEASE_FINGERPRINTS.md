@@ -70,7 +70,23 @@ From current `main`, reviewers can run the executable release-fingerprint verifi
 python3 scripts/verify_release_fingerprints.py
 ```
 
-GitHub also runs the same check through the `release-fingerprints` workflow on relevant pull requests, on changes to the fingerprint tooling or this document, on a weekly schedule, and on manual dispatch. Those workflow runs are self-verification evidence; they are not independent external review.
+GitHub also runs the same check through the `release-fingerprints` workflow on every pull request, on every push to `main`, on a weekly schedule, and on manual dispatch. The `Verify AAC release fingerprint` job is a required protected-branch check. Those workflow runs are self-verification evidence; they are not independent external review.
+
+## Protected Main Gate
+
+As of `2026-05-25`, the protected `main` branch requires strict status checks for:
+
+- `test`
+- `Analyze Python`
+- `Verify AAC release fingerprint`
+
+The current protected-gate evidence after enabling the release-fingerprint requirement is:
+
+- Main commit: `c9373000406a6c753989da94fae92aa64faac71f`
+- Release-fingerprints workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409761127>
+- AAC verifier workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409761102>
+- CodeQL workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409761104>
+- Open code-scanning alerts at last check: `0`
 
 ## Baseline Post-Release Evidence
 
