@@ -1,0 +1,42 @@
+---
+name: release-fingerprints
+
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: "41 5 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/release-fingerprints.yml"
+      - "scripts/verify_release_fingerprints.py"
+      - "RELEASE_FINGERPRINTS.md"
+  pull_request:
+    paths:
+      - ".github/workflows/release-fingerprints.yml"
+      - "scripts/verify_release_fingerprints.py"
+      - "RELEASE_FINGERPRINTS.md"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-release-fingerprint:
+    name: Verify AAC release fingerprint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PIP_NO_CACHE_DIR: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.12"
+
+      - name: Verify release fingerprint
+        run: python3 scripts/verify_release_fingerprints.py
