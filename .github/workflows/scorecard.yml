@@ -2,6 +2,7 @@
 name: openssf-scorecard
 
 "on":
+  pull_request:
   push:
     branches: [main]
   schedule:
