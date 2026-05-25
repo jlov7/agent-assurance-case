@@ -43,6 +43,9 @@ jobs:
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 
+      - name: Check Markdown local links
+        run: python scripts/check_markdown_links.py
+
       - name: Validate citation metadata
         run: >-
           uvx --from cffconvert
