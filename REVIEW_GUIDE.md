@@ -10,7 +10,7 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 - DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. The `v0.2-candidate.7` release includes the standalone vector checker and the checked-in vector files; current `main` may include later documentation clarifications.
+This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. The `v0.2-candidate.7` release includes the standalone vector checker and the checked-in vector files; current `main` may include later documentation clarifications. Public release fingerprints, signed-tag checks, CI run links, and claim boundaries are recorded in [RELEASE_FINGERPRINTS.md](RELEASE_FINGERPRINTS.md).
 
 ## Fast Verification Path
 
