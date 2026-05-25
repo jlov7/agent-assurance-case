@@ -2,6 +2,8 @@
 
 This file records public, reproducible fingerprints for the current AAC release candidate. It is release provenance, not independent validation.
 
+Machine-readable companion: [`release-evidence.v0.2-candidate.7.json`](release-evidence.v0.2-candidate.7.json).
+
 ## Current Release
 
 - Repository: <https://github.com/jlov7/agent-assurance-case>
