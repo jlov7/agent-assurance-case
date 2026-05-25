@@ -7,10 +7,10 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 - Repository: <https://github.com/jlov7/agent-assurance-case>
 - Release: `v0.2-candidate.7`
 - Release commit: the Git tag target for `v0.2-candidate.7`
-- DOI: pending Zenodo archival
+- DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag above; the DOI is added after Zenodo archives the GitHub Release. Commands marked `main` use review tooling added after `v0.2-candidate.7`; the underlying vector files already exist in the release.
+This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. Commands marked `main` use review tooling added after `v0.2-candidate.7`; the underlying vector files already exist in the release.
 
 ## Fast Verification Path
 

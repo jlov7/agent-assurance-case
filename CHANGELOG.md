@@ -7,7 +7,7 @@
 - Adds a standalone conformance-vector checker for canonicalization and sign/verify byte vectors.
 - Adds Dependabot coverage, least-privilege workflow permissions, CodeQL scanning, and protected-branch merge-policy documentation.
 - Updates verifier dependency floors while preserving verifier, schema, and verdict semantics.
-- Zenodo DOI: pending after GitHub Release archival.
+- Zenodo DOI: <https://doi.org/10.5281/zenodo.20379393>.
 
 ## v0.2-candidate.6
 
