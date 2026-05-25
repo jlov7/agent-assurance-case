@@ -55,6 +55,12 @@ jobs:
       - name: Validate Security Insights metadata
         run: scripts/validate_security_insights.sh
 
+      - name: Validate repository posture metadata
+        run: >-
+          uv run
+          --with-requirements verifier/requirements.txt
+          python scripts/verify_repository_posture.py
+
       - name: Validate citation metadata
         run: >-
           uvx --from cffconvert

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/main/repository-posture.schema.json",
+  "title": "AAC Repository Posture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "recorded_as_of",
+    "branch_protection",
+    "merge_policy",
+    "security_analysis",
+    "code_scanning",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "repository": { "const": "jlov7/agent-assurance-case" },
+    "recorded_as_of": { "type": "string", "format": "date" },
+    "branch_protection": { "$ref": "#/$defs/branch_protection" },
+    "merge_policy": { "$ref": "#/$defs/merge_policy" },
+    "security_analysis": { "$ref": "#/$defs/security_analysis" },
+    "code_scanning": { "$ref": "#/$defs/code_scanning" },
+    "claim_boundary": { "$ref": "#/$defs/claim_boundary" }
+  },
+  "$defs": {
+    "branch_protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch",
+        "strict_required_checks",
+        "required_pull_request_reviews",
+        "required_approving_review_count",
+        "enforce_admins",
+        "required_linear_history",
+        "required_conversation_resolution",
+        "allow_force_pushes",
+        "allow_deletions"
+      ],
+      "properties": {
+        "branch": { "const": "main" },
+        "strict_required_checks": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "test" },
+            { "const": "Analyze Python" },
+            { "const": "Verify AAC release fingerprint" },
+            { "const": "Quality checks" },
+            { "const": "OpenSSF Scorecard" }
+          ],
+          "items": false
+        },
+        "required_pull_request_reviews": { "const": true },
+        "required_approving_review_count": { "const": 0 },
+        "enforce_admins": { "const": true },
+        "required_linear_history": { "const": true },
+        "required_conversation_resolution": { "const": true },
+        "allow_force_pushes": { "const": false },
+        "allow_deletions": { "const": false }
+      }
+    },
+    "merge_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allow_merge_commit",
+        "allow_rebase_merge",
+        "allow_squash_merge",
+        "delete_branch_on_merge"
+      ],
+      "properties": {
+        "allow_merge_commit": { "const": false },
+        "allow_rebase_merge": { "const": false },
+        "allow_squash_merge": { "const": true },
+        "delete_branch_on_merge": { "const": true }
+      }
+    },
+    "security_analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependabot_security_updates",
+        "secret_scanning",
+        "secret_scanning_push_protection",
+        "secret_scanning_non_provider_patterns",
+        "secret_scanning_validity_checks"
+      ],
+      "properties": {
+        "dependabot_security_updates": { "const": "enabled" },
+        "secret_scanning": { "const": "enabled" },
+        "secret_scanning_push_protection": { "const": "enabled" },
+        "secret_scanning_non_provider_patterns": { "const": "disabled" },
+        "secret_scanning_validity_checks": { "const": "disabled" }
+      }
+    },
+    "code_scanning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open_alerts"],
+      "properties": {
+        "open_alerts": { "const": 0 }
+      }
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["self_reported", "independent_review_claimed"],
+      "properties": {
+        "self_reported": { "const": true },
+        "independent_review_claimed": { "const": false }
+      }
+    }
+  }
+}
