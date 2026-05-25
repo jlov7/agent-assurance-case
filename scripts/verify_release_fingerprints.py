@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -10,16 +11,11 @@ import sys
 import tempfile
 import venv
 from pathlib import Path
+from typing import Any
 
 
-REPO_URL = "https://github.com/jlov7/agent-assurance-case"
-RELEASE_TAG = "v0.2-candidate.7"
-RELEASE_COMMIT = "689198d9c249a966a0abab6415ae8668efb512d9"
-SIGNING_PRINCIPAL = "jase.lovell@me.com"
-SIGNING_PUBLIC_KEY = (
-    "ssh-ed25519 "
-    "AAAAC3NzaC1lZDI1NTE5AAAAIBD4r6uZD5gvmyQqXSM/HX3gKtl2+HOzX6T1oaGsUlVu"
-)
+ROOT = Path(__file__).resolve().parents[1]
+RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.7.json"
 
 
 def run(
@@ -44,20 +40,35 @@ def require_tool(name: str) -> None:
         raise SystemExit(f"required tool not found on PATH: {name}")
 
 
-def write_allowed_signers(workdir: Path) -> Path:
+def load_release_evidence() -> dict[str, Any]:
+    return json.loads(RELEASE_EVIDENCE_PATH.read_text(encoding="utf-8"))
+
+
+def write_allowed_signers(
+    workdir: Path,
+    *,
+    principal: str,
+    public_key: str,
+) -> Path:
     path = workdir / "allowed_signers"
     path.write_text(
-        f"{SIGNING_PRINCIPAL} {SIGNING_PUBLIC_KEY} aac-release-signing\n",
+        f"{principal} {public_key} aac-release-signing\n",
         encoding="utf-8",
     )
     return path
 
 
-def verify_signed_tag(repo: Path, allowed_signers: Path) -> None:
-    actual_commit = output(["git", "rev-list", "-n", "1", RELEASE_TAG], cwd=repo)
-    if actual_commit != RELEASE_COMMIT:
+def verify_signed_tag(
+    repo: Path,
+    *,
+    tag: str,
+    expected_commit: str,
+    allowed_signers: Path,
+) -> None:
+    actual_commit = output(["git", "rev-list", "-n", "1", tag], cwd=repo)
+    if actual_commit != expected_commit:
         raise SystemExit(
-            f"{RELEASE_TAG} points to {actual_commit}, expected {RELEASE_COMMIT}"
+            f"{tag} points to {actual_commit}, expected {expected_commit}"
         )
     run(
         [
@@ -66,7 +77,7 @@ def verify_signed_tag(repo: Path, allowed_signers: Path) -> None:
             f"gpg.ssh.allowedSignersFile={allowed_signers}",
             "tag",
             "-v",
-            RELEASE_TAG,
+            tag,
         ],
         cwd=repo,
     )
@@ -95,30 +106,47 @@ def create_python_env(repo: Path, env_dir: Path) -> Path:
 def main() -> int:
     require_tool("git")
     require_tool("bash")
+    evidence = load_release_evidence()
+    release = evidence["release"]
+    signed_tag = evidence["signed_tag"]
+    repo_url = str(release["repository"])
+    release_tag = str(release["tag"])
+    release_commit = str(release["release_commit"])
+    signing_principal = str(signed_tag["signer"])
+    signing_public_key = str(signed_tag["public_key"])
 
     with tempfile.TemporaryDirectory(prefix="aac-release-fingerprint-") as tmp:
         tmp_path = Path(tmp)
         repo = tmp_path / "agent-assurance-case"
-        allowed_signers = write_allowed_signers(tmp_path)
+        allowed_signers = write_allowed_signers(
+            tmp_path,
+            principal=signing_principal,
+            public_key=signing_public_key,
+        )
 
         run(
             [
                 "git",
                 "clone",
                 "--branch",
-                RELEASE_TAG,
+                release_tag,
                 "--depth",
                 "1",
-                REPO_URL,
+                repo_url,
                 str(repo),
             ]
         )
 
         head = output(["git", "rev-parse", "HEAD"], cwd=repo)
-        if head != RELEASE_COMMIT:
-            raise SystemExit(f"release checkout is {head}, expected {RELEASE_COMMIT}")
+        if head != release_commit:
+            raise SystemExit(f"release checkout is {head}, expected {release_commit}")
 
-        verify_signed_tag(repo, allowed_signers)
+        verify_signed_tag(
+            repo,
+            tag=release_tag,
+            expected_commit=release_commit,
+            allowed_signers=allowed_signers,
+        )
         python = create_python_env(repo, tmp_path / "fingerprint-venv")
 
         gate_env = {

@@ -3,6 +3,7 @@
 This file records public, reproducible fingerprints for the current AAC release candidate. It is release provenance, not independent validation.
 
 Machine-readable companion: [`release-evidence.v0.2-candidate.7.json`](release-evidence.v0.2-candidate.7.json), validated by [`release-evidence.schema.json`](release-evidence.schema.json).
+The executable fingerprint verifier reads that evidence file as its release source of truth.
 
 ## Current Release
 

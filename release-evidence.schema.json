@@ -71,12 +71,17 @@
       "required": [
         "signature_type",
         "signer",
+        "public_key",
         "key_sha256",
         "expected_object"
       ],
       "properties": {
         "signature_type": { "const": "git-ssh-ed25519" },
         "signer": { "type": "string", "minLength": 1 },
+        "public_key": {
+          "type": "string",
+          "pattern": "^ssh-ed25519 [A-Za-z0-9+/=]+$"
+        },
         "key_sha256": { "type": "string", "pattern": "^SHA256:[A-Za-z0-9+/=]+$" },
         "expected_object": { "$ref": "#/$defs/sha1" }
       }
