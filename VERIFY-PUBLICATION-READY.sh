@@ -11,11 +11,12 @@
 #   7. The verifier source contains the trust hardening hooks.
 #   8. Candidate version metadata stays synchronized across public artifacts.
 #   9. REUSE/SPDX licensing metadata covers every tracked file.
-#   10. Security Insights metadata validates against the pinned OpenSSF schema.
-#   11. Repository posture metadata validates statically.
-#   12. CodeMeta metadata validates against release evidence.
-#   13. Citation metadata validates against release evidence and CodeMeta.
-#   14. Release asset builder passes shellcheck.
+#   10. Python dependency and static security checks pass.
+#   11. Security Insights metadata validates against the pinned OpenSSF schema.
+#   12. Repository posture metadata validates statically.
+#   13. CodeMeta metadata validates against release evidence.
+#   14. Citation metadata validates against release evidence and CodeMeta.
+#   15. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -186,42 +187,55 @@ else
   check "REUSE licensing metadata" "fail" "run 'uvx reuse lint' for details"
 fi
 
-# 9. Security Insights metadata must remain machine-validated.
+# 9. Python dependency and static security checks must pass.
+if pip_audit_out=$(uv run --with-requirements verifier/requirements-dev.txt --with pip-audit pip-audit 2>&1); then
+  check "Python dependency audit" "ok"
+else
+  check "Python dependency audit" "fail" "$(printf "%s\n" "$pip_audit_out" | tail -n 1)"
+fi
+
+if bandit_out=$(uvx bandit -q -r verifier scripts fuzz -x tests -s B404,B603,B607 2>&1); then
+  check "Bandit static security scan" "ok"
+else
+  check "Bandit static security scan" "fail" "$(printf "%s\n" "$bandit_out" | tail -n 1)"
+fi
+
+# 10. Security Insights metadata must remain machine-validated.
 if security_insights_out=$(scripts/validate_security_insights.sh 2>&1); then
   check "Security Insights metadata" "ok"
 else
   check "Security Insights metadata" "fail" "$(printf "%s\n" "$security_insights_out" | tail -n 1)"
 fi
 
-# 10. Repository posture metadata must remain machine-validated.
+# 11. Repository posture metadata must remain machine-validated.
 if repository_posture_out=$("$PYTHON_BIN" scripts/verify_repository_posture.py 2>&1); then
   check "repository posture metadata" "ok"
 else
   check "repository posture metadata" "fail" "$(printf "%s\n" "$repository_posture_out" | tail -n 1)"
 fi
 
-# 11. CodeMeta discovery metadata must remain synchronized with release evidence.
+# 12. CodeMeta discovery metadata must remain synchronized with release evidence.
 if codemeta_out=$("$PYTHON_BIN" scripts/validate_codemeta.py 2>&1); then
   check "CodeMeta metadata" "ok"
 else
   check "CodeMeta metadata" "fail" "$(printf "%s\n" "$codemeta_out" | tail -n 1)"
 fi
 
-# 12. Citation metadata must remain synchronized with release evidence and CodeMeta.
+# 13. Citation metadata must remain synchronized with release evidence and CodeMeta.
 if citation_out=$("$PYTHON_BIN" scripts/validate_citation.py 2>&1); then
   check "citation metadata consistency" "ok"
 else
   check "citation metadata consistency" "fail" "$(printf "%s\n" "$citation_out" | tail -n 1)"
 fi
 
-# 13. Release scripts must be shellcheck-clean.
+# 14. Release scripts must be shellcheck-clean.
 if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
-# 14. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 15. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')

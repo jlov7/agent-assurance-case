@@ -40,6 +40,21 @@ jobs:
           --with pyright
           pyright verifier tests scripts fuzz
 
+      - name: Audit Python dependencies
+        run: >-
+          uv run
+          --with-requirements verifier/requirements-dev.txt
+          --with pip-audit
+          pip-audit
+
+      - name: Run Bandit
+        run: >-
+          uvx bandit
+          -q
+          -r verifier scripts fuzz
+          -x tests
+          -s B404,B603,B607
+
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 

@@ -9,6 +9,7 @@ import os
 import subprocess
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -46,8 +47,12 @@ def gh_token() -> str | None:
 
 
 def github_json(path: str, token: str | None) -> Any:
+    url = f"https://api.github.com/{path}"
+    parsed_url = urllib.parse.urlparse(url)
+    if parsed_url.scheme != "https" or parsed_url.netloc != "api.github.com":
+        raise SystemExit(f"refusing non-GitHub HTTPS API URL: {url}")
     request = urllib.request.Request(
-        f"https://api.github.com/{path}",
+        url,
         headers={
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
@@ -56,7 +61,7 @@ def github_json(path: str, token: str | None) -> Any:
     if token:
         request.add_header("Authorization", f"Bearer {token}")
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raise SystemExit(f"GitHub API request failed for {path}: {exc}") from exc
