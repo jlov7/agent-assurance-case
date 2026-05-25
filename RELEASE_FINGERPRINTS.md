@@ -67,6 +67,14 @@ Each bundled example verifier command should end with:
 VERIFIED
 ```
 
+## Release Assets
+
+`v0.2-candidate.7` predates the `release-assets` workflow and does not claim
+GitHub artifact-attestation provenance. Future releases should be generated
+through that workflow so the release source bundle, manifest, and checksums are
+bound to a GitHub-hosted provenance attestation in addition to the signed tag
+and DOI documented here.
+
 From current `main`, reviewers can run the executable release-fingerprint verifier. It clones the immutable release tag into a temporary directory, checks the exact commit, verifies the signed tag with the public release-signing key, runs the publication gate, checks the conformance vectors, and verifies the bundled examples:
 
 ```bash
