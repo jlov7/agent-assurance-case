@@ -24,6 +24,9 @@ RESULTS=()
 PYTHON_BIN="${PYTHON:-python3}"
 TEMP_ROOT=""
 TMP_CASE=""
+PYTHONPYCACHEPREFIX="${PYTHONPYCACHEPREFIX:-/tmp/aac_pub_gate_pycache}"
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONPYCACHEPREFIX
 EXPECTED_CANDIDATE="v0.2-candidate.7"
 EXPECTED_VERSION="${EXPECTED_CANDIDATE#v}"
 EXPECTED_SCHEMA_URI="https://raw.githubusercontent.com/jlov7/agent-assurance-case/${EXPECTED_CANDIDATE}/schemas/agent-assurance-case-v0.2.schema.json"
