@@ -76,12 +76,14 @@ AAC vectors: valid
 
 An independent implementation should publish equivalent evidence:
 
+- implementation name, source URL, commit or release tag, language/runtime, and
+  exact support scope;
 - accepted canonicalization vector IDs and canonical bytes;
 - rejected canonicalization vector IDs and rejection reasons;
 - sign/verify vector ID;
 - computed `content_hash`;
 - signature verification result;
-- implementation language, library versions, and commit or release tag.
+- library versions.
 
 ## Profile Behavior
 

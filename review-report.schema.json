@@ -10,6 +10,7 @@
     "target",
     "reviewer",
     "review",
+    "implementation",
     "reproduction",
     "vector_conformance",
     "findings",
@@ -21,6 +22,7 @@
     "target": { "$ref": "#/$defs/target" },
     "reviewer": { "$ref": "#/$defs/reviewer" },
     "review": { "$ref": "#/$defs/review" },
+    "implementation": { "$ref": "#/$defs/implementation" },
     "reproduction": { "$ref": "#/$defs/reproduction" },
     "vector_conformance": { "$ref": "#/$defs/vector_conformance" },
     "findings": {
@@ -80,6 +82,42 @@
         },
         "public_artifact_url": { "type": "string" },
         "security_sensitive": { "type": "boolean" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable",
+        "name",
+        "source_url",
+        "version_or_commit",
+        "language_runtime",
+        "support_scope",
+        "profiles_supported",
+        "notes"
+      ],
+      "properties": {
+        "applicable": { "type": "boolean" },
+        "name": { "type": "string" },
+        "source_url": { "type": "string" },
+        "version_or_commit": { "type": "string" },
+        "language_runtime": { "type": "string" },
+        "support_scope": {
+          "enum": [
+            "aac.core parser only",
+            "aac.core verifier",
+            "aac.core verifier plus profiles",
+            "canonicalization/signature vectors only",
+            "exploratory or partial implementation",
+            "not-applicable"
+          ]
+        },
+        "profiles_supported": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "notes": { "type": "string" }
       }
     },
     "reproduction": {
