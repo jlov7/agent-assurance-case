@@ -94,6 +94,7 @@ Run the publication gate:
 ├── THREAT_MODEL.md
 ├── LIMITATIONS.md
 ├── REVIEW_GUIDE.md
+├── EXTERNAL_REVIEW_LEDGER.md
 ├── CITATION.cff
 ├── CHANGELOG.md
 ├── PUBLICATION.md
@@ -152,7 +153,7 @@ Do not claim AAC v1.0 conformance yet. This repository is open for implementatio
 - privacy posture for external evidence artifacts;
 - compatibility with audit and release-review workflows.
 
-Current public review thread: [RFC: external review for AAC v0.2-candidate.6](https://github.com/jlov7/agent-assurance-case/issues/2).
+Current public review thread: [RFC: external review for AAC v0.2-candidate.6](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md).
 
 ## Standards Alignment
 

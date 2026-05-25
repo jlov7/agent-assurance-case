@@ -75,6 +75,8 @@ What is not claimed:
 - no production key rotation, revocation, or enterprise trust-store policy;
 - no recorded independent verifier implementation in this repository yet.
 
+Accepted external review signals are tracked in [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md).
+
 ## Good Review Contributions
 
 The most useful contributions are concrete and runnable:
