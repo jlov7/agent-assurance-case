@@ -6,7 +6,7 @@ This ledger records independent review signals for Agent Assurance Case (AAC). I
 
 - Release: `v0.2-candidate.7`
 - Release commit: the Git tag target for `v0.2-candidate.7`
-- DOI: pending Zenodo archival
+- DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Public review issue: <https://github.com/jlov7/agent-assurance-case/issues/2>
 
 ## Current External Review Status
@@ -17,7 +17,7 @@ No independent verifier implementation, cryptographic review, schema/profile rev
 |---|---|---|---|---|---|
 | none yet | none yet | none yet | none yet | no accepted external review | n/a |
 
-This is not a negative result. It is the current claim boundary: AAC is signed, CI-green, and open for public review; it is not yet independently validated. DOI archival is completed after Zenodo archives the GitHub Release.
+This is not a negative result. It is the current claim boundary: AAC is signed, CI-green, DOI-archived, and open for public review; it is not yet independently validated.
 
 ## What Counts As Accepted External Review
 
