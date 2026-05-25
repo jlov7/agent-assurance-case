@@ -20,6 +20,8 @@ The `main` branch is protected. Changes should land through pull requests after 
 
 Release tags are signed, treated as immutable, and superseded by new tags rather than rewritten.
 
+Repository-level security posture and unresolved automated supply-chain signals are documented in `SECURITY_POSTURE.md`.
+
 ## Developer Certificate of Origin
 
 This project uses the Developer Certificate of Origin. By contributing, you certify that you have the right to submit the contribution under this repository's licenses.

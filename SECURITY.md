@@ -4,6 +4,8 @@ AAC is a draft specification and reference verifier. Please do not report suspec
 
 The reviewer-facing trust boundary is summarized in `THREAT_MODEL.md`.
 
+Repository-level security posture and unresolved automated supply-chain signals are summarized in `SECURITY_POSTURE.md`.
+
 ## Reporting
 
 Use GitHub private vulnerability reporting for this repository when available:
