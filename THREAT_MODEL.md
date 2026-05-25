@@ -1,6 +1,6 @@
 # Threat Model
 
-This document summarizes the security assumptions for AAC v0.2-candidate.5.
+This document summarizes the security assumptions for AAC v0.2-candidate.6.
 The normative security rules remain in `SPEC.md`; this file is a reviewer-facing
 map of the trust boundary.
 
