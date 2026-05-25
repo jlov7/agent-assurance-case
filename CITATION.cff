@@ -20,3 +20,14 @@ keywords:
   - json-schema
   - ed25519
   - verification
+preferred-citation:
+  type: software
+  title: "Agent Assurance Case (AAC) Specification and Reference Verifier"
+  authors:
+    - family-names: "Lovell"
+      given-names: "Jason Mark"
+      orcid: "https://orcid.org/0009-0001-6300-9155"
+  version: "0.2-candidate.7"
+  doi: 10.5281/zenodo.20379393
+  year: 2026
+  url: "https://doi.org/10.5281/zenodo.20379393"
