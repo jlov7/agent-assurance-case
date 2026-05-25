@@ -107,6 +107,10 @@ jobs:
           Draft202012Validator.check_schema(schema)
           PY
 
+      - name: Validate release evidence JSON
+        run: |
+          python -m json.tool release-evidence.v0.2-candidate.7.json >/dev/null
+
       - name: Run publication-readiness gate
         run: |
           chmod +x VERIFY-PUBLICATION-READY.sh

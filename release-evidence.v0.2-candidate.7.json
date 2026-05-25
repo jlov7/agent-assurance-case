@@ -1,0 +1,73 @@
+{
+  "artifact": "agent-assurance-case",
+  "evidence_type": "release-provenance",
+  "schema_version": "1.0",
+  "release": {
+    "name": "Agent Assurance Case (AAC) Specification and Reference Verifier",
+    "version": "0.2-candidate.7",
+    "tag": "v0.2-candidate.7",
+    "release_url": "https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7",
+    "repository": "https://github.com/jlov7/agent-assurance-case",
+    "release_commit": "689198d9c249a966a0abab6415ae8668efb512d9",
+    "doi": "10.5281/zenodo.20379393",
+    "doi_url": "https://doi.org/10.5281/zenodo.20379393",
+    "published_at": "2026-05-25T12:47:41Z"
+  },
+  "citation": {
+    "cff_file": "CITATION.cff",
+    "orcid": "https://orcid.org/0009-0001-6300-9155",
+    "preferred_citation_present": true
+  },
+  "signed_tag": {
+    "signature_type": "git-ssh-ed25519",
+    "signer": "jase.lovell@me.com",
+    "key_sha256": "SHA256:WGevS9odnPKBtzTZjoVXSj2aexpZo4k6VL/dHaVaJdY",
+    "expected_object": "689198d9c249a966a0abab6415ae8668efb512d9"
+  },
+  "release_checks": {
+    "immutable_checkout_commands": [
+      "git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case",
+      "test \"$(git rev-parse HEAD)\" = \"689198d9c249a966a0abab6415ae8668efb512d9\"",
+      "./VERIFY-PUBLICATION-READY.sh",
+      "python verifier/check_vectors.py"
+    ],
+    "expected_vector_output": [
+      "AAC vectors: canonicalization accept=6 reject=5",
+      "AAC vectors: sign_verify=aac-v0.2-demo-sign-verify-pass-with-coverage",
+      "AAC vectors: valid"
+    ],
+    "current_main_release_fingerprint_command": "python3 scripts/verify_release_fingerprints.py"
+  },
+  "protected_branch": {
+    "branch": "main",
+    "recorded_as_of": "2026-05-25",
+    "strict_required_checks": [
+      "test",
+      "Analyze Python",
+      "Verify AAC release fingerprint"
+    ],
+    "initial_required_fingerprint_gate": {
+      "main_commit": "c9373000406a6c753989da94fae92aa64faac71f",
+      "release_fingerprints_run": "https://github.com/jlov7/agent-assurance-case/actions/runs/26409761127",
+      "aac_verifier_run": "https://github.com/jlov7/agent-assurance-case/actions/runs/26409761102",
+      "codeql_run": "https://github.com/jlov7/agent-assurance-case/actions/runs/26409761104"
+    }
+  },
+  "external_review": {
+    "ledger": "EXTERNAL_REVIEW_LEDGER.md",
+    "public_issue": "https://github.com/jlov7/agent-assurance-case/issues/2",
+    "accepted_independent_review": false
+  },
+  "claim_boundary": {
+    "maturity": "public draft candidate",
+    "self_verification_evidence": true,
+    "independent_validation_claimed": false,
+    "not_claimed": [
+      "legal certification",
+      "employer endorsement",
+      "standards-body endorsement",
+      "production key governance",
+      "accepted independent cryptographic review"
+    ]
+  }
+}
