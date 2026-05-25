@@ -44,6 +44,26 @@ def load_release_evidence() -> dict[str, Any]:
     return json.loads(RELEASE_EVIDENCE_PATH.read_text(encoding="utf-8"))
 
 
+def require_equal(label: str, actual: str, expected: str) -> None:
+    if actual != expected:
+        raise SystemExit(f"{label} mismatch: {actual} != {expected}")
+
+
+def validate_release_evidence(evidence: dict[str, Any]) -> None:
+    release = evidence["release"]
+    signed_tag = evidence["signed_tag"]
+    require_equal(
+        "signed tag object",
+        str(signed_tag["expected_object"]),
+        str(release["release_commit"]),
+    )
+    require_equal(
+        "release evidence filename tag",
+        str(release["tag"]),
+        RELEASE_EVIDENCE_PATH.stem.removeprefix("release-evidence."),
+    )
+
+
 def write_allowed_signers(
     workdir: Path,
     *,
@@ -107,6 +127,7 @@ def main() -> int:
     require_tool("git")
     require_tool("bash")
     evidence = load_release_evidence()
+    validate_release_evidence(evidence)
     release = evidence["release"]
     signed_tag = evidence["signed_tag"]
     repo_url = str(release["repository"])
