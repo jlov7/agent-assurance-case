@@ -91,8 +91,9 @@ As of `2026-05-25`, the protected `main` branch requires strict status checks fo
 - `Analyze Python`
 - `Verify AAC release fingerprint`
 - `Quality checks`
+- `OpenSSF Scorecard`
 
-The initial protected-gate evidence after enabling the release-fingerprint requirement is listed below. `Quality checks` was added as a required protected check after this initial evidence point. For the latest `main` status, use the workflow badges or GitHub Actions run history.
+The initial protected-gate evidence after enabling the release-fingerprint requirement is listed below. `Quality checks` and `OpenSSF Scorecard` were added as required protected checks after this initial evidence point. For the latest `main` status, use the workflow badges or GitHub Actions run history.
 
 - Main commit: `c9373000406a6c753989da94fae92aa64faac71f`
 - Release-fingerprints workflow: <https://github.com/jlov7/agent-assurance-case/actions/runs/26409761127>
