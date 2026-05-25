@@ -7,7 +7,7 @@ This checklist is for publishing an Agent Assurance Case (AAC) draft candidate a
 This repository is already public. Future releases should preserve the current provenance bar:
 
 - changes land through protected pull requests;
-- required checks pass on the exact `main` SHA: `test`, CodeQL `Analyze Python`, and `Verify AAC release fingerprint`;
+- required checks pass on the exact `main` SHA: `test`, CodeQL `Analyze Python`, `Verify AAC release fingerprint`, and `Quality checks`;
 - release tags are signed annotated tags and are never moved;
 - GitHub Releases are created from existing tags with `gh release create --verify-tag`;
 - DOI metadata is added only after Zenodo archives the GitHub Release.
