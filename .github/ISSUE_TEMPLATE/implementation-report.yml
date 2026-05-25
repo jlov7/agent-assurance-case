@@ -1,0 +1,105 @@
+---
+name: Implementation report
+description: >-
+  Submit an independent AAC parser, verifier, or profile-checker result.
+title: "[implementation] "
+labels:
+  - implementation
+  - review
+body:
+  - type: input
+    id: implementation
+    attributes:
+      label: Implementation
+      description: Repository, package, artifact, or project name.
+    validations:
+      required: true
+  - type: input
+    id: implementation_commit
+    attributes:
+      label: Implementation version or commit
+      description: Include a release URL or commit SHA when available.
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: AAC target
+      description: Use v0.2-candidate.7 or full commit SHA.
+      placeholder: v0.2-candidate.7
+    validations:
+      required: true
+  - type: dropdown
+    id: support_scope
+    attributes:
+      label: Support scope
+      options:
+        - aac.core parser only
+        - aac.core verifier
+        - aac.core verifier plus profiles
+        - canonicalization/signature vectors only
+        - exploratory or partial implementation
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands and environment
+      description: >-
+        Include OS, language/runtime versions, dependency versions, commands,
+        and any relevant configuration.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: vector_output
+    attributes:
+      label: Vector output
+      description: >-
+        Include `python verifier/check_vectors.py` output from AAC
+        v0.2-candidate.7, or equivalent independent byte-level vector output.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: structured_report
+    attributes:
+      label: Structured review report
+      description: >-
+        For ledger consideration, paste a filled review-report-template.json
+        report or link to a public artifact.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: structured_report_validation
+    attributes:
+      label: Structured report validation
+      description: >-
+        Include output from `python verifier/validate_review_report.py
+        path/to/review-report.json`. Use N/A only if this is an informal
+        implementation discussion rather than a ledger candidate.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: divergences
+    attributes:
+      label: Divergences or unsupported behavior
+      description: >-
+        List any vector mismatch, unsupported JSON domain value, unsupported
+        profile, verifier-order difference, or trust-boundary difference.
+    validations:
+      required: true
+  - type: textarea
+    id: claim_boundary
+    attributes:
+      label: Claim boundary
+      description: >-
+        State the exact claim this implementation result supports and confirm
+        it is not AAC v1.0 conformance, legal certification, or endorsement.
+      placeholder: >-
+        This implementation targets AAC v0.2-candidate.7 only. It does not
+        claim AAC v1.0 conformance, legal certification, or endorsement.
+    validations:
+      required: true

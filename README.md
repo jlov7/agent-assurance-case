@@ -166,7 +166,7 @@ Do not claim AAC v1.0 conformance yet. This repository is open for implementatio
 - privacy posture for external evidence artifacts;
 - compatibility with audit and release-review workflows.
 
-Current public review thread: [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Reviewers can start with the 10-minute and 30-minute recipes in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#review-recipes). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#structured-review-reports).
+Current public review thread: [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Reviewers can start with the 10-minute and 30-minute recipes in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#review-recipes). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#structured-review-reports). Independent verifier/parser authors can use the [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml).
 
 ## Standards Alignment
 
