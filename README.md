@@ -15,7 +15,7 @@
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
-[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7) · [Release fingerprints](RELEASE_FINGERPRINTS.md)
+[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7) · [Release fingerprints](RELEASE_FINGERPRINTS.md) · [Runtime dependency SBOM](sbom/runtime-requirements.cdx.json)
 
 </div>
 
@@ -117,6 +117,8 @@ python3 scripts/verify_release_fingerprints.py
 │   └── agent-assurance-case-v0.2.schema.json
 ├── scripts/
 │   └── verify_release_fingerprints.py
+├── sbom/
+│   └── runtime-requirements.cdx.json
 ├── profiles/
 │   ├── aac.core.md
 │   ├── runwright.skills.release.md

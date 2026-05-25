@@ -55,6 +55,9 @@ jobs:
           -x tests
           -s B404,B603,B607
 
+      - name: Validate dependency SBOM
+        run: python scripts/validate_dependency_sbom.py
+
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 
