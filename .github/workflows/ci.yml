@@ -109,7 +109,21 @@ jobs:
 
       - name: Validate release evidence JSON
         run: |
-          python -m json.tool release-evidence.v0.2-candidate.7.json >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          schema = json.loads(Path("release-evidence.schema.json").read_text())
+          evidence = json.loads(
+              Path("release-evidence.v0.2-candidate.7.json").read_text()
+          )
+          Draft202012Validator.check_schema(schema)
+          Draft202012Validator(
+              schema,
+              format_checker=FormatChecker(),
+          ).validate(evidence)
+          PY
 
       - name: Run publication-readiness gate
         run: |

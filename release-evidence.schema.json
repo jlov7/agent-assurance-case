@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.7/release-evidence.schema.json",
+  "title": "AAC Release Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact",
+    "evidence_type",
+    "schema_version",
+    "release",
+    "citation",
+    "signed_tag",
+    "release_checks",
+    "protected_branch",
+    "external_review",
+    "claim_boundary"
+  ],
+  "properties": {
+    "artifact": { "const": "agent-assurance-case" },
+    "evidence_type": { "const": "release-provenance" },
+    "schema_version": { "const": "1.0" },
+    "release": { "$ref": "#/$defs/release" },
+    "citation": { "$ref": "#/$defs/citation" },
+    "signed_tag": { "$ref": "#/$defs/signed_tag" },
+    "release_checks": { "$ref": "#/$defs/release_checks" },
+    "protected_branch": { "$ref": "#/$defs/protected_branch" },
+    "external_review": { "$ref": "#/$defs/external_review" },
+    "claim_boundary": { "$ref": "#/$defs/claim_boundary" }
+  },
+  "$defs": {
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "tag",
+        "release_url",
+        "repository",
+        "release_commit",
+        "doi",
+        "doi_url",
+        "published_at"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "const": "0.2-candidate.7" },
+        "tag": { "const": "v0.2-candidate.7" },
+        "release_url": { "type": "string", "format": "uri" },
+        "repository": { "type": "string", "format": "uri" },
+        "release_commit": { "$ref": "#/$defs/sha1" },
+        "doi": { "const": "10.5281/zenodo.20379393" },
+        "doi_url": { "type": "string", "format": "uri" },
+        "published_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cff_file", "orcid", "preferred_citation_present"],
+      "properties": {
+        "cff_file": { "const": "CITATION.cff" },
+        "orcid": { "const": "https://orcid.org/0009-0001-6300-9155" },
+        "preferred_citation_present": { "const": true }
+      }
+    },
+    "signed_tag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signature_type",
+        "signer",
+        "key_sha256",
+        "expected_object"
+      ],
+      "properties": {
+        "signature_type": { "const": "git-ssh-ed25519" },
+        "signer": { "type": "string", "minLength": 1 },
+        "key_sha256": { "type": "string", "pattern": "^SHA256:[A-Za-z0-9+/=]+$" },
+        "expected_object": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "release_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutable_checkout_commands",
+        "expected_vector_output",
+        "current_main_release_fingerprint_command"
+      ],
+      "properties": {
+        "immutable_checkout_commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "expected_vector_output": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "current_main_release_fingerprint_command": {
+          "const": "python3 scripts/verify_release_fingerprints.py"
+        }
+      }
+    },
+    "protected_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch",
+        "recorded_as_of",
+        "strict_required_checks",
+        "initial_required_fingerprint_gate"
+      ],
+      "properties": {
+        "branch": { "const": "main" },
+        "recorded_as_of": { "type": "string", "format": "date" },
+        "strict_required_checks": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "test" },
+            { "const": "Analyze Python" },
+            { "const": "Verify AAC release fingerprint" }
+          ],
+          "items": false
+        },
+        "initial_required_fingerprint_gate": { "$ref": "#/$defs/workflow_evidence" }
+      }
+    },
+    "external_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ledger", "public_issue", "accepted_independent_review"],
+      "properties": {
+        "ledger": { "const": "EXTERNAL_REVIEW_LEDGER.md" },
+        "public_issue": { "type": "string", "format": "uri" },
+        "accepted_independent_review": { "const": false }
+      }
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maturity",
+        "self_verification_evidence",
+        "independent_validation_claimed",
+        "not_claimed"
+      ],
+      "properties": {
+        "maturity": { "const": "public draft candidate" },
+        "self_verification_evidence": { "const": true },
+        "independent_validation_claimed": { "const": false },
+        "not_claimed": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "workflow_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "main_commit",
+        "release_fingerprints_run",
+        "aac_verifier_run",
+        "codeql_run"
+      ],
+      "properties": {
+        "main_commit": { "$ref": "#/$defs/sha1" },
+        "release_fingerprints_run": { "type": "string", "format": "uri" },
+        "aac_verifier_run": { "type": "string", "format": "uri" },
+        "codeql_run": { "type": "string", "format": "uri" }
+      }
+    },
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+  }
+}
