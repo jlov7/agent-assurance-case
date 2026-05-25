@@ -178,6 +178,12 @@ def validate_review_report(path: Path) -> list[str]:
 
     claim_boundary = report.get("claim_boundary", {})
     if isinstance(claim_boundary, dict):
+        if claim_boundary.get("independent_review_claimed") is True:
+            _require_populated(errors, report, "review.public_artifact_url")
+            if review.get("security_sensitive") is not False:
+                errors.append(
+                    "review.security_sensitive must be false for independent review claims"
+                )
         if claim_boundary.get("endorsement_claimed") is not False:
             errors.append("claim_boundary.endorsement_claimed must be false")
         if claim_boundary.get("legal_certification_claimed") is not False:

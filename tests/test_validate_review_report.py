@@ -115,6 +115,21 @@ def test_profile_implementation_review_names_supported_profiles(tmp_path: Path) 
     )
 
 
+def test_independent_review_claim_requires_public_non_sensitive_artifact(
+    tmp_path: Path,
+) -> None:
+    report = _valid_report()
+    report["review"]["public_artifact_url"] = ""
+    report["review"]["security_sensitive"] = True
+
+    errors = validate_review_report.validate_review_report(
+        _write_report(tmp_path, report)
+    )
+
+    assert "review.public_artifact_url must be populated" in errors
+    assert "review.security_sensitive must be false for independent review claims" in errors
+
+
 def test_vector_review_requires_exact_vector_output(tmp_path: Path) -> None:
     report = _valid_report()
     report["vector_conformance"]["observed_vector_output"][2] = "AAC vectors: NOT VALID"
