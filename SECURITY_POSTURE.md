@@ -5,7 +5,8 @@ This note explains the repository-level security posture for reviewers who use a
 ## Current Controls
 
 - `main` is protected.
-- Required GitHub Actions checks must pass before protected-branch updates: verifier tests, release-fingerprint verification, CodeQL, and quality checks.
+- Protected-branch updates must land through pull requests.
+- Required GitHub Actions checks must pass before protected-branch updates: verifier tests, release-fingerprint verification, CodeQL, quality checks, and OpenSSF Scorecard.
 - Release tags are signed and treated as immutable.
 - The published release has DOI-backed archival metadata.
 - The release-fingerprint verifier checks the signed tag, release commit, signing key, DOI, and release-evidence consistency.
@@ -27,6 +28,8 @@ Scorecard reports this while the repository is younger than 90 days. That is an 
 Scorecard reports this because recent changes do not have independent human approvals. The repository uses protected pull requests and required checks, but it does not yet claim independent human code review.
 
 The correct remediation is accepted review from another qualified human reviewer or a second maintainer. Bot reviews, AI reviews, and self-approval should not be described as resolving this risk.
+
+Branch protection currently requires pull requests and required checks, with zero required approving reviews. That is intentional for a single-maintainer draft artifact: it prevents direct protected-branch edits without converting self-approval into a false independent-review signal.
 
 ### CII-Best-Practices
 
