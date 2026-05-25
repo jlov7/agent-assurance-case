@@ -6,6 +6,6 @@ WORKDIR $SRC/agent-assurance-case
 
 RUN pip3 install --no-cache-dir \
     -r verifier/requirements.txt \
-    atheris \
-    pyinstaller \
+    atheris==3.0.0 \
+    pyinstaller==6.10.0 \
     && chmod +x "$SRC/build.sh"
