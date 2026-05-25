@@ -15,6 +15,7 @@ path = [
     "review-report.schema.json",
     "schemas/**",
     "scripts/**",
+    "security-insights.yml",
     "test-vectors/**",
     "tests/**",
     "verifier/**",

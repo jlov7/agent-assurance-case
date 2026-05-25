@@ -11,7 +11,8 @@
 #   7. The verifier source contains the trust hardening hooks.
 #   8. Candidate version metadata stays synchronized across public artifacts.
 #   9. REUSE/SPDX licensing metadata covers every tracked file.
-#   10. Release asset builder passes shellcheck.
+#   10. Security Insights metadata validates against the pinned OpenSSF schema.
+#   11. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -182,15 +183,21 @@ else
   check "REUSE licensing metadata" "fail" "run 'uvx reuse lint' for details"
 fi
 
-# 9. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
-# 9. Release scripts must be shellcheck-clean.
-if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh 2>&1); then
+# 9. Security Insights metadata must remain machine-validated.
+if security_insights_out=$(scripts/validate_security_insights.sh 2>&1); then
+  check "Security Insights metadata" "ok"
+else
+  check "Security Insights metadata" "fail" "$(printf "%s\n" "$security_insights_out" | tail -n 1)"
+fi
+
+# 10. Release scripts must be shellcheck-clean.
+if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
-# 10. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 11. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
