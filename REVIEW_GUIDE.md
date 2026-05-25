@@ -18,6 +18,7 @@ This file is a living review guide on `main`. For an immutable review target, us
 git clone --branch v0.2-candidate.6 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 ./VERIFY-PUBLICATION-READY.sh
+python verifier/check_vectors.py
 python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
 python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
 python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
@@ -27,6 +28,14 @@ Expected final verifier line for each example:
 
 ```text
 VERIFIED
+```
+
+Expected vector checker output:
+
+```text
+AAC vectors: canonicalization accept=6 reject=5
+AAC vectors: sign_verify=aac-v0.2-demo-sign-verify-pass-with-coverage
+AAC vectors: valid
 ```
 
 The demo key path is only for bundled examples. A production review should supply an issuer public key with `--public-key`.
@@ -65,6 +74,7 @@ What is true today:
 - the release is signed, archived, and DOI-backed;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
+- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate;
 - GitHub Actions run the repository conformance gate on `main`.
 
 What is not claimed:
@@ -82,6 +92,7 @@ Accepted external review signals are tracked in [EXTERNAL_REVIEW_LEDGER.md](EXTE
 The most useful contributions are concrete and runnable:
 
 - an independent verifier or parser that agrees or disagrees with the vectors;
+- output from `python verifier/check_vectors.py`, or equivalent byte-level output from an independent implementation;
 - a minimal failing AAC case;
 - a profile proposal with machine-checkable requirements;
 - a privacy or evidence-binding critique tied to a field path;

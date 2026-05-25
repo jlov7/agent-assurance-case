@@ -4,6 +4,7 @@
 # Runs on every push and pull request:
 #   - installs runtime and dev Python dependencies
 #   - runs the verifier test suite
+#   - checks published canonicalization and sign/verify vectors
 #   - verifies all three bundled example AACs with --allow-demo-key
 #   - verifies all three bundled example AACs with the published demo public key
 #   - validates the shipped JSON Schema as a Draft 2020-12 schema
@@ -49,6 +50,10 @@ jobs:
             -v \
             -p no:cacheprovider \
             --basetemp=/tmp/aac-pytest
+
+      - name: Check conformance vectors
+        run: |
+          python verifier/check_vectors.py
 
       - name: Verify pass-with-coverage example
         run: |
