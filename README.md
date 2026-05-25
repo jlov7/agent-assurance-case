@@ -165,7 +165,7 @@ Do not claim AAC v1.0 conformance yet. This repository is open for implementatio
 - privacy posture for external evidence artifacts;
 - compatibility with audit and release-review workflows.
 
-Current public review thread: [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md).
+Current public review thread: [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Reviewers can start with the 10-minute and 30-minute recipes in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#review-recipes). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#structured-review-reports).
 
 ## Standards Alignment
 
@@ -185,7 +185,7 @@ The v0.2-candidate.7 release is archived at [10.5281/zenodo.20379393](https://do
 
 ## Contributing
 
-Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification. For broad external review, use the current [AAC v0.2-candidate.7 RFC thread](https://github.com/jlov7/agent-assurance-case/issues/2), or submit a structured review report through the external review issue form.
+Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification. For broad external review, use the current [AAC v0.2-candidate.7 RFC thread](https://github.com/jlov7/agent-assurance-case/issues/2), start from the [review recipes](REVIEW_GUIDE.md#review-recipes), or submit a structured review report through the external review issue form.
 
 Specification text, profiles, examples, and documentation are licensed under CC BY 4.0. Code, schemas, keys, tests, and CI are licensed under Apache 2.0.
 
