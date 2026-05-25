@@ -55,11 +55,23 @@ body:
       label: Structured review report
       description: >-
         For ledger consideration, attach or paste a filled
-        `review-report-template.json` and include the output of
-        `python verifier/validate_review_report.py path/to/review-report.json`.
+        `review-report-template.json`.
         Use N/A only if this is an informal discussion issue rather than a
         ledger candidate.
       render: json
+    validations:
+      required: false
+  - type: textarea
+    id: structured_report_validation
+    attributes:
+      label: Structured report validation
+      description: >-
+        For ledger consideration, include output from
+        `python verifier/validate_review_report.py path/to/review-report.json`.
+        Expected success output is `AAC review report: valid submission.` Use
+        N/A only if this is an informal discussion issue rather than a ledger
+        candidate.
+      render: shell
     validations:
       required: false
   - type: textarea
