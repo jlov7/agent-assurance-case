@@ -64,6 +64,12 @@ Each bundled example verifier command should end with:
 VERIFIED
 ```
 
+From current `main`, reviewers can run the executable release-fingerprint verifier. It clones the immutable release tag into a temporary directory, checks the exact commit, verifies the signed tag with the public release-signing key, runs the publication gate, checks the conformance vectors, and verifies the bundled examples:
+
+```bash
+python3 scripts/verify_release_fingerprints.py
+```
+
 ## Baseline Post-Release Evidence
 
 The release tag is immutable review evidence. `main` may contain later documentation clarifications. This baseline evidence records a green post-release `main` state after the DOI and review-entry updates, without implying it will remain the latest `main` commit:

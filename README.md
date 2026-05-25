@@ -71,6 +71,12 @@ Run the publication gate:
 ./VERIFY-PUBLICATION-READY.sh
 ```
 
+Verify the published release fingerprint from current `main`:
+
+```bash
+python3 scripts/verify_release_fingerprints.py
+```
+
 ## What The Verifier Checks
 
 - JSON Schema conformance with format checks enabled.
@@ -105,6 +111,8 @@ Run the publication gate:
 │   └── demo-issuer-v0.2.pub
 ├── schemas/
 │   └── agent-assurance-case-v0.2.schema.json
+├── scripts/
+│   └── verify_release_fingerprints.py
 ├── profiles/
 │   ├── aac.core.md
 │   ├── runwright.skills.release.md
