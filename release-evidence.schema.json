@@ -127,7 +127,8 @@
           "prefixItems": [
             { "const": "test" },
             { "const": "Analyze Python" },
-            { "const": "Verify AAC release fingerprint" }
+            { "const": "Verify AAC release fingerprint" },
+            { "const": "Quality checks" }
           ],
           "items": false
         },
