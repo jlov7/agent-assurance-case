@@ -14,7 +14,8 @@
 #   10. Security Insights metadata validates against the pinned OpenSSF schema.
 #   11. Repository posture metadata validates statically.
 #   12. CodeMeta metadata validates against release evidence.
-#   13. Release asset builder passes shellcheck.
+#   13. Citation metadata validates against release evidence and CodeMeta.
+#   14. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -206,14 +207,21 @@ else
   check "CodeMeta metadata" "fail" "$(printf "%s\n" "$codemeta_out" | tail -n 1)"
 fi
 
-# 12. Release scripts must be shellcheck-clean.
+# 12. Citation metadata must remain synchronized with release evidence and CodeMeta.
+if citation_out=$("$PYTHON_BIN" scripts/validate_citation.py 2>&1); then
+  check "citation metadata consistency" "ok"
+else
+  check "citation metadata consistency" "fail" "$(printf "%s\n" "$citation_out" | tail -n 1)"
+fi
+
+# 13. Release scripts must be shellcheck-clean.
 if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
-# 13. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 14. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')

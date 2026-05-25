@@ -69,6 +69,12 @@ jobs:
 
       - name: Validate citation metadata
         run: >-
+          uv run
+          --with-requirements verifier/requirements.txt
+          python scripts/validate_citation.py
+
+      - name: Validate CFF syntax
+        run: >-
           uvx --from cffconvert
           cffconvert --validate --infile CITATION.cff
 
