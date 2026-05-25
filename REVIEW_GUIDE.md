@@ -10,7 +10,7 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 - DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. Commands marked `main` use review tooling added after `v0.2-candidate.7`; the underlying vector files already exist in the release.
+This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. The `v0.2-candidate.7` release includes the standalone vector checker and the checked-in vector files; current `main` may include later documentation clarifications.
 
 ## Fast Verification Path
 
@@ -29,10 +29,10 @@ Expected final verifier line for each example:
 VERIFIED
 ```
 
-On `main`, reviewers can also run the standalone vector checker:
+Reviewers can also run the standalone vector checker from the `v0.2-candidate.7` release tag:
 
 ```bash
-git clone --depth 1 https://github.com/jlov7/agent-assurance-case
+git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 python verifier/check_vectors.py
 ```
@@ -81,7 +81,7 @@ What is true today:
 - the release is signed and archived;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
-- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate on `main`;
+- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate in the `v0.2-candidate.7` release and on `main`;
 - GitHub Actions run the repository conformance gate on `main`.
 
 What is not claimed:

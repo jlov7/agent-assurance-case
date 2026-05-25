@@ -24,8 +24,8 @@ body:
     id: target
     attributes:
       label: Target release or commit
-      description: Use v0.2-candidate.6 or a full commit SHA.
-      placeholder: v0.2-candidate.6
+      description: Use v0.2-candidate.7 or a full commit SHA.
+      placeholder: v0.2-candidate.7
     validations:
       required: true
   - type: textarea
@@ -39,7 +39,7 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: Include commands, output, vector IDs, file paths, or a minimal AAC case. For parser/verifier reviews, include `python verifier/check_vectors.py` output from main or equivalent byte-level conformance output against the test vectors.
+      description: Include commands, output, vector IDs, file paths, or a minimal AAC case. For parser/verifier reviews, include `python verifier/check_vectors.py` output from the v0.2-candidate.7 release tag/current main or equivalent byte-level conformance output against the test vectors.
       render: shell
     validations:
       required: true
