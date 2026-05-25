@@ -1,23 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="300" viewBox="0 0 1120 300" role="img" aria-labelledby="title desc">
   <title id="title">Agent Assurance Case</title>
-  <desc id="desc">AAC wordmark for a signed agent assurance evidence object.</desc>
-  <rect width="960" height="260" rx="28" fill="#f8fafc"/>
-  <rect x="2" y="2" width="956" height="256" rx="26" fill="none" stroke="#cbd5e1" stroke-width="4"/>
-  <g transform="translate(72 50)">
-    <path d="M0 42 L72 0 L144 42 L144 124 L72 166 L0 124 Z" fill="#111827"/>
-    <path d="M24 56 L72 28 L120 56 L120 110 L72 138 L24 110 Z" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linejoin="round"/>
-    <path d="M45 89 H99" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
-    <path d="M72 62 V116" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
+  <desc id="desc">AAC wordmark showing a signed evidence record with deterministic verification.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1120" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#080d18"/>
+      <stop offset="0.54" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="84" y1="42" x2="256" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="74" y1="216" x2="246" y2="74" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14b8a6"/>
+      <stop offset="0.55" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="lift" x="52" y="22" width="240" height="248" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#020617" flood-opacity="0.48"/>
+    </filter>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1120" height="300" rx="32" fill="url(#bg)"/>
+  <rect width="1120" height="300" rx="32" fill="url(#grid)"/>
+  <rect x="1.5" y="1.5" width="1117" height="297" rx="30.5" fill="none" stroke="#334155" stroke-width="3"/>
+  <path d="M64 238H1056" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+
+  <g filter="url(#lift)">
+    <path d="M86 58C86 46.9543 94.9543 38 106 38H210L250 78V222C250 233.046 241.046 242 230 242H106C94.9543 242 86 233.046 86 222V58Z" fill="url(#panel)"/>
+    <path d="M210 38V68C210 73.5228 214.477 78 220 78H250" fill="#bfdbfe"/>
+    <path d="M106 38H210L250 78V222C250 233.046 241.046 242 230 242H106C94.9543 242 86 233.046 86 222V58C86 46.9543 94.9543 38 106 38Z" fill="none" stroke="#ffffff" stroke-opacity="0.88" stroke-width="2"/>
+    <path d="M119 100H190M119 126H218M119 152H198" stroke="#475569" stroke-width="7" stroke-linecap="round"/>
+    <path d="M119 191C137 176 153 178 168 192C184 207 206 204 225 181" fill="none" stroke="#0f766e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="222" cy="184" r="19" fill="#0f172a"/>
+    <path d="M213 184L220 191L232 176" fill="none" stroke="#f8fafc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <g fill="#111827" font-family="SFMono-Regular, ui-monospace, Menlo, Consolas, monospace">
-    <text x="252" y="126" font-size="92" font-weight="800">AAC</text>
-    <text x="256" y="172" font-size="26" font-weight="700">AGENT ASSURANCE CASE</text>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 218L166 68L268 218" stroke="url(#accent)" stroke-width="10"/>
+    <path d="M118 158H214" stroke="url(#accent)" stroke-width="10"/>
+    <path d="M54 218H278" stroke="#f8fafc" stroke-opacity="0.9" stroke-width="3"/>
   </g>
-  <g fill="none" stroke-linecap="round" stroke-width="6">
-    <path d="M602 92 H728" stroke="#0f766e"/>
-    <path d="M602 132 H812" stroke="#334155"/>
-    <path d="M602 172 H760" stroke="#d97706"/>
-    <circle cx="840" cy="132" r="18" fill="#111827" stroke="#111827"/>
-    <path d="M832 132 L838 139 L850 124" stroke="#ffffff"/>
+
+  <g transform="translate(330 62)">
+    <text x="0" y="86" fill="#f8fafc" font-family="SFMono-Regular, ui-monospace, Menlo, Consolas, monospace" font-size="98" font-weight="800" letter-spacing="1">AAC</text>
+    <text x="4" y="129" fill="#cbd5e1" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="760" letter-spacing="2.6">AGENT ASSURANCE CASE</text>
+    <g transform="translate(4 158)" font-family="SFMono-Regular, ui-monospace, Menlo, Consolas, monospace" font-size="15" font-weight="700" letter-spacing="1.2">
+      <rect x="0" y="0" width="112" height="30" rx="15" fill="#14b8a6" fill-opacity="0.14" stroke="#14b8a6" stroke-opacity="0.55"/>
+      <text x="18" y="20" fill="#5eead4">SIGNED</text>
+      <rect x="126" y="0" width="176" height="30" rx="15" fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-opacity="0.45"/>
+      <text x="144" y="20" fill="#7dd3fc">DETERMINISTIC</text>
+      <rect x="316" y="0" width="118" height="30" rx="15" fill="#f59e0b" fill-opacity="0.13" stroke="#f59e0b" stroke-opacity="0.50"/>
+      <text x="334" y="20" fill="#fbbf24">OFFLINE</text>
+    </g>
+  </g>
+
+  <g transform="translate(862 82)">
+    <rect x="0" y="0" width="158" height="136" rx="22" fill="#020617" fill-opacity="0.42" stroke="#475569" stroke-opacity="0.75"/>
+    <path d="M28 38H128M28 68H108M28 98H120" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="28" cy="38" r="5" fill="#14b8a6"/>
+    <circle cx="28" cy="68" r="5" fill="#38bdf8"/>
+    <circle cx="28" cy="98" r="5" fill="#f59e0b"/>
+    <path d="M126 35L138 47L126 59" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
