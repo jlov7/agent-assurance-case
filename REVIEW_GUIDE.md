@@ -5,17 +5,17 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 ## Release Under Review
 
 - Repository: <https://github.com/jlov7/agent-assurance-case>
-- Release: `v0.2-candidate.6`
-- Release commit: `a51c7bd4a2de326333b149ad321785a276376cfa`
-- DOI: <https://doi.org/10.5281/zenodo.20345018>
+- Release: `v0.2-candidate.7`
+- Release commit: the Git tag target for `v0.2-candidate.7`
+- DOI: pending Zenodo archival
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. Commands marked `main` use review tooling added after `v0.2-candidate.6`; the underlying vector files already exist in the release.
+This file is a living review guide on `main`. For an immutable review target, use the release tag above; the DOI is added after Zenodo archives the GitHub Release. Commands marked `main` use review tooling added after `v0.2-candidate.7`; the underlying vector files already exist in the release.
 
 ## Fast Verification Path
 
 ```bash
-git clone --branch v0.2-candidate.6 --depth 1 https://github.com/jlov7/agent-assurance-case
+git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 ./VERIFY-PUBLICATION-READY.sh
 python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
@@ -78,7 +78,7 @@ Security-sensitive reports should follow `SECURITY.md` instead of a public issue
 
 What is true today:
 
-- the release is signed, archived, and DOI-backed;
+- the release is signed and archived;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
 - `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate on `main`;
@@ -106,4 +106,4 @@ The most useful contributions are concrete and runnable:
 - a verifier patch with a regression test;
 - a spec issue that maps a normative `MUST` to a missing schema, verifier, or test counterpart.
 
-The current public review thread is [RFC: external review for AAC v0.2-candidate.6](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.
+The current public review thread is [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.

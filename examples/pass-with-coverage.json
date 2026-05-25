@@ -148,12 +148,12 @@
     }
   ],
   "evidence": {
-    "content_hash": "sha256:2cb4c4a7dbdee898ce924ad3aef200606b522c96da1ec311f6d1e8b863970d51",
-    "signature": "ed25519:mNqvW78sOzco95C0r7KDkiKMki0m2NjL3R2nfGfPYncOcaoEpJLi/iBsKP2KLiIt8SyBcma1ypQI8jjsdtNeDA==",
+    "content_hash": "sha256:ad20f2643686485d353321e0ce14f4636998d909de45a66ec1f63e4516eb335a",
+    "signature": "ed25519:py8nyA58IW7K+FhKQqcZmPV+Y0Na1Pf5ASHc3WkXAoJxHDoOAAl/RrvRGVwxyTAt3BzIdUYLBWkhPi59jg7rCw==",
     "signed_by": "urn:agent-assurance-case:demo-issuer",
     "signed_at": "2026-05-11T13:00:00Z",
     "key_id": "aac-demo-v0.2",
-    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.6/keys/demo-issuer-v0.2.pub",
+    "public_key_ref": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.7/keys/demo-issuer-v0.2.pub",
     "signature_algorithm": "Ed25519-JCS-SHA256-v1",
     "canonicalization": "RFC8785-JCS",
     "offline_verifier": "python verifier/verify.py case.json --public-key issuer.pub"
