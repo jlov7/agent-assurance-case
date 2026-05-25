@@ -42,6 +42,11 @@ boundaries, and exact vector output for parser/vector-focused reviews. Passing
 validation does not make the report true; it only makes the review easier to
 inspect reproducibly.
 
+Independent verifier/parser authors can use the
+[implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml)
+to submit vector output, implementation scope, divergences, and a structured
+report for ledger consideration.
+
 Private comments, social-media reactions, stars, and informal praise do not count as accepted external review.
 
 ## Local Evidence That Does Not Count As External Review

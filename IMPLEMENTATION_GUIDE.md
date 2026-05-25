@@ -126,3 +126,6 @@ The most useful external implementation report includes:
 Accepted independent implementation signals are tracked only after maintainer
 review in [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). A private note,
 star, or informal "looks good" does not count.
+
+Implementation authors can submit focused public evidence through the
+[implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml).
