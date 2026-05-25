@@ -29,6 +29,19 @@ An entry can be added here when it has:
 - a clear outcome, such as confirmation, defect, limitation, incompatible interpretation, or implementation divergence;
 - maintainer disposition in a linked issue or pull request.
 
+Ledger candidates should include a filled structured report based on
+[`review-report-template.json`](review-report-template.json), validated with:
+
+```bash
+python verifier/validate_review_report.py path/to/review-report.json
+```
+
+The validator checks the report shape, release identity, populated reviewer and
+reproduction fields, duplicate JSON members, duplicate finding IDs, claim
+boundaries, and exact vector output for parser/vector-focused reviews. Passing
+validation does not make the report true; it only makes the review easier to
+inspect reproducibly.
+
 Private comments, social-media reactions, stars, and informal praise do not count as accepted external review.
 
 ## Local Evidence That Does Not Count As External Review
