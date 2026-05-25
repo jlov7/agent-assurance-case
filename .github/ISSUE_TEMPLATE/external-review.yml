@@ -39,7 +39,7 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: Include commands, output, vector IDs, file paths, or a minimal AAC case. For parser/verifier reviews, include `python verifier/check_vectors.py` output or equivalent byte-level conformance output.
+      description: Include commands, output, vector IDs, file paths, or a minimal AAC case. For parser/verifier reviews, include `python verifier/check_vectors.py` output from main or equivalent byte-level conformance output against the test vectors.
       render: shell
     validations:
       required: true

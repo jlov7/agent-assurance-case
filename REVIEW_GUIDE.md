@@ -10,7 +10,7 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 - DOI: <https://doi.org/10.5281/zenodo.20345018>
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above.
+This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. Commands marked `main` use review tooling added after `v0.2-candidate.6`; the underlying vector files already exist in the release.
 
 ## Fast Verification Path
 
@@ -18,7 +18,6 @@ This file is a living review guide on `main`. For an immutable review target, us
 git clone --branch v0.2-candidate.6 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 ./VERIFY-PUBLICATION-READY.sh
-python verifier/check_vectors.py
 python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
 python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
 python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
@@ -30,7 +29,15 @@ Expected final verifier line for each example:
 VERIFIED
 ```
 
-Expected vector checker output:
+On `main`, reviewers can also run the standalone vector checker:
+
+```bash
+git clone --depth 1 https://github.com/jlov7/agent-assurance-case
+cd agent-assurance-case
+python verifier/check_vectors.py
+```
+
+Expected output:
 
 ```text
 AAC vectors: canonicalization accept=6 reject=5
@@ -74,7 +81,7 @@ What is true today:
 - the release is signed, archived, and DOI-backed;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
-- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate;
+- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate on `main`;
 - GitHub Actions run the repository conformance gate on `main`.
 
 What is not claimed:
