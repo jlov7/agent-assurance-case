@@ -52,6 +52,9 @@ jobs:
       - name: Check public artifact hygiene
         run: python scripts/check_public_hygiene.py
 
+      - name: Validate Security Insights metadata
+        run: scripts/validate_security_insights.sh
+
       - name: Validate citation metadata
         run: >-
           uvx --from cffconvert
@@ -64,3 +67,4 @@ jobs:
           VERIFY-PUBLICATION-READY.sh
           .clusterfuzzlite/build.sh
           scripts/build_release_assets.sh
+          scripts/validate_security_insights.sh
