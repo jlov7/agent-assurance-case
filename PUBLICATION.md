@@ -9,7 +9,8 @@ This repository is already public. Future releases should preserve the current p
 - changes land through protected pull requests;
 - required checks pass on the exact `main` SHA: `test`, CodeQL `Analyze Python`, `Verify AAC release fingerprint`, and `Quality checks`;
 - release tags are signed annotated tags and are never moved;
-- GitHub Releases are created from existing tags with `gh release create --verify-tag`;
+- GitHub Releases are created as drafts from existing tags with `gh release create --verify-tag --draft`;
+- release assets are generated from the signed tag checkout, attested with GitHub artifact attestations, attached before publication, and verified again after publication;
 - DOI metadata is added only after Zenodo archives the GitHub Release.
 
 ## Preflight
@@ -39,16 +40,20 @@ Do not publish a GitHub Release until the maintainer explicitly approves that ex
 
 1. Create a new tag for the final checked commit. Do not move old candidate tags.
 2. Push the signed tag.
-3. Create the GitHub Release from the existing tag, using `--verify-tag` so `gh` cannot create an unsigned tag implicitly.
-4. Include concise release notes covering verifier semantics, schema changes, threat model, examples, and known draft limitations.
-5. Confirm the schema URI and demo public key URL resolve from the public tag.
+3. Create the GitHub Release draft from the existing tag, using `--verify-tag` so `gh` cannot create an unsigned tag implicitly.
+4. Run `release-assets.yml` for the signed tag and confirm the attestation is visible with `gh attestation verify`.
+5. Publish the release draft.
+6. Include concise release notes covering verifier semantics, schema changes, threat model, examples, and known draft limitations.
+7. Confirm the schema URI and demo public key URL resolve from the public tag.
 
 Example:
 
 ```bash
 git tag -s vX.Y-candidate.Z <release-commit-sha> -m "Agent Assurance Case vX.Y-candidate.Z"
 git push origin vX.Y-candidate.Z
-gh release create vX.Y-candidate.Z --verify-tag --prerelease --title "Agent Assurance Case vX.Y-candidate.Z" --notes-file release-notes.md
+gh release create vX.Y-candidate.Z --verify-tag --draft --prerelease --title "Agent Assurance Case vX.Y-candidate.Z" --notes-file release-notes.md
+gh workflow run release-assets.yml --repo jlov7/agent-assurance-case -f tag=vX.Y-candidate.Z
+gh release edit vX.Y-candidate.Z --repo jlov7/agent-assurance-case --draft=false
 ```
 
 ## Zenodo DOI

@@ -60,4 +60,7 @@ jobs:
       - name: Run shellcheck
         run: >-
           uvx --from shellcheck-py
-          shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh
+          shellcheck
+          VERIFY-PUBLICATION-READY.sh
+          .clusterfuzzlite/build.sh
+          scripts/build_release_assets.sh

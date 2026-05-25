@@ -11,6 +11,7 @@
 #   7. The verifier source contains the trust hardening hooks.
 #   8. Candidate version metadata stays synchronized across public artifacts.
 #   9. REUSE/SPDX licensing metadata covers every tracked file.
+#   10. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -182,7 +183,15 @@ else
 fi
 
 # 9. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
-post_junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
+# 9. Release scripts must be shellcheck-clean.
+if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh 2>&1); then
+  check "shellcheck" "ok"
+else
+  check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
+fi
+
+# 10. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$post_junk" | head -1)
