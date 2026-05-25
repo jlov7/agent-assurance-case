@@ -33,7 +33,7 @@ AAC fills the release-decision gap: a small, portable assurance record that says
 
 AAC is not a legal compliance certification. It is a signed evidence object that can support release review, audit preparation, and independent verification.
 
-Read [OVERVIEW.md](OVERVIEW.md) first for the one-page model and trust boundary. Read [THREAT_MODEL.md](THREAT_MODEL.md), [LIMITATIONS.md](LIMITATIONS.md), [REVIEW_GUIDE.md](REVIEW_GUIDE.md), [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md), [RELEASE_FINGERPRINTS.md](RELEASE_FINGERPRINTS.md), [SECURITY_POSTURE.md](SECURITY_POSTURE.md), and [`security-insights.yml`](security-insights.yml) before relying on AAC in a release process.
+Read [OVERVIEW.md](OVERVIEW.md) first for the one-page model and trust boundary. Read [THREAT_MODEL.md](THREAT_MODEL.md), [LIMITATIONS.md](LIMITATIONS.md), [REVIEW_GUIDE.md](REVIEW_GUIDE.md), [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md), [RELEASE_FINGERPRINTS.md](RELEASE_FINGERPRINTS.md), [SECURITY_POSTURE.md](SECURITY_POSTURE.md), [`security-insights.yml`](security-insights.yml), and [`repository-posture.json`](repository-posture.json) before relying on AAC in a release process.
 
 ## Quick Start
 

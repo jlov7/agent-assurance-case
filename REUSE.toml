@@ -11,6 +11,8 @@ path = [
     "keys/**",
     "release-evidence.schema.json",
     "release-evidence.v0.2-candidate.7.json",
+    "repository-posture.json",
+    "repository-posture.schema.json",
     "review-report-template.json",
     "review-report.schema.json",
     "schemas/**",

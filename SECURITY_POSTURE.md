@@ -15,6 +15,7 @@ This note explains the repository-level security posture for reviewers who use a
 - Dependabot is enabled for GitHub Actions and Python requirements.
 - GitHub secret scanning and push protection are enabled.
 - `security-insights.yml` provides machine-readable OpenSSF Security Insights metadata and is validated in CI.
+- `repository-posture.json` records expected live GitHub repository controls. CI validates its schema; maintainers can compare it with live GitHub settings using `python scripts/verify_repository_posture.py --live` from an authenticated admin-capable environment.
 - GitHub private vulnerability reporting is enabled through `SECURITY.md`.
 
 ## Scorecard Interpretation
