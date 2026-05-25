@@ -8,6 +8,7 @@
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
 [![Release fingerprints](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/jlov7/agent-assurance-case/badge)](https://scorecard.dev/viewer/?uri=github.com/jlov7/agent-assurance-case)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20379393.svg)](https://doi.org/10.5281/zenodo.20379393)
 ![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.7-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
