@@ -5,6 +5,7 @@ path = [
     ".clusterfuzzlite/**",
     ".github/**",
     ".gitignore",
+    "codemeta.json",
     "REUSE.toml",
     "VERIFY-PUBLICATION-READY.sh",
     "fuzz/**",

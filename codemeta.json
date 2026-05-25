@@ -1,0 +1,35 @@
+{
+  "@context": "https://w3id.org/codemeta/3.1",
+  "@type": "SoftwareSourceCode",
+  "name": "Agent Assurance Case (AAC) Specification and Reference Verifier",
+  "description": "A portable, signed, deterministically verifiable evidence object for agentic AI release assurance.",
+  "version": "0.2-candidate.7",
+  "identifier": "https://doi.org/10.5281/zenodo.20379393",
+  "sameAs": "https://doi.org/10.5281/zenodo.20379393",
+  "url": "https://github.com/jlov7/agent-assurance-case",
+  "codeRepository": "https://github.com/jlov7/agent-assurance-case",
+  "issueTracker": "https://github.com/jlov7/agent-assurance-case/issues",
+  "datePublished": "2026-05-25",
+  "developmentStatus": "active",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.11+",
+  "license": [
+    "https://spdx.org/licenses/Apache-2.0",
+    "https://spdx.org/licenses/CC-BY-4.0"
+  ],
+  "author": {
+    "@type": "Person",
+    "@id": "https://orcid.org/0009-0001-6300-9155",
+    "givenName": "Jason Mark",
+    "familyName": "Lovell"
+  },
+  "keywords": [
+    "agentic-ai",
+    "ai-assurance",
+    "release-gates",
+    "evidence",
+    "json-schema",
+    "ed25519",
+    "verification"
+  ]
+}

@@ -180,7 +180,7 @@ AAC is designed to sit beside, not replace:
 
 ## Citation
 
-This repository includes `CITATION.cff` so GitHub and archival systems can generate software citations.
+This repository includes `CITATION.cff` and `codemeta.json` so GitHub, archives, and software metadata indexers can generate citations and discovery metadata.
 
 The v0.2-candidate.7 release is archived at [10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393). The superseded v0.2-candidate.6 archive remains available at [10.5281/zenodo.20345018](https://doi.org/10.5281/zenodo.20345018), and the superseded v0.2-candidate.5 archive remains available at [10.5281/zenodo.20185170](https://doi.org/10.5281/zenodo.20185170). To list the work on an ORCID record, add the final version DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
 
