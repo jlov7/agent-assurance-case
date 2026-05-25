@@ -19,6 +19,7 @@ path = [
     "schemas/**",
     "scripts/**",
     "security-insights.yml",
+    "sbom/**",
     "test-vectors/**",
     "tests/**",
     "verifier/**",

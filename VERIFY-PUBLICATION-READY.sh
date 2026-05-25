@@ -12,11 +12,12 @@
 #   8. Candidate version metadata stays synchronized across public artifacts.
 #   9. REUSE/SPDX licensing metadata covers every tracked file.
 #   10. Python dependency and static security checks pass.
-#   11. Security Insights metadata validates against the pinned OpenSSF schema.
-#   12. Repository posture metadata validates statically.
-#   13. CodeMeta metadata validates against release evidence.
-#   14. Citation metadata validates against release evidence and CodeMeta.
-#   15. Release asset builder passes shellcheck.
+#   11. Runtime dependency SBOM validates against verifier requirements.
+#   12. Security Insights metadata validates against the pinned OpenSSF schema.
+#   13. Repository posture metadata validates statically.
+#   14. CodeMeta metadata validates against release evidence.
+#   15. Citation metadata validates against release evidence and CodeMeta.
+#   16. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -200,6 +201,12 @@ else
   check "Bandit static security scan" "fail" "$(printf "%s\n" "$bandit_out" | tail -n 1)"
 fi
 
+if sbom_out=$("$PYTHON_BIN" scripts/validate_dependency_sbom.py 2>&1); then
+  check "runtime dependency SBOM" "ok"
+else
+  check "runtime dependency SBOM" "fail" "$(printf "%s\n" "$sbom_out" | tail -n 1)"
+fi
+
 # 10. Security Insights metadata must remain machine-validated.
 if security_insights_out=$(scripts/validate_security_insights.sh 2>&1); then
   check "Security Insights metadata" "ok"
@@ -235,7 +242,7 @@ else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
-# 15. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 16. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
