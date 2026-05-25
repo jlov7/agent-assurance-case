@@ -1,0 +1,46 @@
+{
+  "report_type": "aac-external-review-report",
+  "schema_version": "1.0",
+  "target": {
+    "release": "v0.2-candidate.7",
+    "commit": "689198d9c249a966a0abab6415ae8668efb512d9",
+    "doi": "10.5281/zenodo.20379393"
+  },
+  "reviewer": {
+    "name": "",
+    "affiliation_or_project": "",
+    "contact_or_url": ""
+  },
+  "review": {
+    "review_type": "independent-verifier-or-parser",
+    "summary": "",
+    "outcome": "inconclusive",
+    "public_artifact_url": "",
+    "security_sensitive": false
+  },
+  "reproduction": {
+    "environment": "",
+    "commands": [
+      "python verifier/check_vectors.py"
+    ],
+    "observed_output": [
+      ""
+    ]
+  },
+  "vector_conformance": {
+    "applicable": true,
+    "method": "reference-check-vectors",
+    "expected_vector_output": [
+      "AAC vectors: canonicalization accept=6 reject=5",
+      "AAC vectors: sign_verify=aac-v0.2-demo-sign-verify-pass-with-coverage",
+      "AAC vectors: valid"
+    ],
+    "observed_vector_output": []
+  },
+  "findings": [],
+  "claim_boundary": {
+    "independent_review_claimed": false,
+    "endorsement_claimed": false,
+    "legal_certification_claimed": false
+  }
+}

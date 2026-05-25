@@ -106,4 +106,22 @@ The most useful contributions are concrete and runnable:
 - a verifier patch with a regression test;
 - a spec issue that maps a normative `MUST` to a missing schema, verifier, or test counterpart.
 
+## Structured Review Reports
+
+Reviewers who want their result considered for the external review ledger can submit a machine-checkable report using [`review-report-template.json`](review-report-template.json) and [`review-report.schema.json`](review-report.schema.json).
+
+Validate a filled report before submitting:
+
+```bash
+python verifier/validate_review_report.py path/to/review-report.json
+```
+
+Expected output for a structurally valid submission:
+
+```text
+AAC review report: valid submission.
+```
+
+The validator checks schema conformance, target release identity, populated reviewer and reproduction fields, duplicate JSON member rejection, duplicate finding IDs, claim-boundary fields, and exact AAC v0.2 vector output for parser or vector-focused reviews. It does not make the report true; maintainers still inspect the evidence before adding anything to [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md).
+
 The current public review thread is [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.
