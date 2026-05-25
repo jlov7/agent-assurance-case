@@ -7,15 +7,7 @@ name: release-fingerprints
     - cron: "41 5 * * 1"
   push:
     branches: [main]
-    paths:
-      - ".github/workflows/release-fingerprints.yml"
-      - "scripts/verify_release_fingerprints.py"
-      - "RELEASE_FINGERPRINTS.md"
   pull_request:
-    paths:
-      - ".github/workflows/release-fingerprints.yml"
-      - "scripts/verify_release_fingerprints.py"
-      - "RELEASE_FINGERPRINTS.md"
 
 permissions:
   contents: read
