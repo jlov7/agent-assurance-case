@@ -38,9 +38,11 @@ python verifier/validate_review_report.py path/to/review-report.json
 
 The validator checks the report shape, release identity, populated reviewer and
 reproduction fields, duplicate JSON members, duplicate finding IDs, claim
-boundaries, and exact vector output for parser/vector-focused reviews. Passing
-validation does not make the report true; it only makes the review easier to
-inspect reproducibly.
+boundaries, public artifact presence for independent-review claims, and exact
+vector output for parser/vector-focused reviews. A report that claims
+independent review must not be marked security-sensitive. Passing validation
+does not make the report true; it only makes the review easier to inspect
+reproducibly.
 
 Independent verifier/parser authors can use the
 [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml)
