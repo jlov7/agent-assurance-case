@@ -10,6 +10,7 @@
 #   6. The published demo public key verifies the examples.
 #   7. The verifier source contains the trust hardening hooks.
 #   8. Candidate version metadata stays synchronized across public artifacts.
+#   9. REUSE/SPDX licensing metadata covers every tracked file.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -172,7 +173,15 @@ else
   check "trust hardening hooks present in verifier" "fail" "only $hooks of 5 expected hooks found"
 fi
 
-# 8. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 8. Every tracked file must have machine-readable licensing metadata.
+if reuse_out=$(uvx reuse lint 2>&1); then
+  covered=$(printf "%s\n" "$reuse_out" | sed -nE 's#^\* Files with license information: ([0-9]+ / [0-9]+)$#\1#p' | head -1)
+  check "REUSE licensing metadata" "ok" "${covered:-all tracked files covered}"
+else
+  check "REUSE licensing metadata" "fail" "run 'uvx reuse lint' for details"
+fi
+
+# 9. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')

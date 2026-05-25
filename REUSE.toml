@@ -1,0 +1,51 @@
+version = 1
+
+[[annotations]]
+path = [
+    ".clusterfuzzlite/**",
+    ".github/**",
+    ".gitignore",
+    "REUSE.toml",
+    "VERIFY-PUBLICATION-READY.sh",
+    "fuzz/**",
+    "keys/**",
+    "release-evidence.schema.json",
+    "release-evidence.v0.2-candidate.7.json",
+    "review-report-template.json",
+    "review-report.schema.json",
+    "schemas/**",
+    "scripts/**",
+    "test-vectors/**",
+    "tests/**",
+    "verifier/**",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jason Mark Lovell"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "EXTERNAL_REVIEW_LEDGER.md",
+    "IMPLEMENTATION_GUIDE.md",
+    "LICENSE.md",
+    "LIMITATIONS.md",
+    "OVERVIEW.md",
+    "PUBLICATION.md",
+    "README.md",
+    "RELEASE_FINGERPRINTS.md",
+    "REVIEW_GUIDE.md",
+    "SECURITY.md",
+    "SECURITY_POSTURE.md",
+    "SPEC.md",
+    "THREAT_MODEL.md",
+    "assets/**",
+    "examples/**",
+    "profiles/**",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jason Mark Lovell"
+SPDX-License-Identifier = "CC-BY-4.0"

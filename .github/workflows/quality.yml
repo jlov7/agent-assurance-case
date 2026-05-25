@@ -43,6 +43,9 @@ jobs:
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 
+      - name: Check REUSE licensing metadata
+        run: uvx reuse lint
+
       - name: Check Markdown local links
         run: python scripts/check_markdown_links.py
 
