@@ -47,6 +47,61 @@ AAC vectors: valid
 
 The demo key path is only for bundled examples. A production review should supply an issuer public key with `--public-key`.
 
+## Review Recipes
+
+Use one of these small paths if you want to contribute a focused review without
+reading the whole repository first.
+
+### 10-Minute Vector Check
+
+Run the release-pinned vector checker and paste the command/output into the
+public review thread or a structured report:
+
+```bash
+git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
+cd agent-assurance-case
+python verifier/check_vectors.py
+```
+
+Useful result: the output matches the expected three lines above, or you can
+explain exactly where an independent implementation disagrees.
+
+### 30-Minute Contract Drift Check
+
+Pick one normative `MUST` from `SPEC.md` or `profiles/aac.core.md` and trace it
+to one of:
+
+- JSON Schema enforcement;
+- verifier logic;
+- a regression test;
+- an explicit human gate or profile requirement.
+
+Useful result: a field path, spec section, and the missing enforcement point, or
+a note that the selected `MUST` is covered.
+
+### Evidence-Binding Check
+
+Try to find an `evidence://` reference that affects release meaning but is not
+covered by `evidence_artifacts` digest binding. Include the field path and the
+smallest AAC case if you find one.
+
+Useful result: a minimal failing case, or a review note that the checked paths
+are bound as expected.
+
+### Ledger-Ready Report
+
+For a report that can be considered for [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md),
+fill [`review-report-template.json`](review-report-template.json) and validate it
+from current `main`:
+
+```bash
+python verifier/validate_review_report.py path/to/review-report.json
+```
+
+Useful result: `AAC review report: valid submission.` plus the filled JSON or a
+public artifact link. Validator success proves report shape and target identity,
+not that the review conclusion is true.
+
 ## What To Challenge
 
 High-value review areas:
