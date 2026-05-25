@@ -61,6 +61,12 @@ jobs:
           --with-requirements verifier/requirements.txt
           python scripts/verify_repository_posture.py
 
+      - name: Validate CodeMeta metadata
+        run: >-
+          uv run
+          --with-requirements verifier/requirements.txt
+          python scripts/validate_codemeta.py
+
       - name: Validate citation metadata
         run: >-
           uvx --from cffconvert
