@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2-candidate.7
+
+- Supersedes `v0.2-candidate.6` without rewriting public history.
+- Adds a standalone review guide, external review ledger, and structured external-review intake.
+- Adds a standalone conformance-vector checker for canonicalization and sign/verify byte vectors.
+- Adds Dependabot coverage, least-privilege workflow permissions, CodeQL scanning, and protected-branch merge-policy documentation.
+- Updates verifier dependency floors while preserving verifier, schema, and verdict semantics.
+- Zenodo DOI: pending after GitHub Release archival.
+
 ## v0.2-candidate.6
 
 - Publishes a signed replacement candidate from current `main` so release provenance no longer depends on the older unsigned `v0.2-candidate.5` tag.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.6 artifact.
+# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.7 artifact.
 #
 # Run this before pushing to the public GitHub repo. The gate checks:
 #   1. The v0.1 leftover files are not present (they would weaken the public artifact).
@@ -24,7 +24,7 @@ RESULTS=()
 PYTHON_BIN="${PYTHON:-python3}"
 TEMP_ROOT=""
 TMP_CASE=""
-EXPECTED_CANDIDATE="v0.2-candidate.6"
+EXPECTED_CANDIDATE="v0.2-candidate.7"
 EXPECTED_VERSION="${EXPECTED_CANDIDATE#v}"
 EXPECTED_SCHEMA_URI="https://raw.githubusercontent.com/jlov7/agent-assurance-case/${EXPECTED_CANDIDATE}/schemas/agent-assurance-case-v0.2.schema.json"
 

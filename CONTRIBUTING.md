@@ -1,6 +1,6 @@
 # Contributing
 
-AAC v0.2-candidate.6 is a draft for review and implementation feedback.
+AAC v0.2-candidate.7 is a draft for review and implementation feedback.
 
 ## Feedback Wanted
 
