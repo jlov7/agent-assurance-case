@@ -54,6 +54,11 @@ jobs:
             -p no:cacheprovider \
             --basetemp=/tmp/aac-pytest
 
+      - name: Compile release fingerprint verifier
+        run: |
+          python -m py_compile scripts/verify_release_fingerprints.py
+          rm -rf scripts/__pycache__
+
       - name: Check conformance vectors
         run: |
           python verifier/check_vectors.py
