@@ -25,6 +25,28 @@
     "key_sha256": "SHA256:WGevS9odnPKBtzTZjoVXSj2aexpZo4k6VL/dHaVaJdY",
     "expected_object": "689198d9c249a966a0abab6415ae8668efb512d9"
   },
+  "release_assets": [
+    {
+      "name": "RELEASE-MANIFEST.json",
+      "github_asset_digest": "sha256:603a51c85aac727c14a4e21ec6015a114cc7117cc0813e59e56eb0ab138c75a7",
+      "github_attestation": "verified"
+    },
+    {
+      "name": "SHA256SUMS",
+      "github_asset_digest": "sha256:2dcdc1c4ead1e38c32e58d85c6024bec27923679d2bb116d32c959e325b717a6",
+      "github_attestation": "verified"
+    },
+    {
+      "name": "agent-assurance-case-v0.2-candidate.7.tar.gz",
+      "github_asset_digest": "sha256:177dd27fe52ed6f95e714f88342637848a4cab5bd790b50ff5590927f058e1c4",
+      "github_attestation": "verified"
+    },
+    {
+      "name": "agent-assurance-case-v0.2-candidate.7.tar.gz.sha256",
+      "github_asset_digest": "sha256:558553a3af1ac16edb06b6883fbafb08ead395458ca28acc3cfd6ec7d57cd5bb",
+      "github_attestation": "verified"
+    }
+  ],
   "release_checks": {
     "immutable_checkout_commands": [
       "git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case",

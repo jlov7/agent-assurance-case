@@ -47,3 +47,27 @@ def test_release_evidence_consistency_rejects_filename_tag_drift(
 
     with pytest.raises(SystemExit, match="release evidence filename tag mismatch"):
         release_fingerprints.validate_release_evidence(evidence)
+
+
+def test_release_evidence_consistency_rejects_duplicate_release_asset() -> None:
+    evidence = copy.deepcopy(_release_evidence())
+    evidence["release_assets"].append(copy.deepcopy(evidence["release_assets"][0]))
+
+    with pytest.raises(SystemExit, match="duplicate release asset names"):
+        release_fingerprints.validate_release_evidence(evidence)
+
+
+def test_release_evidence_consistency_rejects_unexpected_release_asset_name() -> None:
+    evidence = copy.deepcopy(_release_evidence())
+    evidence["release_assets"][0]["name"] = "unexpected.json"
+
+    with pytest.raises(SystemExit, match="release evidence asset set mismatch"):
+        release_fingerprints.validate_release_evidence(evidence)
+
+
+def test_release_evidence_consistency_rejects_unverified_release_asset() -> None:
+    evidence = copy.deepcopy(_release_evidence())
+    evidence["release_assets"][0]["github_attestation"] = "missing"
+
+    with pytest.raises(SystemExit, match="attestation status mismatch"):
+        release_fingerprints.validate_release_evidence(evidence)
