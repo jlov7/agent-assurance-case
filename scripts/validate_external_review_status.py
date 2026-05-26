@@ -11,6 +11,7 @@ from typing import NoReturn
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.7.json"
+REPOSITORY_POSTURE_PATH = ROOT / "repository-posture.json"
 LEDGER_PATH = ROOT / "EXTERNAL_REVIEW_LEDGER.md"
 README_PATH = ROOT / "README.md"
 REVIEW_GUIDE_PATH = ROOT / "REVIEW_GUIDE.md"
@@ -75,9 +76,15 @@ def require_contains(text: str, needle: str, path: Path) -> None:
 
 def main() -> int:
     evidence = load_json(RELEASE_EVIDENCE_PATH)
+    repository_posture = load_json(REPOSITORY_POSTURE_PATH)
     release_checks = require_mapping(evidence.get("release_checks"), "release_checks")
+    protected_branch = require_mapping(evidence.get("protected_branch"), "protected_branch")
     external_review = require_mapping(evidence.get("external_review"), "external_review")
     claim_boundary = require_mapping(evidence.get("claim_boundary"), "claim_boundary")
+    posture_branch = require_mapping(
+        repository_posture.get("branch_protection"),
+        "repository-posture branch_protection",
+    )
 
     require_equal(external_review.get("ledger"), EXPECTED_LEDGER, "external_review.ledger")
     require_equal(
@@ -105,6 +112,11 @@ def main() -> int:
         release_checks.get("current_main_release_fingerprint_command"),
         EXPECTED_FINGERPRINT_COMMAND,
         "release_checks.current_main_release_fingerprint_command",
+    )
+    require_equal(
+        protected_branch.get("strict_required_checks"),
+        posture_branch.get("strict_required_checks"),
+        "protected_branch.strict_required_checks",
     )
 
     not_claimed = claim_boundary.get("not_claimed")
