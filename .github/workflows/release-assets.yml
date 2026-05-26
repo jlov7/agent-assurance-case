@@ -26,10 +26,10 @@ jobs:
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
       PIP_NO_CACHE_DIR: "1"
     steps:
-      - name: Checkout AAC release tag
+      - name: Checkout AAC repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
-          ref: ${{ inputs.tag }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Python
@@ -47,9 +47,14 @@ jobs:
         run: gh release view "$TAG" --repo "$GITHUB_REPOSITORY"
 
       - name: Run release gate from signed tag checkout
-        run: ./VERIFY-PUBLICATION-READY.sh
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          git worktree add /tmp/aac-release-tree "$TAG"
+          cd /tmp/aac-release-tree
+          ./VERIFY-PUBLICATION-READY.sh
 
-      - name: Build release assets from signed tag checkout
+      - name: Build release assets from signed tag commit
         env:
           TAG: ${{ inputs.tag }}
         run: scripts/build_release_assets.sh "$TAG" dist/release
