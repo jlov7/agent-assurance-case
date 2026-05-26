@@ -18,7 +18,7 @@
 #   14. Repository posture metadata validates statically.
 #   15. CodeMeta metadata validates against release evidence.
 #   16. Citation metadata validates against release evidence and CodeMeta.
-#   17. Release asset builder passes shellcheck.
+#   17. Release asset builder dry-runs and passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -242,7 +242,14 @@ else
   check "citation metadata consistency" "fail" "$(printf "%s\n" "$citation_out" | tail -n 1)"
 fi
 
-# 14. Release scripts must be shellcheck-clean.
+# 14. Release asset builder must execute cleanly against the current tree.
+if release_asset_out=$(scripts/build_release_assets.sh "$EXPECTED_CANDIDATE" "$TEMP_ROOT/release-assets" 2>&1); then
+  check "release asset builder dry-run" "ok"
+else
+  check "release asset builder dry-run" "fail" "$(printf "%s\n" "$release_asset_out" | tail -n 1)"
+fi
+
+# 15. Release scripts must be shellcheck-clean.
 if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_dependency_lock.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
