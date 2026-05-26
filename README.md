@@ -79,6 +79,11 @@ Verify the published release fingerprint from current `main`:
 python3 scripts/verify_release_fingerprints.py
 ```
 
+That command checks the immutable release tag and commit, the signed tag, the
+publication gate, conformance vectors, bundled examples, public release asset
+digests, checksum files, and GitHub artifact attestations for the published
+assets.
+
 ## What The Verifier Checks
 
 - JSON Schema conformance with format checks enabled.
