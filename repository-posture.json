@@ -35,6 +35,12 @@
   "code_scanning": {
     "open_alerts": 0
   },
+  "publication_gate": {
+    "local_release_requires_live_posture": true,
+    "ci_default_live_posture_required": false,
+    "ci_live_posture_opt_in_env": "REQUIRE_LIVE_REPOSITORY_POSTURE=1",
+    "ci_live_posture_requires_branch_protection_read_token": true
+  },
   "claim_boundary": {
     "self_reported": true,
     "independent_review_claimed": false

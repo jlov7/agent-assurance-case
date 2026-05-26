@@ -12,6 +12,7 @@
     "merge_policy",
     "security_analysis",
     "code_scanning",
+    "publication_gate",
     "claim_boundary"
   ],
   "properties": {
@@ -22,6 +23,7 @@
     "merge_policy": { "$ref": "#/$defs/merge_policy" },
     "security_analysis": { "$ref": "#/$defs/security_analysis" },
     "code_scanning": { "$ref": "#/$defs/code_scanning" },
+    "publication_gate": { "$ref": "#/$defs/publication_gate" },
     "claim_boundary": { "$ref": "#/$defs/claim_boundary" }
   },
   "$defs": {
@@ -101,6 +103,22 @@
       "required": ["open_alerts"],
       "properties": {
         "open_alerts": { "const": 0 }
+      }
+    },
+    "publication_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local_release_requires_live_posture",
+        "ci_default_live_posture_required",
+        "ci_live_posture_opt_in_env",
+        "ci_live_posture_requires_branch_protection_read_token"
+      ],
+      "properties": {
+        "local_release_requires_live_posture": { "const": true },
+        "ci_default_live_posture_required": { "const": false },
+        "ci_live_posture_opt_in_env": { "const": "REQUIRE_LIVE_REPOSITORY_POSTURE=1" },
+        "ci_live_posture_requires_branch_protection_read_token": { "const": true }
       }
     },
     "claim_boundary": {
