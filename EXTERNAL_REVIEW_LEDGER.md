@@ -19,6 +19,8 @@ No independent verifier implementation, cryptographic review, schema/profile rev
 
 This is not a negative result. It is the current claim boundary: AAC is signed, CI-green, DOI-archived, and open for public review; it is not yet independently validated.
 
+This boundary is machine-checked against release evidence and reviewer-facing docs by [`scripts/validate_external_review_status.py`](scripts/validate_external_review_status.py).
+
 ## What Counts As Accepted External Review
 
 An entry can be added here when it has:
