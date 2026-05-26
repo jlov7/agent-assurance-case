@@ -5,10 +5,13 @@ from __future__ import annotations
 
 import json
 import os
+import hashlib
 import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.parse
+import urllib.request
 import venv
 from pathlib import Path
 from typing import Any
@@ -62,6 +65,27 @@ def validate_release_evidence(evidence: dict[str, Any]) -> None:
         str(release["tag"]),
         RELEASE_EVIDENCE_PATH.stem.removeprefix("release-evidence."),
     )
+    asset_names = [asset["name"] for asset in evidence["release_assets"]]
+    if len(asset_names) != len(set(asset_names)):
+        raise SystemExit("release evidence contains duplicate release asset names")
+    release_version = str(release["tag"]).removeprefix("v")
+    expected_asset_names = {
+        "RELEASE-MANIFEST.json",
+        "SHA256SUMS",
+        f"agent-assurance-case-v{release_version}.tar.gz",
+        f"agent-assurance-case-v{release_version}.tar.gz.sha256",
+    }
+    if set(asset_names) != expected_asset_names:
+        raise SystemExit(
+            "release evidence asset set mismatch: "
+            f"{sorted(asset_names)} != {sorted(expected_asset_names)}"
+        )
+    for asset in evidence["release_assets"]:
+        require_equal(
+            f"{asset['name']} attestation status",
+            str(asset["github_attestation"]),
+            "verified",
+        )
 
 
 def write_allowed_signers(
@@ -123,6 +147,74 @@ def create_python_env(repo: Path, env_dir: Path) -> Path:
     return python
 
 
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def download_release_assets(
+    destination: Path,
+    *,
+    asset_base_url: str,
+    asset_digests: dict[str, str],
+) -> None:
+    destination.mkdir(parents=True)
+    for name, expected_digest in asset_digests.items():
+        url = f"{asset_base_url}/{name}"
+        parsed_url = urllib.parse.urlparse(url)
+        if parsed_url.scheme != "https" or parsed_url.netloc != "github.com":
+            raise SystemExit(f"refusing non-GitHub HTTPS release asset URL: {url}")
+        target = destination / name
+        print(f"download {url}", flush=True)
+        with urllib.request.urlopen(url, timeout=30) as response:  # nosec B310
+            target.write_bytes(response.read())
+        actual_digest = sha256(target)
+        if actual_digest != expected_digest:
+            raise SystemExit(
+                f"{name} sha256 mismatch: {actual_digest} != {expected_digest}"
+            )
+
+
+def verify_sha256s(assets_dir: Path, sums_name: str) -> None:
+    sums_path = assets_dir / sums_name
+    for line in sums_path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        expected_digest, relative_path = line.split(maxsplit=1)
+        target = assets_dir / relative_path
+        if not target.is_file():
+            raise SystemExit(f"{sums_name} target missing: {relative_path}")
+        actual_digest = sha256(target)
+        if actual_digest != expected_digest:
+            raise SystemExit(
+                f"{relative_path} sha256 mismatch: "
+                f"{actual_digest} != {expected_digest}"
+            )
+
+
+def verify_release_asset_attestations(
+    assets_dir: Path,
+    *,
+    repo: str,
+    asset_names: list[str],
+) -> None:
+    require_tool("gh")
+    for name in asset_names:
+        run(
+            [
+                "gh",
+                "attestation",
+                "verify",
+                str(assets_dir / name),
+                "--repo",
+                repo,
+            ],
+        )
+
+
 def main() -> int:
     require_tool("git")
     require_tool("bash")
@@ -135,6 +227,11 @@ def main() -> int:
     release_commit = str(release["release_commit"])
     signing_principal = str(signed_tag["signer"])
     signing_public_key = str(signed_tag["public_key"])
+    asset_digests = {
+        asset["name"]: asset["github_asset_digest"].removeprefix("sha256:")
+        for asset in evidence["release_assets"]
+    }
+    asset_base_url = f"{release['repository']}/releases/download/{release['tag']}"
 
     with tempfile.TemporaryDirectory(prefix="aac-release-fingerprint-") as tmp:
         tmp_path = Path(tmp)
@@ -194,6 +291,23 @@ def main() -> int:
                 cwd=repo,
                 env={"PYTHONDONTWRITEBYTECODE": "1"},
             )
+
+        assets_dir = tmp_path / "release-assets"
+        download_release_assets(
+            assets_dir,
+            asset_base_url=asset_base_url,
+            asset_digests=asset_digests,
+        )
+        verify_sha256s(assets_dir, "SHA256SUMS")
+        verify_sha256s(
+            assets_dir,
+            f"agent-assurance-case-{release_tag}.tar.gz.sha256",
+        )
+        verify_release_asset_attestations(
+            assets_dir,
+            repo="jlov7/agent-assurance-case",
+            asset_names=sorted(asset_digests),
+        )
 
     print("AAC release fingerprint: valid")
     return 0

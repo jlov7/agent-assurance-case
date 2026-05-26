@@ -11,6 +11,7 @@
     "release",
     "citation",
     "signed_tag",
+    "release_assets",
     "release_checks",
     "protected_branch",
     "external_review",
@@ -23,6 +24,11 @@
     "release": { "$ref": "#/$defs/release" },
     "citation": { "$ref": "#/$defs/citation" },
     "signed_tag": { "$ref": "#/$defs/signed_tag" },
+    "release_assets": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/release_asset" }
+    },
     "release_checks": { "$ref": "#/$defs/release_checks" },
     "protected_branch": { "$ref": "#/$defs/protected_branch" },
     "external_review": { "$ref": "#/$defs/external_review" },
@@ -84,6 +90,20 @@
         },
         "key_sha256": { "type": "string", "pattern": "^SHA256:[A-Za-z0-9+/=]+$" },
         "expected_object": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "release_asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "github_asset_digest",
+        "github_attestation"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "github_asset_digest": { "$ref": "#/$defs/sha256_digest" },
+        "github_attestation": { "const": "verified" }
       }
     },
     "release_checks": {
@@ -181,6 +201,7 @@
         "codeql_run": { "type": "string", "format": "uri" }
       }
     },
-    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
   }
 }
