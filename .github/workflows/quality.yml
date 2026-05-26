@@ -102,6 +102,9 @@ jobs:
           --with-requirements verifier/requirements.txt
           python scripts/validate_citation.py
 
+      - name: Validate external-review status
+        run: python scripts/validate_external_review_status.py
+
       - name: Validate CFF syntax
         run: >-
           uvx --from cffconvert

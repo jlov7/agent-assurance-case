@@ -18,7 +18,8 @@
 #   14. Repository posture metadata validates statically.
 #   15. CodeMeta metadata validates against release evidence.
 #   16. Citation metadata validates against release evidence and CodeMeta.
-#   17. Release asset builder dry-runs and passes shellcheck.
+#   17. External-review status validates against release evidence and public docs.
+#   18. Release asset builder dry-runs and passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -242,21 +243,28 @@ else
   check "citation metadata consistency" "fail" "$(printf "%s\n" "$citation_out" | tail -n 1)"
 fi
 
-# 14. Release asset builder must execute cleanly against the current tree.
+# 14. External review status must stay synchronized with public claim boundaries.
+if external_review_out=$("$PYTHON_BIN" scripts/validate_external_review_status.py 2>&1); then
+  check "external review status" "ok"
+else
+  check "external review status" "fail" "$(printf "%s\n" "$external_review_out" | tail -n 1)"
+fi
+
+# 15. Release asset builder must execute cleanly against the current tree.
 if release_asset_out=$(scripts/build_release_assets.sh "$EXPECTED_CANDIDATE" "$TEMP_ROOT/release-assets" 2>&1); then
   check "release asset builder dry-run" "ok"
 else
   check "release asset builder dry-run" "fail" "$(printf "%s\n" "$release_asset_out" | tail -n 1)"
 fi
 
-# 15. Release scripts must be shellcheck-clean.
+# 16. Release scripts must be shellcheck-clean.
 if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_dependency_lock.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
-# 16. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
+# 17. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
 post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
