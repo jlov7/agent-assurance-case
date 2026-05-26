@@ -13,11 +13,12 @@
 #   9. REUSE/SPDX licensing metadata covers every tracked file.
 #   10. Python dependency and static security checks pass.
 #   11. Runtime dependency SBOM validates against verifier requirements.
-#   12. Security Insights metadata validates against the pinned OpenSSF schema.
-#   13. Repository posture metadata validates statically.
-#   14. CodeMeta metadata validates against release evidence.
-#   15. Citation metadata validates against release evidence and CodeMeta.
-#   16. Release asset builder passes shellcheck.
+#   12. Runtime dependency lock matches verifier requirements and audits cleanly.
+#   13. Security Insights metadata validates against the pinned OpenSSF schema.
+#   14. Repository posture metadata validates statically.
+#   15. CodeMeta metadata validates against release evidence.
+#   16. Citation metadata validates against release evidence and CodeMeta.
+#   17. Release asset builder passes shellcheck.
 #
 # Exit code 0 = ready to publish. Non-zero = stop and fix the listed item.
 
@@ -207,6 +208,12 @@ else
   check "runtime dependency SBOM" "fail" "$(printf "%s\n" "$sbom_out" | tail -n 1)"
 fi
 
+if lock_out=$(scripts/validate_dependency_lock.sh 2>&1); then
+  check "runtime dependency lock" "ok"
+else
+  check "runtime dependency lock" "fail" "$(printf "%s\n" "$lock_out" | tail -n 1)"
+fi
+
 # 10. Security Insights metadata must remain machine-validated.
 if security_insights_out=$(scripts/validate_security_insights.sh 2>&1); then
   check "Security Insights metadata" "ok"
@@ -236,7 +243,7 @@ else
 fi
 
 # 14. Release scripts must be shellcheck-clean.
-if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_security_insights.sh 2>&1); then
+if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_dependency_lock.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
