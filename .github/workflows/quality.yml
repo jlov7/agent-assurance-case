@@ -58,6 +58,9 @@ jobs:
       - name: Validate dependency SBOM
         run: python scripts/validate_dependency_sbom.py
 
+      - name: Validate dependency lock
+        run: scripts/validate_dependency_lock.sh
+
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 
@@ -103,4 +106,5 @@ jobs:
           VERIFY-PUBLICATION-READY.sh
           .clusterfuzzlite/build.sh
           scripts/build_release_assets.sh
+          scripts/validate_dependency_lock.sh
           scripts/validate_security_insights.sh
