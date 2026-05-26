@@ -59,6 +59,28 @@ jobs:
           TAG: ${{ inputs.tag }}
         run: scripts/build_release_assets.sh "$TAG" dist/release
 
+      - name: Check release asset upload safety
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          for asset in dist/release/*; do
+            name="$(basename "$asset")"
+            local_digest="sha256:$(shasum -a 256 "$asset" | awk '{print $1}')"
+            remote_digest="$(
+              gh release view "$TAG" \
+                --repo "$GITHUB_REPOSITORY" \
+                --json assets \
+                --jq ".assets[] | select(.name == \"$name\") | .digest"
+            )"
+            if [[ -n "$remote_digest" ]] &&
+              [[ "$remote_digest" != "$local_digest" ]]; then
+              printf 'asset exists with different digest: %s\n' "$name" >&2
+              printf 'remote=%s local=%s\n' "$remote_digest" "$local_digest" >&2
+              exit 1
+            fi
+          done
+
       - name: Generate GitHub artifact attestation
         uses: >-
           actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32
@@ -69,6 +91,23 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag }}
-        run: >-
-          gh release upload "$TAG" dist/release/*
-          --repo "$GITHUB_REPOSITORY"
+        run: |
+          for asset in dist/release/*; do
+            name="$(basename "$asset")"
+            local_digest="sha256:$(shasum -a 256 "$asset" | awk '{print $1}')"
+            remote_digest="$(
+              gh release view "$TAG" \
+                --repo "$GITHUB_REPOSITORY" \
+                --json assets \
+                --jq ".assets[] | select(.name == \"$name\") | .digest"
+            )"
+            if [[ -z "$remote_digest" ]]; then
+              gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+            elif [[ "$remote_digest" == "$local_digest" ]]; then
+              printf 'asset already uploaded with matching digest: %s\n' "$name"
+            else
+              printf 'asset exists with different digest: %s\n' "$name" >&2
+              printf 'remote=%s local=%s\n' "$remote_digest" "$local_digest" >&2
+              exit 1
+            fi
+          done
