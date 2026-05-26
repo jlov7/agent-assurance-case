@@ -15,6 +15,7 @@ REPOSITORY_POSTURE_PATH = ROOT / "repository-posture.json"
 LEDGER_PATH = ROOT / "EXTERNAL_REVIEW_LEDGER.md"
 README_PATH = ROOT / "README.md"
 REVIEW_GUIDE_PATH = ROOT / "REVIEW_GUIDE.md"
+SECURITY_POSTURE_PATH = ROOT / "SECURITY_POSTURE.md"
 
 EXPECTED_LEDGER = "EXTERNAL_REVIEW_LEDGER.md"
 EXPECTED_PUBLIC_ISSUE = "https://github.com/jlov7/agent-assurance-case/issues/2"
@@ -129,6 +130,7 @@ def main() -> int:
     ledger = LEDGER_PATH.read_text(encoding="utf-8")
     readme = README_PATH.read_text(encoding="utf-8")
     review_guide = REVIEW_GUIDE_PATH.read_text(encoding="utf-8")
+    security_posture = SECURITY_POSTURE_PATH.read_text(encoding="utf-8")
 
     require_contains(
         ledger,
@@ -141,6 +143,16 @@ def main() -> int:
     require_contains(readme, EXPECTED_PUBLIC_ISSUE, README_PATH)
     require_contains(review_guide, "no recorded independent verifier implementation", REVIEW_GUIDE_PATH)
     require_contains(review_guide, EXPECTED_LEDGER, REVIEW_GUIDE_PATH)
+    require_contains(
+        security_posture,
+        "The publication gate compares `repository-posture.json` with live GitHub settings during normal maintainer release runs.",
+        SECURITY_POSTURE_PATH,
+    )
+    require_contains(
+        security_posture,
+        "CI runs static posture validation unless `REQUIRE_LIVE_REPOSITORY_POSTURE=1` is set with a token that can read branch protection.",
+        SECURITY_POSTURE_PATH,
+    )
 
     print("External review status: valid")
     return 0
