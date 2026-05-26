@@ -148,7 +148,8 @@
             { "const": "test" },
             { "const": "Analyze Python" },
             { "const": "Verify AAC release fingerprint" },
-            { "const": "Quality checks" }
+            { "const": "Quality checks" },
+            { "const": "OpenSSF Scorecard" }
           ],
           "items": false
         },
