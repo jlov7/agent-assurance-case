@@ -15,7 +15,7 @@
 #   11. Runtime dependency SBOM validates against verifier requirements.
 #   12. Runtime dependency lock matches verifier requirements and audits cleanly.
 #   13. Security Insights metadata validates against the pinned OpenSSF schema.
-#   14. Repository posture metadata validates statically.
+#   14. Repository posture metadata validates; local release runs compare live GitHub settings.
 #   15. CodeMeta metadata validates against release evidence.
 #   16. Citation metadata validates against release evidence and CodeMeta.
 #   17. External-review status validates against release evidence and public docs.
@@ -223,8 +223,23 @@ else
 fi
 
 # 11. Repository posture metadata must remain machine-validated.
-if repository_posture_out=$("$PYTHON_BIN" scripts/verify_repository_posture.py 2>&1); then
-  check "repository posture metadata" "ok"
+repository_posture_args=()
+repository_posture_detail="static"
+if [[ "${CI:-}" != "true" || "${REQUIRE_LIVE_REPOSITORY_POSTURE:-}" == "1" ]]; then
+  repository_posture_args=(--live)
+  repository_posture_detail="static + live"
+fi
+if [[ ${#repository_posture_args[@]} -gt 0 ]]; then
+  repository_posture_out=$("$PYTHON_BIN" scripts/verify_repository_posture.py "${repository_posture_args[@]}" 2>&1)
+else
+  repository_posture_out=$("$PYTHON_BIN" scripts/verify_repository_posture.py 2>&1)
+fi
+repository_posture_rc=$?
+if [[ $repository_posture_rc -eq 0 ]]; then
+  if [[ "$repository_posture_detail" == "static" ]]; then
+    repository_posture_detail="static; set REQUIRE_LIVE_REPOSITORY_POSTURE=1 with a token that can read branch protection to require live comparison"
+  fi
+  check "repository posture metadata" "ok" "$repository_posture_detail"
 else
   check "repository posture metadata" "fail" "$(printf "%s\n" "$repository_posture_out" | tail -n 1)"
 fi
