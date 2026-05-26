@@ -61,6 +61,12 @@ jobs:
       - name: Validate dependency lock
         run: scripts/validate_dependency_lock.sh
 
+      - name: Dry-run release asset builder
+        run: >-
+          scripts/build_release_assets.sh
+          v0.2-candidate.7
+          /tmp/aac-release-assets
+
       - name: Run codespell
         run: uvx codespell . --skip './.git,./.venv'
 
