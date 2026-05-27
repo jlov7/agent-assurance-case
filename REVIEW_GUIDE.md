@@ -18,9 +18,9 @@ This file is a living review guide on `main`. For an immutable review target, us
 git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 ./VERIFY-PUBLICATION-READY.sh
-python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
-python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
-python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+python3 verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
+python3 verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
+python3 verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
 ```
 
 Expected final verifier line for each example:
@@ -34,7 +34,7 @@ Reviewers can also run the standalone vector checker from the `v0.2-candidate.7`
 ```bash
 git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
-python verifier/check_vectors.py
+python3 verifier/check_vectors.py
 ```
 
 Expected output:
@@ -60,7 +60,7 @@ public review thread or a structured report:
 ```bash
 git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
-python verifier/check_vectors.py
+python3 verifier/check_vectors.py
 ```
 
 Useful result: the output matches the expected three lines above, or you can
@@ -95,7 +95,7 @@ fill [`review-report-template.json`](review-report-template.json) and validate i
 from current `main`:
 
 ```bash
-python verifier/validate_review_report.py path/to/review-report.json
+python3 verifier/validate_review_report.py path/to/review-report.json
 ```
 
 Useful result: `AAC review report: valid submission.` plus the filled JSON or a
@@ -136,7 +136,7 @@ What is true today:
 - the release is signed and archived;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
-- `python verifier/check_vectors.py` exposes those vectors as a standalone conformance gate in the `v0.2-candidate.7` release and on `main`;
+- `python3 verifier/check_vectors.py` exposes those vectors as a standalone conformance gate in the `v0.2-candidate.7` release and on `main`;
 - GitHub Actions run the repository conformance gate on `main`.
 
 What is not claimed:
@@ -154,7 +154,7 @@ Accepted external review signals are tracked in [EXTERNAL_REVIEW_LEDGER.md](EXTE
 The most useful contributions are concrete and runnable:
 
 - an independent verifier or parser that agrees or disagrees with the vectors;
-- output from `python verifier/check_vectors.py`, or equivalent byte-level output from an independent implementation;
+- output from `python3 verifier/check_vectors.py`, or equivalent byte-level output from an independent implementation;
 - a minimal failing AAC case;
 - an implementation report using [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md);
 - a profile proposal with machine-checkable requirements;
@@ -169,7 +169,7 @@ Reviewers who want their result considered for the external review ledger can su
 Validate a filled report before submitting:
 
 ```bash
-python verifier/validate_review_report.py path/to/review-report.json
+python3 verifier/validate_review_report.py path/to/review-report.json
 ```
 
 Expected output for a structurally valid submission:

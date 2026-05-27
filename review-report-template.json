@@ -33,7 +33,7 @@
   "reproduction": {
     "environment": "",
     "commands": [
-      "python verifier/check_vectors.py"
+      "python3 verifier/check_vectors.py"
     ],
     "observed_output": [
       ""

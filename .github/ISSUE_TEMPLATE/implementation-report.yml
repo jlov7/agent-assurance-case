@@ -56,7 +56,7 @@ body:
     attributes:
       label: Vector output
       description: >-
-        Include `python verifier/check_vectors.py` output from AAC
+        Include `python3 verifier/check_vectors.py` output from AAC
         v0.2-candidate.7, or equivalent independent byte-level vector output.
       render: shell
     validations:
@@ -76,7 +76,7 @@ body:
     attributes:
       label: Structured report validation
       description: >-
-        Include output from `python verifier/validate_review_report.py
+        Include output from `python3 verifier/validate_review_report.py
         path/to/review-report.json`. Use N/A only if this is an informal
         implementation discussion rather than a ledger candidate.
       render: shell

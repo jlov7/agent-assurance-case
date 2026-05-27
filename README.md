@@ -40,10 +40,10 @@ Read [OVERVIEW.md](OVERVIEW.md) first for the one-page model and trust boundary.
 Verify the bundled examples with the demo key:
 
 ```bash
-pip install -r verifier/requirements.txt
-python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
-python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
-python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+python3 -m pip install -r verifier/requirements.txt
+python3 verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
+python3 verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
+python3 verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
 ```
 
 Expected final line for each command:
@@ -57,14 +57,14 @@ VERIFIED
 Verify a production case with an issuer key:
 
 ```bash
-python verifier/verify.py case.json --public-key issuer.pub
+python3 verifier/verify.py case.json --public-key issuer.pub
 ```
 
 Run the conformance tests:
 
 ```bash
-pip install -r verifier/requirements-dev.txt
-python -m pytest tests/ -q
+python3 -m pip install -r verifier/requirements-dev.txt
+python3 -m pytest tests/ -q
 ```
 
 Run the publication gate:

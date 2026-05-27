@@ -47,10 +47,10 @@ git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-ass
 cd agent-assurance-case
 test "$(git rev-parse HEAD)" = "689198d9c249a966a0abab6415ae8668efb512d9"
 ./VERIFY-PUBLICATION-READY.sh
-python verifier/check_vectors.py
-python verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
-python verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
-python verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
+python3 verifier/check_vectors.py
+python3 verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
+python3 verifier/verify.py examples/skill-poisoning-hold.json --allow-demo-key
+python3 verifier/verify.py examples/critical-exfiltration-fail.json --allow-demo-key
 ```
 
 Expected vector-checker output:
