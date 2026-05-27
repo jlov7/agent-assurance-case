@@ -63,7 +63,7 @@ canonicalization.
 Run the reference vector checker:
 
 ```bash
-python verifier/check_vectors.py
+python3 verifier/check_vectors.py
 ```
 
 Expected output:
@@ -123,7 +123,7 @@ The most useful external implementation report includes:
 - whether the implementation supports only `aac.core` or also `runwright.*`
   profiles;
 - a filled [`review-report-template.json`](review-report-template.json) validated
-  with `python verifier/validate_review_report.py`.
+  with `python3 verifier/validate_review_report.py`.
 
 Accepted independent implementation signals are tracked only after maintainer
 review in [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). A private note,

@@ -43,7 +43,7 @@ body:
       label: Evidence
       description: >-
         Include commands, output, vector IDs, file paths, or a minimal AAC case.
-        For parser/verifier reviews, include `python verifier/check_vectors.py`
+        For parser/verifier reviews, include `python3 verifier/check_vectors.py`
         output from the v0.2-candidate.7 release tag/current main or equivalent
         byte-level conformance output against the test vectors.
       render: shell
@@ -67,7 +67,7 @@ body:
       label: Structured report validation
       description: >-
         For ledger consideration, include output from
-        `python verifier/validate_review_report.py path/to/review-report.json`.
+        `python3 verifier/validate_review_report.py path/to/review-report.json`.
         Expected success output is `AAC review report: valid submission.` Use
         N/A only if this is an informal discussion issue rather than a ledger
         candidate.

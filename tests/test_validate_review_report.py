@@ -31,7 +31,7 @@ def _valid_report() -> dict:
         "notes": "Example implementation report.",
     }
     report["reproduction"]["environment"] = "Python 3.12 on Linux"
-    report["reproduction"]["commands"] = ["python verifier/check_vectors.py"]
+    report["reproduction"]["commands"] = ["python3 verifier/check_vectors.py"]
     report["reproduction"]["observed_output"] = [
         "AAC vectors: canonicalization accept=6 reject=5",
         "AAC vectors: sign_verify=aac-v0.2-demo-sign-verify-pass-with-coverage",
