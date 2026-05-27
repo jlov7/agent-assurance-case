@@ -35,7 +35,7 @@ Ledger candidates should include a filled structured report based on
 [`review-report-template.json`](review-report-template.json), validated with:
 
 ```bash
-python verifier/validate_review_report.py path/to/review-report.json
+python3 verifier/validate_review_report.py path/to/review-report.json
 ```
 
 The validator checks the report shape, release identity, populated reviewer and

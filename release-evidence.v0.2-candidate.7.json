@@ -52,7 +52,7 @@
       "git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case",
       "test \"$(git rev-parse HEAD)\" = \"689198d9c249a966a0abab6415ae8668efb512d9\"",
       "./VERIFY-PUBLICATION-READY.sh",
-      "python verifier/check_vectors.py"
+      "python3 verifier/check_vectors.py"
     ],
     "expected_vector_output": [
       "AAC vectors: canonicalization accept=6 reject=5",
