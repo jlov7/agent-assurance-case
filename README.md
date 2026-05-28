@@ -9,13 +9,13 @@
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
 [![Release fingerprints](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/jlov7/agent-assurance-case/badge)](https://scorecard.dev/viewer/?uri=github.com/jlov7/agent-assurance-case)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20379393.svg)](https://doi.org/10.5281/zenodo.20379393)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20435608.svg)](https://doi.org/10.5281/zenodo.20435608)
 ![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.8-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
-[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.8](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.8) · [Release fingerprints](RELEASE_FINGERPRINTS.md) · [Runtime dependency SBOM](sbom/runtime-requirements.cdx.json) · [Runtime dependency lock](verifier/requirements.lock.txt)
+[DOI: 10.5281/zenodo.20435608](https://doi.org/10.5281/zenodo.20435608) · [Release: v0.2-candidate.8](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.8) · [Release fingerprints](RELEASE_FINGERPRINTS.md) · [Runtime dependency SBOM](sbom/runtime-requirements.cdx.json) · [Runtime dependency lock](verifier/requirements.lock.txt)
 
 </div>
 
@@ -208,7 +208,7 @@ AAC is designed to sit beside, not replace:
 
 This repository includes `CITATION.cff` and `codemeta.json` so GitHub, archives, and software metadata indexers can generate citations and discovery metadata.
 
-The v0.2-candidate.8 release is archived at [10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393). The superseded v0.2-candidate.6 archive remains available at [10.5281/zenodo.20345018](https://doi.org/10.5281/zenodo.20345018), and the superseded v0.2-candidate.5 archive remains available at [10.5281/zenodo.20185170](https://doi.org/10.5281/zenodo.20185170). To list the work on an ORCID record, add the final version DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
+The v0.2-candidate.8 release is archived at [10.5281/zenodo.20435608](https://doi.org/10.5281/zenodo.20435608). The superseded v0.2-candidate.7 archive remains available at [10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393), and the superseded v0.2-candidate.6 archive remains available at [10.5281/zenodo.20345018](https://doi.org/10.5281/zenodo.20345018). The concept DOI [10.5281/zenodo.20159773](https://doi.org/10.5281/zenodo.20159773) always resolves to the latest version. To list the work on an ORCID record, add the final version DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
 
 ## Contributing
 
