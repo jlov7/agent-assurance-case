@@ -4,7 +4,7 @@
 
 # Agent Assurance Case
 
-**A portable, signed, audit-grade evidence object for agentic AI release assurance.**
+**A portable, signed, audit-oriented evidence object for agentic AI release assurance (draft).**
 
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
 [![Release fingerprints](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml)
@@ -92,6 +92,7 @@ assets.
 - `evidence.content_hash` is recomputed over the signed payload.
 - `evidence.signature` is verified with Ed25519.
 - Canonicalization behavior is pinned by published byte-level test vectors.
+- Canonicalization implements a constrained subset of RFC 8785 (JCS): floats, out-of-safe-range integers, and lone UTF-16 surrogate code points are rejected rather than encoded. The `Ed25519-JCS-SHA256-v1` / `RFC8785-JCS` identifiers denote the canonicalization family used, not full RFC 8785 numeric coverage. See [LIMITATIONS.md](LIMITATIONS.md#canonicalization-is-a-constrained-rfc-8785-subset).
 - Sign/verify behavior is pinned by a published golden vector.
 - Unsupported profiles return `NOT VERIFIED`.
 - PASS/HOLD/FAIL is recomputed deterministically from the case contents.
@@ -154,9 +155,26 @@ The schema defines shape. A profile defines the evidence bar.
 
 This separation is deliberate: AAC can be cited, implemented, archived, and discussed as a standalone assurance format even if Runwright evolves separately or is built by someone else.
 
+## What This Is / What This Is Not
+
+For a one-page statement of scope, claims, and the boundary between what is
+self-verified and what has been independently reviewed, read
+[VALIDATION_BOUNDARY.md](VALIDATION_BOUNDARY.md). In short: AAC is a draft
+specification, a deterministic reference verifier, and signed examples; it is
+self-verified and not yet independently reviewed; it is not a certification,
+not a guarantee that any detector finds every defect, and not an
+employer-endorsed product.
+
 ## Status
 
 Current draft: `v0.2-candidate.7`.
+
+The citable artifact is the signed, DOI-archived release tag
+[`v0.2-candidate.7`](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7),
+not the tip of `main`. `main` may contain unreleased hardening that is not part
+of the archived release; cite or audit the tagged commit unless you are
+deliberately reviewing in-progress work. The next synchronized release is cut
+per [PUBLICATION.md](PUBLICATION.md).
 
 The draft schema identifier is pinned to the candidate tag:
 

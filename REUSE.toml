@@ -47,6 +47,7 @@ path = [
     "SECURITY_POSTURE.md",
     "SPEC.md",
     "THREAT_MODEL.md",
+    "VALIDATION_BOUNDARY.md",
     "assets/**",
     "examples/**",
     "profiles/**",

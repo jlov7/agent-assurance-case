@@ -37,6 +37,10 @@ TMP_CASE=""
 PYTHONPYCACHEPREFIX="${PYTHONPYCACHEPREFIX:-/tmp/aac_pub_gate_pycache}"
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONPYCACHEPREFIX
+# Keep Hypothesis' example database out of the repository tree so the gate's own
+# pytest run cannot leave a .hypothesis/ directory behind.
+HYPOTHESIS_STORAGE_DIRECTORY="${HYPOTHESIS_STORAGE_DIRECTORY:-/tmp/aac_pub_gate_hypothesis}"
+export HYPOTHESIS_STORAGE_DIRECTORY
 EXPECTED_CANDIDATE="v0.2-candidate.7"
 EXPECTED_VERSION="${EXPECTED_CANDIDATE#v}"
 EXPECTED_SCHEMA_URI="https://raw.githubusercontent.com/jlov7/agent-assurance-case/${EXPECTED_CANDIDATE}/schemas/agent-assurance-case-v0.2.schema.json"
@@ -92,7 +96,7 @@ else
 fi
 
 # 1b. No build caches, Python caches, or Mac zip artifacts (must not be pushed public).
-junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
+junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name ".hypothesis" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$junk" ]]; then
   count=$(printf "%s\n" "$junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$junk" | head -1)
@@ -273,14 +277,14 @@ else
 fi
 
 # 16. Release scripts must be shellcheck-clean.
-if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_dependency_lock.sh scripts/validate_security_insights.sh 2>&1); then
+if shellcheck_out=$(uvx --from shellcheck-py shellcheck VERIFY-PUBLICATION-READY.sh .clusterfuzzlite/build.sh scripts/build_release_assets.sh scripts/validate_dependency_lock.sh scripts/regenerate_dependency_lock.sh scripts/validate_security_insights.sh 2>&1); then
   check "shellcheck" "ok"
 else
   check "shellcheck" "fail" "$(printf "%s\n" "$shellcheck_out" | tail -n 1)"
 fi
 
 # 17. Final junk-artifact check, AFTER pytest/verifier execution, because Python can recreate caches mid-gate.
-post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
+post_junk=$(find . \( -path ./dist -prune \) -o \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name ".hypothesis" -o -name "__pycache__" -o -name "pytest-cache-files-*" -o -name "__MACOSX" -o -name "*.pyc" -o -name ".DS_Store" \) -print 2>/dev/null | sort)
 if [[ -n "$post_junk" ]]; then
   count=$(printf "%s\n" "$post_junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$post_junk" | head -1)
