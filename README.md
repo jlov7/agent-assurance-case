@@ -9,13 +9,13 @@
 [![CI](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/ci.yml)
 [![Release fingerprints](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml/badge.svg)](https://github.com/jlov7/agent-assurance-case/actions/workflows/release-fingerprints.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/jlov7/agent-assurance-case/badge)](https://scorecard.dev/viewer/?uri=github.com/jlov7/agent-assurance-case)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20379393.svg)](https://doi.org/10.5281/zenodo.20379393)
-![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.7-2f6f9f)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20435608.svg)](https://doi.org/10.5281/zenodo.20435608)
+![Status](https://img.shields.io/badge/status-draft%20v0.2--candidate.8-2f6f9f)
 ![Verifier](https://img.shields.io/badge/verifier-deterministic-0f766e)
 ![Signature](https://img.shields.io/badge/signature-Ed25519--JCS-111827)
 ![License](https://img.shields.io/badge/license-CC--BY--4.0%20%2B%20Apache--2.0-blue)
 
-[DOI: 10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393) · [Release: v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7) · [Release fingerprints](RELEASE_FINGERPRINTS.md) · [Runtime dependency SBOM](sbom/runtime-requirements.cdx.json) · [Runtime dependency lock](verifier/requirements.lock.txt)
+[DOI: 10.5281/zenodo.20435608](https://doi.org/10.5281/zenodo.20435608) · [Release: v0.2-candidate.8](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.8) · [Release fingerprints](RELEASE_FINGERPRINTS.md) · [Runtime dependency SBOM](sbom/runtime-requirements.cdx.json) · [Runtime dependency lock](verifier/requirements.lock.txt)
 
 </div>
 
@@ -167,10 +167,10 @@ employer-endorsed product.
 
 ## Status
 
-Current draft: `v0.2-candidate.7`.
+Current draft: `v0.2-candidate.8`.
 
 The citable artifact is the signed, DOI-archived release tag
-[`v0.2-candidate.7`](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7),
+[`v0.2-candidate.8`](https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.8),
 not the tip of `main`. `main` may contain unreleased hardening that is not part
 of the archived release; cite or audit the tagged commit unless you are
 deliberately reviewing in-progress work. The next synchronized release is cut
@@ -179,7 +179,7 @@ per [PUBLICATION.md](PUBLICATION.md).
 The draft schema identifier is pinned to the candidate tag:
 
 ```text
-https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.7/schemas/agent-assurance-case-v0.2.schema.json
+https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.8/schemas/agent-assurance-case-v0.2.schema.json
 ```
 
 This draft supersedes an unpublished v0.1 design that had trust-critical defects around signature verification and evidence metadata binding. Those bug classes now have regression tests.
@@ -192,7 +192,7 @@ Do not claim AAC v1.0 conformance yet. This repository is open for implementatio
 - privacy posture for external evidence artifacts;
 - compatibility with audit and release-review workflows.
 
-Current public review thread: [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Reviewers can start with the 10-minute and 30-minute recipes in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#review-recipes). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#structured-review-reports). Independent verifier/parser authors can use the [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml).
+Current public review thread: [RFC: external review for AAC v0.2-candidate.8](https://github.com/jlov7/agent-assurance-case/issues/2). Current external review status: no accepted independent review yet; see [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md). Reviewers can start with the 10-minute and 30-minute recipes in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#review-recipes). Ledger candidates can use the machine-checkable [`review-report-template.json`](review-report-template.json) described in [REVIEW_GUIDE.md](REVIEW_GUIDE.md#structured-review-reports). Independent verifier/parser authors can use the [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml).
 
 ## Standards Alignment
 
@@ -208,11 +208,11 @@ AAC is designed to sit beside, not replace:
 
 This repository includes `CITATION.cff` and `codemeta.json` so GitHub, archives, and software metadata indexers can generate citations and discovery metadata.
 
-The v0.2-candidate.7 release is archived at [10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393). The superseded v0.2-candidate.6 archive remains available at [10.5281/zenodo.20345018](https://doi.org/10.5281/zenodo.20345018), and the superseded v0.2-candidate.5 archive remains available at [10.5281/zenodo.20185170](https://doi.org/10.5281/zenodo.20185170). To list the work on an ORCID record, add the final version DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
+The v0.2-candidate.8 release is archived at [10.5281/zenodo.20435608](https://doi.org/10.5281/zenodo.20435608). The superseded v0.2-candidate.7 archive remains available at [10.5281/zenodo.20379393](https://doi.org/10.5281/zenodo.20379393), and the superseded v0.2-candidate.6 archive remains available at [10.5281/zenodo.20345018](https://doi.org/10.5281/zenodo.20345018). The concept DOI [10.5281/zenodo.20159773](https://doi.org/10.5281/zenodo.20159773) always resolves to the latest version. To list the work on an ORCID record, add the final version DOI as a work item through ORCID. See `PUBLICATION.md` for the release checklist.
 
 ## Contributing
 
-Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification. For broad external review, use the current [AAC v0.2-candidate.7 RFC thread](https://github.com/jlov7/agent-assurance-case/issues/2), start from the [review recipes](REVIEW_GUIDE.md#review-recipes), or submit a structured review report through the external review issue form.
+Issues and pull requests are welcome while the draft is under review. Please keep proposals scoped, include a concrete example, and explain how the change affects deterministic verification. For broad external review, use the current [AAC v0.2-candidate.8 RFC thread](https://github.com/jlov7/agent-assurance-case/issues/2), start from the [review recipes](REVIEW_GUIDE.md#review-recipes), or submit a structured review report through the external review issue form.
 
 Specification text, profiles, examples, and documentation are licensed under CC BY 4.0. Code, schemas, keys, tests, and CI are licensed under Apache 2.0.
 

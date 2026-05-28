@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import NoReturn
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.7.json"
+RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.8.json"
 REPOSITORY_POSTURE_PATH = ROOT / "repository-posture.json"
 LEDGER_PATH = ROOT / "EXTERNAL_REVIEW_LEDGER.md"
 README_PATH = ROOT / "README.md"

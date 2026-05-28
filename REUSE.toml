@@ -11,7 +11,7 @@ path = [
     "fuzz/**",
     "keys/**",
     "release-evidence.schema.json",
-    "release-evidence.v0.2-candidate.7.json",
+    "release-evidence.v0.2-candidate.8.json",
     "repository-posture.json",
     "repository-posture.schema.json",
     "review-report-template.json",

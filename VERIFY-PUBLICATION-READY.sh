@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.7 artifact.
+# Publication-readiness gate for the Agent Assurance Case (AAC) v0.2-candidate.8 artifact.
 #
 # Run this before pushing to the public GitHub repo. The gate checks:
 #   1. The v0.1 leftover files are not present (they would weaken the public artifact).
@@ -41,7 +41,7 @@ export PYTHONPYCACHEPREFIX
 # pytest run cannot leave a .hypothesis/ directory behind.
 HYPOTHESIS_STORAGE_DIRECTORY="${HYPOTHESIS_STORAGE_DIRECTORY:-/tmp/aac_pub_gate_hypothesis}"
 export HYPOTHESIS_STORAGE_DIRECTORY
-EXPECTED_CANDIDATE="v0.2-candidate.7"
+EXPECTED_CANDIDATE="v0.2-candidate.8"
 EXPECTED_VERSION="${EXPECTED_CANDIDATE#v}"
 EXPECTED_SCHEMA_URI="https://raw.githubusercontent.com/jlov7/agent-assurance-case/${EXPECTED_CANDIDATE}/schemas/agent-assurance-case-v0.2.schema.json"
 

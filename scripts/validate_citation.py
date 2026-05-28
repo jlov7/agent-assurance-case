@@ -12,7 +12,7 @@ from typing import NoReturn
 ROOT = Path(__file__).resolve().parents[1]
 CITATION_PATH = ROOT / "CITATION.cff"
 CODEMETA_PATH = ROOT / "codemeta.json"
-RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.7.json"
+RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.8.json"
 
 EXPECTED_CFF_VERSION = "1.2.0"
 EXPECTED_TYPE = "software"

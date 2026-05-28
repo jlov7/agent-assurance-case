@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2-candidate.8
+
+- Supersedes `v0.2-candidate.7` without rewriting public history; no schema, verdict, or signature semantics changed.
+- Makes the runtime dependency lock fully reproducible across machines and CI by pinning the exact `uv` version and target `--python-version` (uv's `--universal` resolution of python-version-conditional dependencies otherwise varies with the host interpreter), with a `scripts/regenerate_dependency_lock.sh` helper.
+- Keeps the Hypothesis example database out of the tree during the gate and flags stray `.hypothesis/` in the junk check.
+- Softens the README tagline to "audit-oriented (draft)", discloses the constrained RFC 8785 (JCS) subset in `LIMITATIONS.md`, adds `VALIDATION_BOUNDARY.md`, and notes that the DOI tag (not `main`) is the citable artifact.
+- Zenodo DOI: <https://doi.org/10.5281/zenodo.20435608>.
+
 ## v0.2-candidate.7
 
 - Supersedes `v0.2-candidate.6` without rewriting public history.

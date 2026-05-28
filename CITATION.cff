@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use the Agent Assurance Case specification or reference verifier, please cite it as below."
 type: software
 title: "Agent Assurance Case (AAC) Specification and Reference Verifier"
-version: "0.2-candidate.7"
-date-released: 2026-05-25
-doi: 10.5281/zenodo.20379393
+version: "0.2-candidate.8"
+date-released: 2026-05-28
+doi: 10.5281/zenodo.20435608
 authors:
   - family-names: "Lovell"
     given-names: "Jason Mark"
@@ -27,7 +27,7 @@ preferred-citation:
     - family-names: "Lovell"
       given-names: "Jason Mark"
       orcid: "https://orcid.org/0009-0001-6300-9155"
-  version: "0.2-candidate.7"
-  doi: 10.5281/zenodo.20379393
+  version: "0.2-candidate.8"
+  doi: 10.5281/zenodo.20435608
   year: 2026
-  url: "https://doi.org/10.5281/zenodo.20379393"
+  url: "https://doi.org/10.5281/zenodo.20435608"

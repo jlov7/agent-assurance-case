@@ -30,6 +30,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      # The release gate (run against the cloned signed tag) shells out to
+      # uv/uvx for the dependency-lock, SBOM audit, Bandit, REUSE, and
+      # shellcheck checks, so uv must be on PATH in this job.
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+
       - name: Verify release fingerprint
         env:
           GH_TOKEN: ${{ github.token }}

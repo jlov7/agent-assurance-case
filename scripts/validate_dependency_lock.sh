@@ -15,6 +15,23 @@ TEMP_ROOT="$(mktemp -d)"
 # regenerate (see scripts/regenerate_dependency_lock.sh).
 EXCLUDE_NEWER="${EXCLUDE_NEWER:-2026-05-29T00:00:00Z}"
 
+# Pin the exact uv version used to resolve the lock. uv's --universal marker
+# resolution (e.g. conditional transitive deps like typing-extensions for
+# python<3.13) is NOT stable across uv releases, so an unpinned `uv` makes the
+# committed lock fail to reproduce whenever the local or CI uv version drifts.
+# uvx fetches this exact uv regardless of the system uv, giving a single source
+# of truth. Bump in lockstep with regenerate_dependency_lock.sh.
+UV_PIN="${UV_PIN:-0.11.17}"
+# Pin the TARGET python too. uv's --universal resolution of python-version
+# conditional deps (e.g. typing-extensions for python<3.13) otherwise keys off
+# the host interpreter, so the same uv produces different locks on a macOS box
+# running under 3.14 vs a CI runner under 3.12. Pinning the minimum supported
+# python makes the universal lock identical everywhere.
+PYTHON_TARGET="${PYTHON_TARGET:-3.11}"
+uv_compile() {
+  uvx --from "uv==$UV_PIN" uv pip compile --python-version "$PYTHON_TARGET" "$@"
+}
+
 cleanup() {
   rm -rf "$TEMP_ROOT"
 }
@@ -31,7 +48,7 @@ normalize_header() {
 # "# via -r <path>" annotations stay portable (no absolute or username-specific
 # paths baked into the committed file) and identical across machines and CI.
 cd "$ROOT"
-uv pip compile "$REQUIREMENTS" --universal --generate-hashes \
+uv_compile "$REQUIREMENTS" --universal --generate-hashes \
   --exclude-newer "$EXCLUDE_NEWER" -o "$TEMP_ROOT/requirements.lock.txt" >/dev/null
 normalize_header < "$LOCKFILE" > "$TEMP_ROOT/committed.normalized"
 normalize_header < "$TEMP_ROOT/requirements.lock.txt" > "$TEMP_ROOT/generated.normalized"

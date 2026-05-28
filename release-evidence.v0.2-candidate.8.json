@@ -4,14 +4,14 @@
   "schema_version": "1.0",
   "release": {
     "name": "Agent Assurance Case (AAC) Specification and Reference Verifier",
-    "version": "0.2-candidate.7",
-    "tag": "v0.2-candidate.7",
-    "release_url": "https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.7",
+    "version": "0.2-candidate.8",
+    "tag": "v0.2-candidate.8",
+    "release_url": "https://github.com/jlov7/agent-assurance-case/releases/tag/v0.2-candidate.8",
     "repository": "https://github.com/jlov7/agent-assurance-case",
-    "release_commit": "689198d9c249a966a0abab6415ae8668efb512d9",
-    "doi": "10.5281/zenodo.20379393",
-    "doi_url": "https://doi.org/10.5281/zenodo.20379393",
-    "published_at": "2026-05-25T12:47:41Z"
+    "release_commit": "936885583a49dfd06fd11ce45c8ee82330f1007d",
+    "doi": "10.5281/zenodo.20435608",
+    "doi_url": "https://doi.org/10.5281/zenodo.20435608",
+    "published_at": "2026-05-28T22:09:06Z"
   },
   "citation": {
     "cff_file": "CITATION.cff",
@@ -23,34 +23,35 @@
     "signer": "jase.lovell@me.com",
     "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBD4r6uZD5gvmyQqXSM/HX3gKtl2+HOzX6T1oaGsUlVu",
     "key_sha256": "SHA256:WGevS9odnPKBtzTZjoVXSj2aexpZo4k6VL/dHaVaJdY",
-    "expected_object": "689198d9c249a966a0abab6415ae8668efb512d9"
+    "expected_object": "936885583a49dfd06fd11ce45c8ee82330f1007d"
   },
   "release_assets": [
     {
       "name": "RELEASE-MANIFEST.json",
-      "github_asset_digest": "sha256:603a51c85aac727c14a4e21ec6015a114cc7117cc0813e59e56eb0ab138c75a7",
+      "github_asset_digest": "sha256:1c520f050a67451b3071630bcd1af4df69965ff7539395cb2069e3fa0ab12948",
       "github_attestation": "verified"
     },
     {
       "name": "SHA256SUMS",
-      "github_asset_digest": "sha256:2dcdc1c4ead1e38c32e58d85c6024bec27923679d2bb116d32c959e325b717a6",
+      "github_asset_digest": "sha256:0b420cba3d518198f0ac7542ea7bd3a07968c81a3b1b356ec3a5134240d10bd2",
       "github_attestation": "verified"
     },
     {
-      "name": "agent-assurance-case-v0.2-candidate.7.tar.gz",
-      "github_asset_digest": "sha256:177dd27fe52ed6f95e714f88342637848a4cab5bd790b50ff5590927f058e1c4",
+      "name": "agent-assurance-case-v0.2-candidate.8.tar.gz",
+      "github_asset_digest": "sha256:8ed15ba6f18e3f5bfa7d3fc93a540ac4791dbc2c8310298d477b924f36625fb9",
       "github_attestation": "verified"
     },
     {
-      "name": "agent-assurance-case-v0.2-candidate.7.tar.gz.sha256",
-      "github_asset_digest": "sha256:558553a3af1ac16edb06b6883fbafb08ead395458ca28acc3cfd6ec7d57cd5bb",
+      "name": "agent-assurance-case-v0.2-candidate.8.tar.gz.sha256",
+      "github_asset_digest": "sha256:9b8411abf1f25b9c6c510cd5a4707fe35165152f6afa273b7b53112039a0f8fb",
       "github_attestation": "verified"
     }
   ],
   "release_checks": {
     "immutable_checkout_commands": [
-      "git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case",
-      "test \"$(git rev-parse HEAD)\" = \"689198d9c249a966a0abab6415ae8668efb512d9\"",
+      "git clone --branch v0.2-candidate.8 --depth 1 https://github.com/jlov7/agent-assurance-case",
+      "test \"$(git rev-parse HEAD)\" = \"936885583a49dfd06fd11ce45c8ee82330f1007d\"",
+      "python3 -m pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt",
       "./VERIFY-PUBLICATION-READY.sh",
       "python3 verifier/check_vectors.py"
     ],
@@ -63,7 +64,7 @@
   },
   "protected_branch": {
     "branch": "main",
-    "recorded_as_of": "2026-05-25",
+    "recorded_as_of": "2026-05-28",
     "strict_required_checks": [
       "test",
       "Analyze Python",
