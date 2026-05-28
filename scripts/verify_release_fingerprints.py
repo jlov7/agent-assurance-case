@@ -111,9 +111,7 @@ def verify_signed_tag(
 ) -> None:
     actual_commit = output(["git", "rev-list", "-n", "1", tag], cwd=repo)
     if actual_commit != expected_commit:
-        raise SystemExit(
-            f"{tag} points to {actual_commit}, expected {expected_commit}"
-        )
+        raise SystemExit(f"{tag} points to {actual_commit}, expected {expected_commit}")
     run(
         [
             "git",
@@ -190,8 +188,7 @@ def verify_sha256s(assets_dir: Path, sums_name: str) -> None:
         actual_digest = sha256(target)
         if actual_digest != expected_digest:
             raise SystemExit(
-                f"{relative_path} sha256 mismatch: "
-                f"{actual_digest} != {expected_digest}"
+                f"{relative_path} sha256 mismatch: {actual_digest} != {expected_digest}"
             )
 
 
@@ -267,8 +264,12 @@ def main() -> int:
         )
         python = create_python_env(repo, tmp_path / "fingerprint-venv")
 
+        # Do not pass PYTHON to the gate. When PYTHON is supplied the gate skips
+        # creating its own temporary working directory, which leaves the release
+        # asset builder writing to an absolute "/release-assets" path. Letting
+        # the gate bootstrap its own isolated venv keeps that temp root writable
+        # and matches how a fresh reviewer runs the gate from the signed tag.
         gate_env = {
-            "PYTHON": str(python),
             "PYTHONDONTWRITEBYTECODE": "1",
             "PIP_DISABLE_PIP_VERSION_CHECK": "1",
             "PIP_NO_CACHE_DIR": "1",
