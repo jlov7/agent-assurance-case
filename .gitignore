@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 pytest-cache-files-*/
 .ruff_cache/
+.hypothesis/
 
 # macOS / ZIP artifacts
 .DS_Store

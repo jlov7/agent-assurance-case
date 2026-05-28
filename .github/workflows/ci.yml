@@ -30,6 +30,10 @@ jobs:
       PYTHONDONTWRITEBYTECODE: "1"
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
       PIP_NO_CACHE_DIR: "1"
+      # Keep Hypothesis' example database out of the working tree so the
+      # standalone pytest step does not leave a .hypothesis/ directory that the
+      # publication gate's junk check would later (correctly) reject.
+      HYPOTHESIS_STORAGE_DIRECTORY: "/tmp/aac-hypothesis"
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd

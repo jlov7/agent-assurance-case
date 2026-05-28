@@ -34,6 +34,39 @@ This repository is already public. Future releases should preserve the current p
    python3 scripts/verify_release_fingerprints.py
    ```
 
+## Evidence-at-Tag Requirements (read before tagging)
+
+A common, embarrassing failure mode is a release whose advertised evidence and
+gates are only present on `main`, not at the immutable tagged commit a reviewer
+actually checks out from the DOI. Avoid it:
+
+1. **Commit the release-evidence file and the publication gate to `main` first.**
+   `release-evidence.vX.Y-candidate.Z.json`, `RELEASE_FINGERPRINTS.md`, and
+   `VERIFY-PUBLICATION-READY.sh` must already exist at the commit you tag, so the
+   immutable checkout contains everything the release claims. Never tag a commit
+   that lacks its own release-evidence.
+2. **Regenerate the dependency lock deterministically** so the gate passes from a
+   clean clone on any platform and at any future date:
+
+   ```bash
+   scripts/regenerate_dependency_lock.sh   # universal, index-pinned via EXCLUDE_NEWER
+   ```
+
+3. **Make the immutable-checkout commands self-sufficient.** The
+   `release_checks.immutable_checkout_commands` in the release-evidence file must
+   include the dependency install step before any verifier invocation, e.g.:
+
+   ```bash
+   git clone --branch vX.Y-candidate.Z --depth 1 https://github.com/jlov7/agent-assurance-case
+   test "$(git rev-parse HEAD)" = "<release-commit-sha>"
+   python3 -m pip install -r verifier/requirements.txt -r verifier/requirements-dev.txt
+   ./VERIFY-PUBLICATION-READY.sh
+   python3 verifier/check_vectors.py
+   ```
+
+4. **Re-verify on a fresh clone** of the tag before publishing the DOI, with the
+   gate exiting `0`.
+
 ## GitHub Release
 
 Do not publish a GitHub Release until the maintainer explicitly approves that exact publication action.
