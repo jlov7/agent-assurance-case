@@ -37,7 +37,7 @@
       "additionalProperties": false,
       "required": ["release", "commit", "doi"],
       "properties": {
-        "release": { "const": "v0.2-candidate.7" },
+        "release": { "const": "v0.2-candidate.8" },
         "commit": { "const": "689198d9c249a966a0abab6415ae8668efb512d9" },
         "doi": { "const": "10.5281/zenodo.20379393" }
       }

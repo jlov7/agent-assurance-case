@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.7/release-evidence.schema.json",
+  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.8/release-evidence.schema.json",
   "title": "AAC Release Evidence",
   "type": "object",
   "additionalProperties": false,
@@ -51,8 +51,8 @@
       ],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
-        "version": { "const": "0.2-candidate.7" },
-        "tag": { "const": "v0.2-candidate.7" },
+        "version": { "const": "0.2-candidate.8" },
+        "tag": { "const": "v0.2-candidate.8" },
         "release_url": { "type": "string", "format": "uri" },
         "repository": { "type": "string", "format": "uri" },
         "release_commit": { "$ref": "#/$defs/sha1" },

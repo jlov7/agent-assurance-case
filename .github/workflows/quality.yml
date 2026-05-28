@@ -66,7 +66,7 @@ jobs:
       - name: Dry-run release asset builder
         run: >-
           scripts/build_release_assets.sh
-          v0.2-candidate.7
+          v0.2-candidate.8
           /tmp/aac-release-assets
 
       - name: Run codespell

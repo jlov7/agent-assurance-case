@@ -19,7 +19,7 @@ spec.loader.exec_module(release_fingerprints)
 
 
 def _release_evidence() -> dict:
-    return json.loads((BASE / "release-evidence.v0.2-candidate.7.json").read_text())
+    return json.loads((BASE / "release-evidence.v0.2-candidate.8.json").read_text())
 
 
 def test_release_evidence_consistency_accepts_current_file() -> None:
@@ -28,7 +28,7 @@ def test_release_evidence_consistency_accepts_current_file() -> None:
 
 def test_release_evidence_consistency_rejects_signed_tag_commit_drift() -> None:
     evidence = copy.deepcopy(_release_evidence())
-    evidence["signed_tag"]["expected_object"] = "0" * 40
+    evidence["signed_tag"]["expected_object"] = "1" * 40
 
     with pytest.raises(SystemExit, match="signed tag object mismatch"):
         release_fingerprints.validate_release_evidence(evidence)
@@ -42,7 +42,7 @@ def test_release_evidence_consistency_rejects_filename_tag_drift(
     monkeypatch.setattr(
         release_fingerprints,
         "RELEASE_EVIDENCE_PATH",
-        tmp_path / "release-evidence.v0.2-candidate.8.json",
+        tmp_path / "release-evidence.v0.2-candidate.7.json",
     )
 
     with pytest.raises(SystemExit, match="release evidence filename tag mismatch"):

@@ -124,7 +124,7 @@ jobs:
 
           schema = json.loads(Path("release-evidence.schema.json").read_text())
           evidence = json.loads(
-              Path("release-evidence.v0.2-candidate.7.json").read_text()
+              Path("release-evidence.v0.2-candidate.8.json").read_text()
           )
           Draft202012Validator.check_schema(schema)
           Draft202012Validator(

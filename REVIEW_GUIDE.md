@@ -5,17 +5,17 @@ This guide is for independent reviewers who want to challenge the Agent Assuranc
 ## Release Under Review
 
 - Repository: <https://github.com/jlov7/agent-assurance-case>
-- Release: `v0.2-candidate.7`
+- Release: `v0.2-candidate.8`
 - Release commit: `689198d9c249a966a0abab6415ae8668efb512d9`
 - DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Status: public draft candidate, not v1.0
 
-This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. The `v0.2-candidate.7` release includes the standalone vector checker and the checked-in vector files; current `main` may include later documentation clarifications. Public release fingerprints, signed-tag checks, CI run links, and claim boundaries are recorded in [RELEASE_FINGERPRINTS.md](RELEASE_FINGERPRINTS.md).
+This file is a living review guide on `main`. For an immutable review target, use the release tag and DOI above. The `v0.2-candidate.8` release includes the standalone vector checker and the checked-in vector files; current `main` may include later documentation clarifications. Public release fingerprints, signed-tag checks, CI run links, and claim boundaries are recorded in [RELEASE_FINGERPRINTS.md](RELEASE_FINGERPRINTS.md).
 
 ## Fast Verification Path
 
 ```bash
-git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
+git clone --branch v0.2-candidate.8 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 ./VERIFY-PUBLICATION-READY.sh
 python3 verifier/verify.py examples/pass-with-coverage.json --allow-demo-key
@@ -29,10 +29,10 @@ Expected final verifier line for each example:
 VERIFIED
 ```
 
-Reviewers can also run the standalone vector checker from the `v0.2-candidate.7` release tag:
+Reviewers can also run the standalone vector checker from the `v0.2-candidate.8` release tag:
 
 ```bash
-git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
+git clone --branch v0.2-candidate.8 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 python3 verifier/check_vectors.py
 ```
@@ -58,7 +58,7 @@ Run the release-pinned vector checker and paste the command/output into the
 public review thread or a structured report:
 
 ```bash
-git clone --branch v0.2-candidate.7 --depth 1 https://github.com/jlov7/agent-assurance-case
+git clone --branch v0.2-candidate.8 --depth 1 https://github.com/jlov7/agent-assurance-case
 cd agent-assurance-case
 python3 verifier/check_vectors.py
 ```
@@ -136,7 +136,7 @@ What is true today:
 - the release is signed and archived;
 - the reference verifier has regression tests for previously identified trust-critical bug classes;
 - canonicalization and sign/verify behavior are pinned by checked-in test vectors;
-- `python3 verifier/check_vectors.py` exposes those vectors as a standalone conformance gate in the `v0.2-candidate.7` release and on `main`;
+- `python3 verifier/check_vectors.py` exposes those vectors as a standalone conformance gate in the `v0.2-candidate.8` release and on `main`;
 - GitHub Actions run the repository conformance gate on `main`.
 
 What is not claimed:
@@ -180,4 +180,4 @@ AAC review report: valid submission.
 
 The validator checks schema conformance, target release identity, populated reviewer and reproduction fields, duplicate JSON member rejection, duplicate finding IDs, claim-boundary fields, public artifact presence for independent-review claims, and exact AAC v0.2 vector output for parser or vector-focused reviews. Reports that claim independent review must not be marked security-sensitive. Validation does not make the report true; maintainers still inspect the evidence before adding anything to [EXTERNAL_REVIEW_LEDGER.md](EXTERNAL_REVIEW_LEDGER.md).
 
-The current public review thread is [RFC: external review for AAC v0.2-candidate.7](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml), and independent parser/verifier authors can use the [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.
+The current public review thread is [RFC: external review for AAC v0.2-candidate.8](https://github.com/jlov7/agent-assurance-case/issues/2). Focused new reports can use the [external review issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=external-review.yml), and independent parser/verifier authors can use the [implementation report issue form](https://github.com/jlov7/agent-assurance-case/issues/new?template=implementation-report.yml). Use private vulnerability reporting for bypasses, parser ambiguity, signature confusion, or anything involving non-public evidence or keys.

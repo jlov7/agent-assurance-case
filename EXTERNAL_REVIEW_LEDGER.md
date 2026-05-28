@@ -4,7 +4,7 @@ This ledger records independent review signals for Agent Assurance Case (AAC). I
 
 ## Current Target
 
-- Release: `v0.2-candidate.7`
+- Release: `v0.2-candidate.8`
 - Release commit: `689198d9c249a966a0abab6415ae8668efb512d9`
 - DOI: <https://doi.org/10.5281/zenodo.20379393>
 - Public review issue: <https://github.com/jlov7/agent-assurance-case/issues/2>

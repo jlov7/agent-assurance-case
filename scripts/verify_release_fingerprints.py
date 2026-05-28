@@ -18,7 +18,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.7.json"
+RELEASE_EVIDENCE_PATH = ROOT / "release-evidence.v0.2-candidate.8.json"
 
 
 def run(

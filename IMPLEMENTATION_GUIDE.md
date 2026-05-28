@@ -5,12 +5,12 @@ profile checker. It is not a replacement for [SPEC.md](SPEC.md). The spec is
 normative; this file is a practical map from the spec to runnable conformance
 evidence.
 
-AAC `v0.2-candidate.7` is a public draft candidate. Implementations should say
+AAC `v0.2-candidate.8` is a public draft candidate. Implementations should say
 they target this candidate, not a stable AAC standard.
 
 ## Target
 
-- Release: `v0.2-candidate.7`
+- Release: `v0.2-candidate.8`
 - Release commit: `689198d9c249a966a0abab6415ae8668efb512d9`
 - Schema: [`schemas/agent-assurance-case-v0.2.schema.json`](schemas/agent-assurance-case-v0.2.schema.json)
 - Core profile: [`profiles/aac.core.md`](profiles/aac.core.md)
@@ -19,7 +19,7 @@ they target this candidate, not a stable AAC standard.
 
 ## Minimum Verifier Pipeline
 
-A verifier that claims support for AAC v0.2-candidate.7 should do these steps in
+A verifier that claims support for AAC v0.2-candidate.8 should do these steps in
 this order:
 
 1. Parse JSON as UTF-8 and reject duplicate object member names.
@@ -43,7 +43,7 @@ verification.
 
 ## Canonicalization Scope
 
-AAC v0.2-candidate.7 uses an RFC 8785/JCS-style canonical JSON byte format over a
+AAC v0.2-candidate.8 uses an RFC 8785/JCS-style canonical JSON byte format over a
 deliberately constrained JSON value domain:
 
 - objects are sorted by member name;

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.7
+Agent Assurance Case (AAC) Reference Verifier — v0.2-candidate.8
 
 Trust-critical properties:
 - Signature verification is never silently skipped. Use --allow-demo-key for bundled examples only.
@@ -836,7 +836,7 @@ def verify(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Agent Assurance Case v0.2-candidate.7 reference verifier"
+        description="Agent Assurance Case v0.2-candidate.8 reference verifier"
     )
     parser.add_argument("case", type=Path)
     parser.add_argument("--public-key", type=Path, default=None)

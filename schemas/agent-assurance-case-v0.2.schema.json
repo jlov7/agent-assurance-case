@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.7/schemas/agent-assurance-case-v0.2.schema.json",
+  "$id": "https://raw.githubusercontent.com/jlov7/agent-assurance-case/v0.2-candidate.8/schemas/agent-assurance-case-v0.2.schema.json",
   "title": "Agent Assurance Case",
   "description": "A portable, signed, deterministically-verifiable JSON object that captures evidence and verdict for a release of an agentic AI workflow.",
   "type": "object",

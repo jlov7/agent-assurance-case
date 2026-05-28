@@ -2,7 +2,7 @@
   "report_type": "aac-external-review-report",
   "schema_version": "1.0",
   "target": {
-    "release": "v0.2-candidate.7",
+    "release": "v0.2-candidate.8",
     "commit": "689198d9c249a966a0abab6415ae8668efb512d9",
     "doi": "10.5281/zenodo.20379393"
   },
