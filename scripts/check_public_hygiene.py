@@ -29,8 +29,9 @@ RULES = [
     Rule(
         "hype wording",
         re.compile(
-            r"\b(?:Karpathy(?:-level)?|carpentry-level|Carnegie-level|"
-            r"world-class|elite|frontier)\b",
+            r"\b(?:world-class|elite|frontier|cutting-edge|state-of-the-art|"
+            r"revolutionary|game-?changing|best-in-class|industry-leading|"
+            r"unparalleled|groundbreaking)\b",
             re.I,
         ),
     ),

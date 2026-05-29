@@ -90,7 +90,7 @@ if [[ -e "examples/minimal-pass.json" || -e "schemas/agent-assurance-case-v0.1.s
   leftovers=()
   [[ -e "examples/minimal-pass.json" ]] && leftovers+=("examples/minimal-pass.json")
   [[ -e "schemas/agent-assurance-case-v0.1.schema.json" ]] && leftovers+=("schemas/agent-assurance-case-v0.1.schema.json")
-  check "no v0.1 leftover files" "fail" "found: ${leftovers[*]} (delete via Finder before publishing)"
+  check "no v0.1 leftover files" "fail" "found: ${leftovers[*]} (remove the listed paths before publishing)"
 else
   check "no v0.1 leftover files" "ok"
 fi
@@ -100,7 +100,7 @@ junk=$(find . \( -name ".pytest_cache" -o -name ".ruff_cache" -o -name ".hypothe
 if [[ -n "$junk" ]]; then
   count=$(printf "%s\n" "$junk" | wc -l | tr -d ' ')
   first=$(printf "%s\n" "$junk" | head -1)
-  check "no build cache or junk artifacts" "fail" "$count item(s) found; first: $first (delete via Finder before publishing)"
+  check "no build cache or junk artifacts" "fail" "$count item(s) found; first: $first (remove the listed paths before publishing)"
 else
   check "no build cache or junk artifacts" "ok"
 fi
@@ -299,7 +299,7 @@ echo
 echo "Summary: $PASS passed, $FAIL failed."
 if [[ $FAIL -eq 0 ]]; then
   echo "AAC $EXPECTED_CANDIDATE publication gate: PASSED"
-  echo "Ready for final publication approval."
+  echo "All publication-readiness checks passed."
   exit 0
 else
   echo "AAC $EXPECTED_CANDIDATE publication gate: FAILED"
