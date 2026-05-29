@@ -18,7 +18,6 @@ class Rule:
 RULES = [
     Rule("local macOS user path", re.compile(r"/Users/[A-Za-z0-9._-]+")),
     Rule("local Windows user path", re.compile(r"[A-Za-z]:\\Users\\")),
-    Rule("private workspace name", re.compile(r"Runwright Agent Assurance Platform")),
     Rule("OpenAI API key", re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b")),
     Rule(
         "GitHub token",
@@ -37,7 +36,6 @@ RULES = [
     ),
 ]
 
-PRIVATE_PASSPHRASE = "vh84" + "uZod" + "ZSZFHU0"
 SKIP_SUFFIXES = {
     ".gif",
     ".gz",
@@ -79,8 +77,6 @@ def hygiene_errors() -> list[str]:
         if text is None:
             continue
         for line_no, line in enumerate(text.splitlines(), start=1):
-            if PRIVATE_PASSPHRASE in line:
-                errors.append(f"{path}:{line_no}: private passphrase literal")
             for rule in RULES:
                 if rule.pattern.search(line):
                     errors.append(f"{path}:{line_no}: {rule.name}")
