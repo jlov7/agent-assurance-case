@@ -291,9 +291,9 @@ rpds-py==0.30.0 \
     --hash=sha256:f83424d738204d9770830d35290ff3273fbb02b41f919870479fab14b9d303b2 \
     --hash=sha256:f8d1736cfb49381ba528cd5baa46f82fdc65c06e843dab24dd70b63d09121b3f \
     --hash=sha256:fe5fa731a1fa8a0a56b0977413f8cacac1768dad38d16b3a296712709476fbd5
-setuptools==82.0.1 \
-    --hash=sha256:7d872682c5d01cfde07da7bccc7b65469d3dca203318515ada1de5eda35efbf9 \
-    --hash=sha256:a59e362652f08dcd477c78bb6e7bd9d80a7995bc73ce773050228a348ce2e5bb
+setuptools==83.0.0 \
+    --hash=sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef \
+    --hash=sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3
 typing-extensions==4.15.0 \
     --hash=sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466 \
     --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
